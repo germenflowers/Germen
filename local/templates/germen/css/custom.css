@@ -1,0 +1,47 @@
+.promo-menu { display: none; }
+.nav > div{ display: inline-block; }
+.nav > div > li {
+    display: inline-block;
+    font-size: 20px;
+    color: black;
+    margin-right: 36px;
+}
+.nav > div > li > a {
+    color: black;
+    padding: 0;
+}
+.datepicker--time-row:nth-child(2n){ display: none; }
+
+.list_street{ position: relative; }
+.list_street ul{ position: absolute; width: 100%; z-index: 10; background: #fff; margin: 0; padding: 0; list-style: none;}
+.list_street ul li{ cursor: pointer; padding: 5px 10px; border: 1px solid #003B64; border-top: none;  }
+.list_street ul li:first-child{ border-top: 1px solid #003B64;  }
+.list_street ul li:hover{ background: #003B64; color: #fff;}
+
+.input.error{ border: 1px solid red; }
+div.order-error{ color: red; margin-bottom: 10px; }
+
+@media (min-width: 700px) {
+    .js-address-block {
+        width: 30%;
+    }
+    .js-address-block:first-child{
+        width: 70%;
+    }
+}
+
+.promo-propertiesicon--car{ height: 64px; }
+
+.promo-order.loader{ position: relative; }
+.promo-order.loader:before{
+    display: block;
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #fff;
+    opacity: 0.75;
+    z-index: 10000;
+}

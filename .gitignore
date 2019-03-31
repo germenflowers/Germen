@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+.idea/
+*.log
+*.txt
+*.xml
+
+/bitrix/
+/upload/
+/.htaccess
