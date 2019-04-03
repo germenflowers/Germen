@@ -431,3 +431,14 @@ $(document).ready(function(){
         return false;
     });
 });
+
+// Фикс скролла после закрытия попапа скидки
+(function(){
+    var $doc = $(document);
+
+    $doc.ready(function(){
+        $doc.on('click', '.mc-closeModal', function(){
+            $('body').css('overflow', '');
+        });
+    });
+})();
