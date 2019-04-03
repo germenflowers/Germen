@@ -25,7 +25,7 @@ $this->setFrameMode(true);
                 <div class="promo-properties__block" id="<?=$this->GetEditAreaId($arItem['ID']);?>">
                     <div class="promo-properties__img">
                         <div class="promo-properties__img__wrapper">
-                            <svg class="<?if($arItem['CODE']=='properties-car'){?>promo-propertiesicon promo-propertiesicon--car <?}else{?>promo-properties__icon promo-properties__icon--flowers<?}?>">
+                            <svg class="<?if($arItem['CODE']=='properties-car'){?>promo-properties__icon promo-properties__icon--car <?}else{?>promo-properties__icon promo-properties__icon--flowers<?}?>">
                                 <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#<?=$arItem['CODE']?>"></use>
                             </svg>
                         </div>
