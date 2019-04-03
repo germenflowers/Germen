@@ -244,7 +244,14 @@ $(document).ready(function(){
         maxHours: maxHours
     });
 
-    $('.phomemask').mask("+7 (999) 999-99-99");
+    $('.phomemask').mask('+7 (999) 999-99-99', {
+        'translation': {
+            7: {
+                pattern: /7/,
+                optional: true
+            }
+        }
+    });
 
     if ( $('#popup-login').length )
         $('#popup-login').modal('show');

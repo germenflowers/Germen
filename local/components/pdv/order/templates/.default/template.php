@@ -209,22 +209,8 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 </div>
                             </div>
 
-                            <div class="promo-order__block promo-order__block--full">
-                                <?$prop = $arResult['ORDER_PROPS'][10];?>
-                                <div class="styled-checkbox__block">
-                                    <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
-                                    <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
-
-                                    <?if( !empty($prop['DESCRIPTION']) ) {?>
-                                        <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
-                                            <svg class="" width="23px" height="23px">
-                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
-                                            </svg>
-                                        </span>
-                                    <? } ?>
-                                </div>
-
-                                <?if ( !empty($arResult['VASE']) ):?>
+                            <?if ( !empty($arResult['VASE']) ):?>
+                                <div class="promo-order__block promo-order__block--full">
                                     <?$prop = $arResult['ORDER_PROPS'][11];?>
                                     <div class="styled-checkbox__block">
                                         <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
@@ -237,21 +223,8 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                             </span>
                                         <? } ?>
                                     </div>
-                                <?endif;?>
-
-                                <?$prop = $arResult['ORDER_PROPS'][12];?>
-                                <div class="styled-checkbox__block">
-                                    <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
-                                    <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
-                                    <?if( !empty($prop['DESCRIPTION']) ) {?>
-                                        <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
-                                            <svg class="" width="23px" height="23px">
-                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
-                                            </svg>
-                                        </span>
-                                    <? } ?>
                                 </div>
-                            </div>
+                            <?endif;?>
 
                             <?$prop = $arResult['ORDER_PROPS'][14];?>
                             <div class="promo-order__block promo-order__block--full hidden" id="write_comment">
@@ -287,13 +260,48 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                         </div>
                     <?endif;?>
 
+                    <div class="promo-order__row">
+                        <div class="promo-order__block promo-order__block--full">
+                            <div class="promo-order__comment">
+                                <textarea name="COMMENT" class="textarea" placeholder="Комментарий к заказу" maxlength="400"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Это сюрприз -->
+                        <div class="promo-order__block promo-order__block--full">
+                            <?$prop = $arResult['ORDER_PROPS'][10];?>
+                            <div class="styled-checkbox__block">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+
+                            <!-- Добавить записку -->
+                            <?$prop = $arResult['ORDER_PROPS'][12];?>
+                            <div class="styled-checkbox__block">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <?$prop = $arResult['ORDER_PROPS'][13];?>
                     <div class="promo-order__comment" id="note-wrap">
                         <textarea name="ORDER_PROP_<?=$prop['ID']?>" class="textarea" placeholder="Текст записки"><?=$prop['VALUE']?></textarea>
-                    </div>
-
-                    <div class="promo-order__comment">
-                        <textarea name="COMMENT" class="textarea" placeholder="Комментарий к заказу" maxlength="400"></textarea>
                     </div>
 
                     <div class="promo-order__submit">
