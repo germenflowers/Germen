@@ -21,9 +21,10 @@ $isTextPage = \PDV\Tools::isTextPage();
     <?
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
-    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.mask.js');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/cleave/cleave.js');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/cleave/addons/cleave-phone.ru.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
-    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.211');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.212');
     ?>
     <script data-skip-moving="true">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

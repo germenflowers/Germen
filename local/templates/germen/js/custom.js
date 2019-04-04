@@ -244,13 +244,11 @@ $(document).ready(function(){
         maxHours: maxHours
     });
 
-    $('.phomemask').mask('+7 (999) 999-99-99', {
-        'translation': {
-            7: {
-                pattern: /7/,
-                optional: true
-            }
-        }
+    $('.phomemask').each(function(){
+        new Cleave(this, {
+            phone: true,
+            phoneRegionCode: 'RU'
+        });
     });
 
     if ( $('#popup-login').length )
