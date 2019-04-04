@@ -209,8 +209,17 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 </div>
                             </div>
 
-                            <?if ( !empty($arResult['VASE']) ):?>
-                                <div class="promo-order__block promo-order__block--full">
+                            <div class="promo-order__block promo-order__block--full">
+                                <div class="styled-checkbox__block">
+                                    <input class="styled-checkbox" id="recipient" type="checkbox">
+                                    <label for="recipient">Я получатель</label>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="Скрыть данные получателя">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#question"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <?if ( !empty($arResult['VASE']) ):?>
                                     <?$prop = $arResult['ORDER_PROPS'][11];?>
                                     <div class="styled-checkbox__block">
                                         <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
@@ -223,8 +232,8 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                             </span>
                                         <? } ?>
                                     </div>
-                                </div>
-                            <?endif;?>
+                                <?endif;?>
+                            </div>
 
                             <?$prop = $arResult['ORDER_PROPS'][14];?>
                             <div class="promo-order__block promo-order__block--full hidden" id="write_comment">
