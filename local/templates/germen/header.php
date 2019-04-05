@@ -19,7 +19,7 @@ $isTextPage = \PDV\Tools::isTextPage();
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
     <?
-    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
+    // Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.maskedinput.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
