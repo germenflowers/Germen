@@ -30,8 +30,6 @@ div.order-error{ color: red; margin-bottom: 10px; }
     }
 }
 
-.promo-propertiesicon--car{ height: 64px; }
-
 .promo-order.loader{ position: relative; }
 .promo-order.loader:before{
     display: block;

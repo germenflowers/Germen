@@ -44,18 +44,15 @@ if ( $USER_DELIVERY_ID == 0 ):
     </div>
 <?endif;?>
 
-<div class="modal fade" id="popup-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade product-modal" id="popup-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="popup-promo">
-                <div class="popup-promo__header">
-                    <div class="logo"></div>
-                    <div class="popup-promo__close mobile-menu active" data-dismiss="modal" aria-hidden="true">
-                        <span></span>
-                    </div>
-                </div>
-                <div class="js-body"></div>
-            </div>
+            <button class="modal-close" type="button" data-dismiss="modal" aria-label="Close">
+                <svg width="24px" height="24px">
+                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#cross"></use>
+                </svg>
+            </button>
+            <div class="product-info js-body"></div>
         </div>
     </div>
 </div>
