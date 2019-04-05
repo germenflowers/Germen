@@ -220,6 +220,7 @@ function afterEnterCoupon( result ) {
 
 $(document).ready(function(){
     var SITE_TEMPLATE_PATH = '/local/templates/germen/',
+        $doc = $(document),
         body = $('body');
 
     var startDate = new Date(),
@@ -265,7 +266,7 @@ $(document).ready(function(){
         return false;
     });
 
-    body.on('click', '.js-pagin', function(){
+    $doc.on('click', '.js-pagin', function(){
         var link = $(this),
             href = link.data('href');
 
@@ -281,7 +282,7 @@ $(document).ready(function(){
         return false;
     });
 
-    body.on('click', '.js-detail', function() {
+    $doc.on('click', '.js-detail', function() {
         var id = parseInt( $(this).data('id') ),
             order = '';
         if ( window.location.pathname == '/order/' )
@@ -393,12 +394,12 @@ $(document).ready(function(){
     if ( $('#popup-flowers-success').length )
         $('#popup-flowers-success').modal('show');
 
-    body.on('click', '.js-coupon_link', function() {
+    $doc.on('click', '.js-coupon_link', function() {
         $('#coupon_wrap').slideToggle();
         return false;
     });
 
-    body.on('click', '#coupon_wrap button', function() {
+    $doc.on('click', '#coupon_wrap button', function() {
         var btn = $(this),
             input = $(this).closest('.promo-order__coupon').find('input'),
             props = [],
@@ -420,7 +421,7 @@ $(document).ready(function(){
         return false;
     });
 
-    body.on('click', '#coupon_wrap .promo-order__coupon__discount__cancel', function() {
+    $doc.on('click', '#coupon_wrap .promo-order__coupon__discount__cancel', function() {
         $(this).hide();
         BX.showWait();
         $.post( window.location.href, { coupon:'' }, function ( result ) {
