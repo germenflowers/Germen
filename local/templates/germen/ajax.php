@@ -59,7 +59,7 @@ switch ( $action ) {
                         /*$result['data'] .= '<div class="product-slider__item">
                             <div class="type-label">
                                 <svg width="16px" height="13px">
-                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#aroma"></use>
+                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#aroma"></use>
                                 </svg>
                                 Ароматная роза
                             </div>
@@ -76,7 +76,7 @@ switch ( $action ) {
                         <h2 class="product-info__title">
                             '.$arProd['NAME'].'
                         </h2>
-                        <p class="product-info__text">'.$arProd['PREVIEW_TEXT'].'</p>
+                        <div class="product-info__text">'.$arProd['PREVIEW_TEXT'].'</div>
                     </div>
                     <div class="product-info__row product-info__row--baseline">
                         <div class="product-info__cell">
@@ -88,12 +88,12 @@ switch ( $action ) {
                             <div class="payment-systems">
                                 <div class="payment-systems__item" aria-label="Оплата по счёту">
                                     <svg class="payment-systems__icon payment-systems__icon--invoice">
-                                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#payment-invoice"></use>
+                                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#payment-invoice"></use>
                                     </svg>
                                 </div>
                                 <div class="payment-systems__item" aria-label="MasterCard">
                                     <svg class="payment-systems__icon payment-systems__icon--mastercard">
-                                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#payment-mastercard"></use>
+                                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#payment-mastercard"></use>
                                     </svg>
                                 </div>
                                 <div class="payment-systems__item" aria-label="Visa">
@@ -125,7 +125,7 @@ switch ( $action ) {
                         <div class="product-info__feature">
                             <div class="product-info__feature-icon">
                                 <svg width="26px" height="22px">
-                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#feature-car"></use>
+                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#feature-car"></use>
                                 </svg>
                             </div>
                             <h5 class="product-info__feature-title">Бесплатная доставка</h5>
@@ -135,7 +135,7 @@ switch ( $action ) {
                         <div class="product-info__feature">
                             <div class="product-info__feature-icon">
                                 <svg width="19px" height="26px">
-                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#feature-paper"></use>
+                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#feature-paper"></use>
                                 </svg>
                             </div>
                             <h5 class="product-info__feature-title">Открытка в&nbsp;подарок</h5>
@@ -144,7 +144,7 @@ switch ( $action ) {
                         <div class="product-info__feature">
                             <div class="product-info__feature-icon">
                                 <svg width="26px" height="22px">
-                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#feature-camera"></use>
+                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#feature-camera"></use>
                                 </svg>
                             </div>
                             <h5 class="product-info__feature-title">Контроль на&nbsp;каждом этапе</h5>
@@ -153,7 +153,7 @@ switch ( $action ) {
                         <div class="product-info__feature">
                             <div class="product-info__feature-icon">
                                 <svg width="20px" height="26px">
-                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#feature-badge"></use>
+                                    <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#feature-badge"></use>
                                 </svg>
                             </div>
                             <h5 class="product-info__feature-title">Гарантия качества</h5>

@@ -58,13 +58,13 @@ $this->setFrameMode(true);
                                 <?if (!empty($arItem['PROPERTIES']['LINK_FB']['VALUE']) ){?>
                                     <a href="<?=$arItem['PROPERTIES']['LINK_FB']['VALUE']?>" target="_blank">
                                         <svg class="item-review__profile__social">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#fb"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#fb"></use>
                                         </svg>
                                     </a>
                                 <? }elseif (!empty($arItem['PROPERTIES']['LINK_YELL']['VALUE']) ){?>
                                     <a href="<?=$arItem['PROPERTIES']['LINK_YELL']['VALUE']?>" target="_blank">
                                         <svg class="item-review__profile__social">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#yell"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#yell"></use>
                                         </svg>
                                     </a>
                                 <? } ?>

@@ -34,7 +34,7 @@ if ( $count > $arResult['NavPageSize'] )
                 <span class="btn__loading__text">
                     + еще <?=\PDV\Tools::Declension($count, array('букет','букета','букетов'))?>
                     <svg class="btn__loading__icon">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#loading"></use>
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#loading"></use>
                     </svg>
                 </span>
             </button>
@@ -47,7 +47,7 @@ if ( $count > $arResult['NavPageSize'] )
                 <span class="btn__loading__text">
                     + еще <?=\PDV\Tools::Declension($count, array('букет','букета','букетов'))?>
                     <svg class="btn__loading__icon">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#loading"></use>
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#loading"></use>
                     </svg>
                 </span>
             </button>

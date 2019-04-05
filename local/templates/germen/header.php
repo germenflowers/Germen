@@ -110,7 +110,7 @@ $isTextPage = \PDV\Tools::isTextPage();
                 ?>
                 <a href="tel:<?=$phone?>" class="header__phone">
                     <svg class="" width="26px" height="26px">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#phone"></use>
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#phone"></use>
                     </svg>
                 </a>
 
