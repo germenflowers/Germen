@@ -56,13 +56,16 @@ switch ( $action ) {
                 if ( !empty($images) ) {
                     $result['data'] .= '<div class="product-info__gallery"><div class="product-slider" data-product-slider="">';
                     foreach ( $images as $img ) {
-                        $result['data'] .= '<div class="product-slider__item">
+                        /*$result['data'] .= '<div class="product-slider__item">
                             <div class="type-label">
                                 <svg width="16px" height="13px">
                                     <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg#aroma"></use>
                                 </svg>
                                 Ароматная роза
                             </div>
+                            <img data-lazy="' . CFile::GetPath($img) .'" alt="">
+                        </div>';*/
+                        $result['data'] .= '<div class="product-slider__item">
                             <img data-lazy="' . CFile::GetPath($img) .'" alt="">
                         </div>';
                     }
