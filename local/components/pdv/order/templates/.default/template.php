@@ -118,7 +118,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                         <?if( !empty($prop['DESCRIPTION']) ) {?>
                                             <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                                 <svg class="" width="23px" height="23px">
-                                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
                                                 </svg>
                                             </span>
                                         <? } ?>
@@ -181,7 +181,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
 
                                     <label for="add_<?=$code?>">
                                         <svg class="promo-order__social__icon">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#social-<?=$code?>"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#social-<?=$code?>"></use>
                                         </svg>
 
                                         <span class="promo-order__social__text"><?=$name?></span>
@@ -218,7 +218,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <?if( !empty($prop['DESCRIPTION']) ) {?>
                                         <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                             <svg class="" width="23px" height="23px">
-                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
                                             </svg>
                                         </span>
                                     <? } ?>
@@ -232,7 +232,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                         <?if( !empty($prop['DESCRIPTION']) ) {?>
                                             <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                                 <svg class="" width="23px" height="23px">
-                                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
                                                 </svg>
                                             </span>
                                         <? } ?>
@@ -246,7 +246,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <?if( !empty($prop['DESCRIPTION']) ) {?>
                                         <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                             <svg class="" width="23px" height="23px">
-                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
                                             </svg>
                                         </span>
                                     <? } ?>
@@ -261,7 +261,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <?if( !empty($prop['DESCRIPTION']) ) {?>
                                         <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                             <svg class="" width="23px" height="23px">
-                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
                                             </svg>
                                         </span>
                                     <? } ?>

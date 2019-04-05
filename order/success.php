@@ -27,7 +27,7 @@ $APPLICATION->SetTitle("Ваш заказ успешно оплачен");
                     <div class="popup-promo__greate__social">
                         <a href="#">
                             <svg width="64px" height="64px" class="popup-promo__greate__social__icon">
-                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#instagram"></use>
+                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#instagram"></use>
                             </svg>
                         </a>
 
