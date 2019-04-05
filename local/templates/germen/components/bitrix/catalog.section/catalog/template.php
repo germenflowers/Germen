@@ -28,7 +28,7 @@
 
                                 <div class="promo-item__delivery__time">
                                     <svg class="promo-item__delivery__icon">
-                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#properties-car-mini"></use>
+                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#properties-car-mini"></use>
                                     </svg>
 
                                     <div class="promo-item__delivery__time__text js-prod_time"><?=$arParams['DELIVERY_TIME']?></div>

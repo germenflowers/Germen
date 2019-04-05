@@ -8,7 +8,7 @@
 	<li>
 		<a href="#">
 			<svg class="promo-about__nav__img" height="24px" width="228px">
-				<use xlink:href="/local/templates/germen/icons/icons.svg#promo-about-commerc"></use>
+				<use xlink:href="/local/templates/germen/icons/icons.svg?v=1.1#promo-about-commerc"></use>
 			</svg>
 		</a>
 	</li>
