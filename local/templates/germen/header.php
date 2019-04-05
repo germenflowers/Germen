@@ -19,11 +19,11 @@ $isTextPage = \PDV\Tools::isTextPage();
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
     <?
-    // Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.maskedinput.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
-    // Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.211');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.212');
     ?>
     <script data-skip-moving="true">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
