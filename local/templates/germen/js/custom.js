@@ -121,6 +121,8 @@ function getMap() {
     }
 }
 
+var isOrderFormInited = false;
+
 function changeFormData( formOrder ) {
     var error = true,
         props = [],
@@ -148,6 +150,50 @@ function changeFormData( formOrder ) {
     else
         $('#social-wrap').show();
 
+
+    var $contactsPhone = $('#ORDER_PROP_5'),
+        $contactsName = $('#ORDER_PROP_name'),
+        $recipientPhone = $('#ORDER_PROP_8'),
+        $recipientName = $('#ORDER_PROP_9');
+
+    var contactsPhone = $contactsPhone.val(),
+        contactsName = $contactsName.val(),
+        recipientPhone = $recipientPhone.val(),
+        recipientName = $recipientName.val();
+
+    if (!$contactsPhone.data('prevValue')) {
+        $contactsPhone.data('prevValue', contactsPhone);
+    }
+
+    if (!$contactsName.data('prevValue')) {
+        $contactsName.data('prevValue', contactsName);
+    }
+
+    if (isOrderFormInited) {
+        if ( props['ORDER_PROP_recipient'].length > 0 ) {
+            $contactsPhone.data('prevValue', contactsPhone);
+            $contactsName.data('prevValue', contactsName);
+
+            if (recipientPhone !== '') {
+                $contactsPhone.data('cleave').setRawValue(recipientPhone);
+            }
+
+            if (recipientName !== '') {
+                $contactsName.val(recipientName);
+            }
+
+            $('#contacts-name').removeClass('hidden');
+            $('#recipient').hide();
+        } else {
+            $recipientPhone.data('cleave').setRawValue(contactsPhone);
+            $recipientName.val(contactsName);
+            $contactsPhone.data('cleave').setRawValue($contactsPhone.data('prevValue'));
+            $contactsName.val($contactsName.data('prevValue'));
+            $('#contacts-name').addClass('hidden');
+            $('#recipient').show();
+        }
+    }
+
     if ( props['ORDER_PROP_11'].length == 0 )
         vaseWrap.hide();
     else
@@ -172,6 +218,8 @@ function changeFormData( formOrder ) {
 
 
     $('.js-orderprice').text( $.number( price, 0, '', ' ' ) );
+
+    isOrderFormInited = true;
 }
 
 function afterEnterCoupon( result ) {
@@ -244,11 +292,13 @@ $(document).ready(function(){
         maxHours: maxHours
     });
 
-    $('.phomemask').each(function(){
-        new Cleave(this, {
+    $('.phonemask').each(function(){
+        var cleave = new Cleave(this, {
             phone: true,
             phoneRegionCode: 'RU'
         });
+
+        $(this).data('cleave', cleave);
     });
 
     if ( $('#popup-login').length )
@@ -343,8 +393,18 @@ $(document).ready(function(){
     if ( formOrder.length ) {
         changeFormData( formOrder );
 
-        formOrder.find('input').on('change', function(){
-            changeFormData( formOrder );
+        formOrder.find('input').on('change', function(e){
+            switch (e.target.name) {
+                case 'ORDER_PROP_5':
+                case 'ORDER_PROP_name':
+                case 'ORDER_PROP_9':
+                case 'ORDER_PROP_8':
+                    break;
+
+                default:
+                    changeFormData( formOrder );
+                    break;
+            }
         });
     }
 

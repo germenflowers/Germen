@@ -151,7 +151,12 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                             <div class="promo-order__row">
                                 <div class="promo-order__block">
                                     <div class="input__wrapper input__wrapper--mark">
-                                        <input type="text" class="input phomemask" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" value="<?= !empty($prop['VALUE']) ? $prop['VALUE'] : '+7' ?>" placeholder="+7">
+                                        <input type="text" class="input phonemask" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" value="<?= !empty($prop['VALUE']) ? $prop['VALUE'] : '+7' ?>" placeholder="+7">
+                                    </div>
+                                </div>
+                                <div class="promo-order__block hidden" id="contacts-name">
+                                    <div class="input__wrapper input__wrapper--mark">
+                                        <input type="text" class="input" id="ORDER_PROP_name" name="ORDER_PROP_name" value="" placeholder="Имя">
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +172,17 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="styled-checkbox__block">
                                     <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
                                     <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="styled-checkbox__block">
+                                    <input class="styled-checkbox" name="ORDER_PROP_recipient" id="ORDER_PROP_recipient" type="checkbox" value="Y">
+                                    <label for="ORDER_PROP_recipient">Я получатель</label>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="Скрыть данные получателя">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#question"></use>
+                                        </svg>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -191,14 +207,14 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                         <? } ?>
                     </ul>
 
-                    <div class="promo-order__recipient">
+                    <div class="promo-order__recipient" id="recipient">
                         <div class="head-h3">Данные получателя</div>
 
                         <div class="promo-order__row">
                             <?$prop = $arResult['ORDER_PROPS'][8];?>
                             <div class="promo-order__block">
                                 <div class="input__wrapper input__wrapper--mark">
-                                    <input type="text" class="input phomemask" id="ORDER_PROP_<?=$prop['ID']?>" name="ORDER_PROP_<?=$prop['ID']?>" value="<?= !empty($prop['VALUE']) ? $prop['VALUE'] : '+7' ?>" placeholder="+7">
+                                    <input type="text" class="input phonemask" id="ORDER_PROP_<?=$prop['ID']?>" name="ORDER_PROP_<?=$prop['ID']?>" value="<?= !empty($prop['VALUE']) ? $prop['VALUE'] : '+7' ?>" placeholder="+7">
                                 </div>
                             </div>
 
@@ -207,32 +223,6 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="input__wrapper input__wrapper--mark">
                                     <input type="text" class="input" id="ORDER_PROP_<?=$prop['ID']?>" name="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>" placeholder="Имя">
                                 </div>
-                            </div>
-
-                            <div class="promo-order__block promo-order__block--full">
-                                <div class="styled-checkbox__block">
-                                    <input class="styled-checkbox" id="recipient" type="checkbox">
-                                    <label for="recipient">Я получатель</label>
-                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="Скрыть данные получателя">
-                                        <svg class="" width="23px" height="23px">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#question"></use>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <?if ( !empty($arResult['VASE']) ):?>
-                                    <?$prop = $arResult['ORDER_PROPS'][11];?>
-                                    <div class="styled-checkbox__block">
-                                        <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
-                                        <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
-                                        <?if( !empty($prop['DESCRIPTION']) ) {?>
-                                            <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
-                                                <svg class="" width="23px" height="23px">
-                                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
-                                                </svg>
-                                            </span>
-                                        <? } ?>
-                                    </div>
-                                <?endif;?>
                             </div>
 
                             <?$prop = $arResult['ORDER_PROPS'][14];?>
@@ -278,6 +268,21 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
 
                         <!-- Это сюрприз -->
                         <div class="promo-order__block promo-order__block--full">
+                            <?if ( !empty($arResult['VASE']) ):?>
+                                <?$prop = $arResult['ORDER_PROPS'][11];?>
+                                <div class="styled-checkbox__block">
+                                    <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                    <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                    <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                        <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                            <svg class="" width="23px" height="23px">
+                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#question"></use>
+                                            </svg>
+                                        </span>
+                                    <? } ?>
+                                </div>
+                            <?endif;?>
+
                             <?$prop = $arResult['ORDER_PROPS'][10];?>
                             <div class="styled-checkbox__block">
                                 <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
