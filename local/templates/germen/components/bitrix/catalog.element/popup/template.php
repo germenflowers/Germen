@@ -23,6 +23,9 @@
                 <?= $arResult["NAME"] ?>
             </h2>
             <div class="product-info__text"> <?= $arResult["PREVIEW_TEXT"] ?></div>
+            <? if (!empty($arResult["COMPOSITION"])): ?>
+                <div><?= $arResult["COMPOSITION"] ?></div>
+            <? endif; ?>
         </div>
         <div class="product-info__row product-info__row--baseline">
             <div class="product-info__cell">

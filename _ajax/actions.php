@@ -51,7 +51,7 @@ try {
                     "ELEMENT_ID" => $id,
                     "PROPERTY_CODE" => [
                         "IMAGES",
-                        "SOSTAV",
+                        "COMPOSITION",
                     ],
                     "ACTION_VARIABLE" => "action_var",
                     "CACHE_TYPE" => "A",

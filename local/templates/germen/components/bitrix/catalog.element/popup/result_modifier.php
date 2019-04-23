@@ -19,3 +19,4 @@ if (!empty($propImages)) {
         $arResult["IMAGES"][] = $propImages["FILE_VALUE"];
     }
 }
+$arResult["COMPOSITION"] = $arResult["DISPLAY_PROPERTIES"]["COMPOSITION"]["DISPLAY_VALUE"];
