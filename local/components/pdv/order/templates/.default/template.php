@@ -169,6 +169,26 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
                                 </div>
                             </div>
+
+                            <div class="promo-order__delivery__checkbox">
+                                <? $prop = $arResult['ORDER_PROPS'][18]; ?>
+                                <div class="styled-checkbox__block">
+                                    <input class="styled-checkbox" name="ORDER_PROP_<?= $prop['ID'] ?>"
+                                           id="ORDER_PROP_<?= $prop['ID'] ?>" type="checkbox"
+                                           value="Y"<? if (!empty($prop['VALUE'])) {
+                                        echo ' checked';
+                                    } ?>>
+                                    <label for="ORDER_PROP_<?= $prop['ID'] ?>"><?= $prop['NAME'] ?></label>
+                                    <? if (!empty($prop['DESCRIPTION'])) { ?>
+                                        <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip"
+                                              data-placement="bottom" title="<?= $prop['DESCRIPTION'] ?>">
+                                            <svg class="" width="23px" height="23px">
+                                                <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.1#question"></use>
+                                            </svg>
+                                        </span>
+                                    <? } ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
