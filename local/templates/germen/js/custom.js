@@ -219,8 +219,7 @@ function afterEnterCoupon( result ) {
 }
 
 $(document).ready(function(){
-    var SITE_TEMPLATE_PATH = '/local/templates/germen/',
-        body = $('body');
+    var body = $('body');
 
     var startDate = new Date(),
         orderData = $('.order-datetime'),
@@ -251,12 +250,15 @@ $(document).ready(function(){
 
     $('.js-set_delivery').click(function () {
         $.post(
-            SITE_TEMPLATE_PATH + "ajax.php",
-            { id: $(this).data('id'), action: "setdelivery" },
-            function( result ){
-                if ( !result.error ) {
+            "/_ajax/actions.php",
+            {
+                id: $(this).data('id'),
+                action: "setDelivery"
+            },
+            function (result) {
+                if (!result.error) {
                     $('#popup-login').modal('hide');
-                    $('.js-prod_time').text( result.data.TIME );
+                    $('.js-prod_time').text(result.data.TIME);
                 }
             },
             'json'
@@ -284,19 +286,33 @@ $(document).ready(function(){
     var $popupProduct = $('#popup-product');
     var $popupProductBody = $popupProduct.find('.js-body');
 
-    body.on('click', '.js-detail', function() {
-        var id = parseInt( $(this).data('id') ),
+    function getUrlParam(name) {
+        var s = window.location.search;
+        s = s.match(new RegExp(name + '=([^&=]+)'));
+        return s ? s[1] : false;
+    }
+
+    body.on('click', '.js-detail', function () {
+        var id = parseInt($(this).data('id')),
             order = '';
-        if ( window.location.pathname == '/order/' )
+        if (window.location.pathname === '/order/')
             order = 'Y';
 
-        if ( id > 0 ) {
-            $.post(
-                SITE_TEMPLATE_PATH + "ajax.php",
-                { id: id, order: order, action: 'prod_detail' },
-                function( result ) {
-                    if ( !result.error ) {
-                        $popupProductBody.html( result.data );
+
+        if (id > 0) {
+            $.ajax({
+                url: "/_ajax/actions.php",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    id: id,
+                    order: order,
+                    action: 'getDetail',
+                    clear_cache: getUrlParam("clear_cache")
+                },
+                success: function (result) {
+                    if (!result.error) {
+                        $popupProductBody.html(result.data);
                         var $productSlider = $popupProduct.find('[data-product-slider]');
 
                         if ($productSlider.length > 0) {
@@ -308,9 +324,8 @@ $(document).ready(function(){
                         }
                         $popupProduct.modal('show');
                     }
-                },
-                'json'
-            );
+                }
+            });
         }
 
         return false;
