@@ -28738,6 +28738,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.info-bar__close', function(e){
         $(this).closest('.info-bar').addClass(hiddenClass);
+        BX.setCookie("HIDE_INFOBAR", "Y")
         e.preventDefault();
     });
 });

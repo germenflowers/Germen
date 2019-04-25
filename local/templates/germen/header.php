@@ -96,15 +96,22 @@ $isTextPage = \PDV\Tools::isTextPage();
     </div>
 </nav>
 <?endif;?>
+<? if (\Bitrix\Main\Loader::includeModule("germen.settings")): ?>
+    <?
+    $infoLineText = \UniPlug\Settings::get("INFO_LINE_TEXT");
+    $infoLineIsShow = (bool)\UniPlug\Settings::get("INFO_LINE_IS_SHOW");
 
-<div class="info-bar">
-    <button class="info-bar__close" aria-label="close">
-        <svg aria-hidden="true">
-            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#cross-2"></use>
-        </svg>
-    </button>
-    <div class="info-bar__inner">Заказы на&nbsp;8&nbsp;марта больше не&nbsp;принимаются, следующая доставка&nbsp;&mdash; 10&nbsp;марта</div>
-</div>
+    if (!empty($infoLineText) && $infoLineIsShow && $_COOKIE["HIDE_INFOBAR"] !== "Y"):?>
+        <div class="info-bar">
+            <button class="info-bar__close" aria-label="close">
+                <svg aria-hidden="true">
+                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.2#cross-2"></use>
+                </svg>
+            </button>
+            <div class="info-bar__inner"><?= $infoLineText ?></div>
+        </div>
+    <? endif; ?>
+<? endif; ?>
 
 <main id="panel-body">
     <?if( !$isOrderPage ):?>
