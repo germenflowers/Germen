@@ -15,7 +15,7 @@ $isTextPage = \PDV\Tools::isTextPage();
     <title><?$APPLICATION->ShowTitle()?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="apple-touch-icon" href="<?=SITE_TEMPLATE_PATH?>/img/apple-touch-icon.png">
-    <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.4">
+    <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.5">
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
     <?
@@ -23,7 +23,7 @@ $isTextPage = \PDV\Tools::isTextPage();
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.maskedinput.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
-    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.211');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.212');
     ?>
     <script data-skip-moving="true">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -96,6 +96,22 @@ $isTextPage = \PDV\Tools::isTextPage();
     </div>
 </nav>
 <?endif;?>
+<? if (\Bitrix\Main\Loader::includeModule("germen.settings")): ?>
+    <?
+    $infoLineText = \UniPlug\Settings::get("INFO_LINE_TEXT");
+    $infoLineIsShow = (bool)\UniPlug\Settings::get("INFO_LINE_IS_SHOW");
+
+    if (!empty($infoLineText) && $infoLineIsShow && $_COOKIE["HIDE_INFOBAR"] !== "Y"):?>
+        <div class="info-bar">
+            <button class="info-bar__close" aria-label="close">
+                <svg aria-hidden="true">
+                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.2#cross-2"></use>
+                </svg>
+            </button>
+            <div class="info-bar__inner"><?= $infoLineText ?></div>
+        </div>
+    <? endif; ?>
+<? endif; ?>
 
 <main id="panel-body">
     <?if( !$isOrderPage ):?>
@@ -110,7 +126,7 @@ $isTextPage = \PDV\Tools::isTextPage();
                 ?>
                 <a href="tel:<?=$phone?>" class="header__phone">
                     <svg class="" width="26px" height="26px">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.1#phone"></use>
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#phone"></use>
                     </svg>
                 </a>
 

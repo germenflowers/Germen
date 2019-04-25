@@ -28732,6 +28732,16 @@ $(document).ready(function(){
         });
     }
 });
+
+$(document).ready(function(){
+    var hiddenClass = 'info-bar--hidden';
+
+    $(document).on('click', '.info-bar__close', function(e){
+        $(this).closest('.info-bar').addClass(hiddenClass);
+        BX.setCookie("HIDE_INFOBAR", "Y")
+        e.preventDefault();
+    });
+});
 /*
      _ _      _       _
  ___| (_) ___| | __  (_)___
