@@ -2,14 +2,25 @@
     <div class="product-slider" data-product-slider="">
         <? foreach ($arResult["IMAGES"] as $arImage): ?>
             <div class="product-slider__item">
-                <? /*
-                <div class="type-label">
-                    <svg width="16px" height="13px">
-                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=1.1#aroma"></use>
-                    </svg>
-                    Ароматная роза
-                </div>
-                */ ?>
+                <? if (!empty($arResult["PICTURE_LABELS"])): ?>
+                    <?
+                    $counter = 0;
+                    foreach ($arResult["PICTURE_LABELS"] as $pictureLabel):
+                        ?>
+                        <div class="type-label" <?= $counter > 0 ? "style='top:80px'" : "" ?>>
+                            <? if (!empty($pictureLabel["ICON"])): ?>
+                                <img src="<?= $pictureLabel["ICON"]["SRC"] ?>" style="width: 16px;height: 13px;">
+                            <? else: ?>
+                                <svg width="16px" height="13px">
+                                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.1#aroma"></use>
+                                </svg>
+                            <? endif; ?>
+                            <?= $pictureLabel["NAME"] ?>
+                        </div>
+                        <?
+                        $counter++;
+                    endforeach; ?>
+                <? endif; ?>
                 <img data-lazy="<?= $arImage["SRC"] ?>" alt="">
             </div>
         <? endforeach; ?>

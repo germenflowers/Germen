@@ -52,6 +52,7 @@ try {
                     "PROPERTY_CODE" => [
                         "IMAGES",
                         "SOSTAV",
+                        "PICTURE_LABELS",
                     ],
                     "ACTION_VARIABLE" => "action_var",
                     "CACHE_TYPE" => "A",
