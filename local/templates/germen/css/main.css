@@ -8786,6 +8786,18 @@ input, textarea, button {
       object-fit: cover;
       transform: translate(-50%, -50%);
       transition: opacity .2s ease; }
+  .product-slider__labels {
+    position: absolute;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    top: 15px;
+    left: 0;
+    z-index: 1;
+    text-align: left; }
+    .product-slider__labels .type-label {
+      margin: 0 1px 1px 0; }
   .product-slider .slick-list {
     height: 100%; }
   .product-slider .slick-track {
@@ -8841,17 +8853,12 @@ input, textarea, button {
           background-color: rgba(216, 216, 216, 0.46); }
           .product-slider .slick-dots li.slick-active button:after {
             opacity: 1; }
-  .product-slider .type-label {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    z-index: 1; }
 
 @media screen and (min-width: 700px) {
+  .product-slider__labels {
+    top: 28px; }
   .product-slider .slick-dots {
-    bottom: 30px; }
-  .product-slider .type-label {
-    top: 28px; } }
+    bottom: 30px; } }
 
 @keyframes rotateSpinner {
   0% {
