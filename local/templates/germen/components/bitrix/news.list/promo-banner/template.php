@@ -23,5 +23,10 @@ $this->setFrameMode(true);
         <?if ( !empty($arItem['PREVIEW_TEXT']) ) {?>
             <div class="head-h1 promo-main__title"><?=$arItem['PREVIEW_TEXT']?></div>
         <? } ?>
+        <? if ($APPLICATION->GetCurPage(false) === '/') {?>
+            <div class="promo-main__cta">
+                <a href="#advantages" class="btn btn__main btn--md btn--base js-scroll-to" title="Как это работает?" data-offset="50">Как это работает?</a>
+            </div>
+        <? } ?>
     </div>
 <?endforeach;?>

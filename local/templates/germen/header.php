@@ -105,7 +105,7 @@ $isTextPage = \PDV\Tools::isTextPage();
         <div class="info-bar">
             <button class="info-bar__close" aria-label="close">
                 <svg aria-hidden="true">
-                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.2#cross-2"></use>
+                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross-2"></use>
                 </svg>
             </button>
             <div class="info-bar__inner"><?= $infoLineText ?></div>
@@ -118,15 +118,15 @@ $isTextPage = \PDV\Tools::isTextPage();
         <div class="header">
             <div class="header__container">
                 <div class="header__logo">
-                    <a href="/" class="logo"></a>
+                    <a href="/" class="logo" title="germen"></a>
                 </div>
 
                 <?
                 $phone = trim(str_replace(array('(',')','-',' '), '', file_get_contents($_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH.'/include/phone.php')));
                 ?>
                 <a href="tel:<?=$phone?>" class="header__phone">
-                    <svg class="" width="26px" height="26px">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#phone"></use>
+                    <svg width="24px" height="24px" aria-hidden="true">
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#phone"></use>
                     </svg>
                 </a>
 
@@ -155,11 +155,15 @@ $isTextPage = \PDV\Tools::isTextPage();
                 </div>
 
                 <div class="header__burger">
-                    <span class="toggle-menu mobile-menu"><span></span></span>
+                    <span class="toggle-menu mobile-menu">
+                        <svg width="26px" height="22px" aria-hidden="true">
+                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#burger"></use>
+                        </svg>
+                    </span>
                 </div>
             </div>
         </div>
-        <div class="content<?if ( !$isArticlePage ){?> content--main<?}?>">
+        <div class="content<?if ( !$isArticlePage && !$isSubscribePage ){?> content--main<?}?>">
             <?if ( $isArticlePage ) :?>
                 <div class="content__container">
                     <div class="promo-article">
@@ -224,76 +228,18 @@ $isTextPage = \PDV\Tools::isTextPage();
 
                         <div class="head-h2"><?$APPLICATION->ShowTitle()?></div>
             <?else:?>
-                <div class="promo-main">
-                    <?
-                    $arrFilterBanner = array();
-                    if ( \PDV\Tools::is404() )
-                        $arrFilterBanner = array('=CODE' => '404');
-                    else
-                        $arrFilterBanner = array('=CODE' => $APPLICATION->GetCurDir());
-                    ?>
-                    <?$APPLICATION->IncludeComponent(
-                        "bitrix:news.list",
-                        "promo-banner",
-                        Array(
-                            "ACTIVE_DATE_FORMAT" => "d.m.Y",
-                            "ADD_SECTIONS_CHAIN" => "N",
-                            "AJAX_MODE" => "N",
-                            "AJAX_OPTION_ADDITIONAL" => "",
-                            "AJAX_OPTION_HISTORY" => "N",
-                            "AJAX_OPTION_JUMP" => "N",
-                            "AJAX_OPTION_STYLE" => "Y",
-                            "CACHE_FILTER" => "Y",
-                            "CACHE_GROUPS" => "Y",
-                            "CACHE_TIME" => "36000000",
-                            "CACHE_TYPE" => "A",
-                            "CHECK_DATES" => "Y",
-                            "DETAIL_URL" => "",
-                            "DISPLAY_BOTTOM_PAGER" => "N",
-                            "DISPLAY_DATE" => "N",
-                            "DISPLAY_NAME" => "Y",
-                            "DISPLAY_PICTURE" => "N",
-                            "DISPLAY_PREVIEW_TEXT" => "N",
-                            "DISPLAY_TOP_PAGER" => "N",
-                            "FIELD_CODE" => array("", ""),
-                            "FILTER_NAME" => "arrFilterBanner",
-                            "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                            "IBLOCK_ID" => IBLOCK_ID__PROMO_BANNER,
-                            "IBLOCK_TYPE" => "germen",
-                            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
-                            "INCLUDE_SUBSECTIONS" => "N",
-                            "MESSAGE_404" => "",
-                            "NEWS_COUNT" => "20",
-                            "PAGER_BASE_LINK_ENABLE" => "N",
-                            "PAGER_DESC_NUMBERING" => "N",
-                            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",
-                            "PAGER_SHOW_ALL" => "N",
-                            "PAGER_SHOW_ALWAYS" => "N",
-                            "PAGER_TEMPLATE" => ".default",
-                            "PAGER_TITLE" => "",
-                            "PARENT_SECTION" => "",
-                            "PARENT_SECTION_CODE" => "",
-                            "PREVIEW_TRUNCATE_LEN" => "",
-                            "PROPERTY_CODE" => array("", ""),
-                            "SET_BROWSER_TITLE" => "N",
-                            "SET_LAST_MODIFIED" => "N",
-                            "SET_META_DESCRIPTION" => "N",
-                            "SET_META_KEYWORDS" => "N",
-                            "SET_STATUS_404" => "N",
-                            "SET_TITLE" => "N",
-                            "SHOW_404" => "N",
-                            "SORT_BY1" => "ACTIVE_FROM",
-                            "SORT_BY2" => "SORT",
-                            "SORT_ORDER1" => "DESC",
-                            "SORT_ORDER2" => "ASC",
-                            "STRICT_SECTION_CHECK" => "N"
-                        )
-                    );?>
-
-                    <?if ( $isHome ): ?>
+                <?if ( !$isSubscribePage ) :?>
+                    <div class="promo-main">
+                        <?
+                        $arrFilterBanner = array();
+                        if ( \PDV\Tools::is404() )
+                            $arrFilterBanner = array('=CODE' => '404');
+                        else
+                            $arrFilterBanner = array('=CODE' => $APPLICATION->GetCurDir());
+                        ?>
                         <?$APPLICATION->IncludeComponent(
                             "bitrix:news.list",
-                            "promo-icons",
+                            "promo-banner",
                             Array(
                                 "ACTIVE_DATE_FORMAT" => "d.m.Y",
                                 "ADD_SECTIONS_CHAIN" => "N",
@@ -302,7 +248,7 @@ $isTextPage = \PDV\Tools::isTextPage();
                                 "AJAX_OPTION_HISTORY" => "N",
                                 "AJAX_OPTION_JUMP" => "N",
                                 "AJAX_OPTION_STYLE" => "Y",
-                                "CACHE_FILTER" => "N",
+                                "CACHE_FILTER" => "Y",
                                 "CACHE_GROUPS" => "Y",
                                 "CACHE_TIME" => "36000000",
                                 "CACHE_TYPE" => "A",
@@ -315,9 +261,9 @@ $isTextPage = \PDV\Tools::isTextPage();
                                 "DISPLAY_PREVIEW_TEXT" => "N",
                                 "DISPLAY_TOP_PAGER" => "N",
                                 "FIELD_CODE" => array("", ""),
-                                "FILTER_NAME" => "",
+                                "FILTER_NAME" => "arrFilterBanner",
                                 "HIDE_LINK_WHEN_NO_DETAIL" => "N",
-                                "IBLOCK_ID" => IBLOCK_ID__PROMO_ICONS,
+                                "IBLOCK_ID" => IBLOCK_ID__PROMO_BANNER,
                                 "IBLOCK_TYPE" => "germen",
                                 "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
                                 "INCLUDE_SUBSECTIONS" => "N",
@@ -348,11 +294,71 @@ $isTextPage = \PDV\Tools::isTextPage();
                                 "STRICT_SECTION_CHECK" => "N"
                             )
                         );?>
+
+                        <?/*if ( $isHome ): ?>
+                            <?$APPLICATION->IncludeComponent(
+                                "bitrix:news.list",
+                                "promo-icons",
+                                Array(
+                                    "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                                    "ADD_SECTIONS_CHAIN" => "N",
+                                    "AJAX_MODE" => "N",
+                                    "AJAX_OPTION_ADDITIONAL" => "",
+                                    "AJAX_OPTION_HISTORY" => "N",
+                                    "AJAX_OPTION_JUMP" => "N",
+                                    "AJAX_OPTION_STYLE" => "Y",
+                                    "CACHE_FILTER" => "N",
+                                    "CACHE_GROUPS" => "Y",
+                                    "CACHE_TIME" => "36000000",
+                                    "CACHE_TYPE" => "A",
+                                    "CHECK_DATES" => "Y",
+                                    "DETAIL_URL" => "",
+                                    "DISPLAY_BOTTOM_PAGER" => "N",
+                                    "DISPLAY_DATE" => "N",
+                                    "DISPLAY_NAME" => "Y",
+                                    "DISPLAY_PICTURE" => "N",
+                                    "DISPLAY_PREVIEW_TEXT" => "N",
+                                    "DISPLAY_TOP_PAGER" => "N",
+                                    "FIELD_CODE" => array("", ""),
+                                    "FILTER_NAME" => "",
+                                    "HIDE_LINK_WHEN_NO_DETAIL" => "N",
+                                    "IBLOCK_ID" => IBLOCK_ID__PROMO_ICONS,
+                                    "IBLOCK_TYPE" => "germen",
+                                    "INCLUDE_IBLOCK_INTO_CHAIN" => "N",
+                                    "INCLUDE_SUBSECTIONS" => "N",
+                                    "MESSAGE_404" => "",
+                                    "NEWS_COUNT" => "20",
+                                    "PAGER_BASE_LINK_ENABLE" => "N",
+                                    "PAGER_DESC_NUMBERING" => "N",
+                                    "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",
+                                    "PAGER_SHOW_ALL" => "N",
+                                    "PAGER_SHOW_ALWAYS" => "N",
+                                    "PAGER_TEMPLATE" => ".default",
+                                    "PAGER_TITLE" => "",
+                                    "PARENT_SECTION" => "",
+                                    "PARENT_SECTION_CODE" => "",
+                                    "PREVIEW_TRUNCATE_LEN" => "",
+                                    "PROPERTY_CODE" => array("", ""),
+                                    "SET_BROWSER_TITLE" => "N",
+                                    "SET_LAST_MODIFIED" => "N",
+                                    "SET_META_DESCRIPTION" => "N",
+                                    "SET_META_KEYWORDS" => "N",
+                                    "SET_STATUS_404" => "N",
+                                    "SET_TITLE" => "N",
+                                    "SHOW_404" => "N",
+                                    "SORT_BY1" => "ACTIVE_FROM",
+                                    "SORT_BY2" => "SORT",
+                                    "SORT_ORDER1" => "DESC",
+                                    "SORT_ORDER2" => "ASC",
+                                    "STRICT_SECTION_CHECK" => "N"
+                                )
+                            );?>
+                        <?endif;*/?>
+                    </div>
+                    <?if ( $isTextPage ):?>
+                        <div class="content__container">
+                            <div class="promo-article<?if($isSubscribePage){?> promo-article--subscribe<?}?>">
                     <?endif;?>
-                </div>
-                <?if ( $isTextPage ):?>
-                    <div class="content__container">
-                        <div class="promo-article<?if($isSubscribePage){?> promo-article--subscribe<?}?>">
                 <?endif;?>
             <?endif;?>
     <?endif;?>

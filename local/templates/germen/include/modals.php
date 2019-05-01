@@ -49,7 +49,7 @@ if ( $USER_DELIVERY_ID == 0 ):
         <div class="modal-content">
             <button class="modal-close" type="button" data-dismiss="modal" aria-label="Close">
                 <svg width="24px" height="24px">
-                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#cross"></use>
+                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross"></use>
                 </svg>
             </button>
             <div class="product-info js-body"></div>
