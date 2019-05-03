@@ -24,7 +24,7 @@ $this->setFrameMode(true);
                 <div class="promo-subscribe__pluse__img">
                     <div class="promo-subscribe__pluse__img__cell">
                         <svg class="promo-subscribe__pluse__icon promo-subscribe__pluse__icon--price ">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#<?=$arItem['CODE']?>"></use>
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#<?=$arItem['CODE']?>"></use>
                         </svg>
                     </div>
                 </div>

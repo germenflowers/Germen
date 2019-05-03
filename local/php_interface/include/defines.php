@@ -1,4 +1,6 @@
 <?
+define('VERSION_SPRITE__ICONS', '1.3');
+
 define('IBLOCK_ID__CATALOG', 1);
 define('IBLOCK_ID__REVIEWS', 2);
 define('IBLOCK_ID__SUBSCRIBE', 3);

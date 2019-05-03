@@ -67,7 +67,7 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
                 "PAGER_SHOW_ALWAYS" => "Y",
                 "PAGER_TEMPLATE" => "catalog",
                 "PAGER_TITLE" => "",
-                "PAGE_ELEMENT_COUNT" => "8",
+                "PAGE_ELEMENT_COUNT" => "4",
                 "PARTIAL_PRODUCT_PROPERTIES" => "N",
                 "PRICE_CODE" => array("BASE"),
                 "PRICE_VAT_INCLUDE" => "Y",
@@ -114,7 +114,43 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
                 "BLOCK_TITLE" => "Самое популярное"
             )
         );?>
+    </div>
 
+    <div class="promo-features__wrapper" data-anchor="advantages">
+        <div class="promo-features js-promo-features-slider">
+            <ul class="promo-features__list">
+                <li class="promo-features__item">
+                    <div class="promo-features__block">
+                        <div class="promo-features__icon promo-features__icon--car">
+                            <img src="<?=SITE_TEMPLATE_PATH?>/img/features-car.svg" alt="" />
+                        </div>
+                        <h5 class="promo-features__title">Быстрая доставка</h5>
+                        <p class="promo-features__text">Как только вы&nbsp;сделали заказ, флорист идет выбирать свежие цветы, а&nbsp;курьер сразу выезжает на&nbsp;базу. Доставка от&nbsp;60&nbsp;минут.</p>
+                    </div>
+                </li>
+                <li class="promo-features__item">
+                    <div class="promo-features__block">
+                        <div class="promo-features__icon promo-features__icon--flower">
+                            <img src="<?=SITE_TEMPLATE_PATH?>/img/features-flower.svg" alt="" />
+                        </div>
+                        <h5 class="promo-features__title">Только свежие цветы</h5>
+                        <p class="promo-features__text">Собираем букет под конкретный заказ&nbsp;&mdash; цветы не&nbsp;вянут в&nbsp;ожидании продажи. Каждое растение храним в&nbsp;подходящей для него температуре, регулярно меняем воду, сразу списываем вялые цветы и&nbsp;брак.</p>
+                    </div>
+                </li>
+                <li class="promo-features__item">
+                    <div class="promo-features__block">
+                        <div class="promo-features__icon promo-features__icon--reward">
+                            <img src="<?=SITE_TEMPLATE_PATH?>/img/features-reward.svg" alt="" />
+                        </div>
+                        <h5 class="promo-features__title">Гарантия качества </h5>
+                        <p class="promo-features__text">Возвращаем деньги, если цветы окажутся несвежими или завянут в&nbsp;день доставки.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="promo-catalog__wrapper">
         <?
         \Bitrix\Main\Loader::includeModule('iblock');
         $rsSect = CIBlockSection::GetList(
@@ -185,7 +221,7 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
                     "PAGER_SHOW_ALWAYS" => "Y",
                     "PAGER_TEMPLATE" => "catalog",
                     "PAGER_TITLE" => "",
-                    "PAGE_ELEMENT_COUNT" => "8",
+                    "PAGE_ELEMENT_COUNT" => "4",
                     "PARTIAL_PRODUCT_PROPERTIES" => "N",
                     "PRICE_CODE" => array("BASE"),
                     "PRICE_VAT_INCLUDE" => "Y",
@@ -233,6 +269,16 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
                 )
             );?>
         <? } ?>
+    </div>
+
+    <div class="promo-chat">
+        <div class="promo-chat__preview">
+            <img src="<?=SITE_TEMPLATE_PATH?>/img/chat.gif" alt="" />
+        </div>
+        <div class="promo-chat__content">
+            <h2 class="head-h2 promo-chat__title">Удобный чат с флористом</h2>
+            <div class="promo-chat__text">Порекомендуем лучшие сезонные цветы, пришлем фото всех растений, которые есть на&nbsp;базе, сфотографируем готовый букет и&nbsp;подписанную открытку перед отправкой, добавим или заменим упаковку и&nbsp;цветы по&nbsp;вашей просьбе. И&nbsp;всё это&nbsp;&mdash; в&nbsp;удобном чате!</div>
+        </div>
     </div>
 
     <?$APPLICATION->IncludeComponent(
@@ -294,9 +340,9 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
     );?>
 </div>
 
-<?require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");?>
+<?/*require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");*/?>
 
-<div class="promo-sub promo-sub--main">
+<div class="promo-sub promo-sub--main u-pt-0">
     <?$APPLICATION->IncludeComponent(
         "bitrix:main.include",
         "",
