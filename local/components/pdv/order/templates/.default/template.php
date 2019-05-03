@@ -18,6 +18,478 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
 ?>
 
 <?if ( !$arResult["CONFIRM"] ):?>
+    <header class="order-header">
+        <div class="order-header__logo">
+            <a href="#" class="logo"></a>
+        </div>
+    </header>
+
+    <div class="order-content">
+        <form class="order-form" id="form-order" action="<?=$APPLICATION->GetCurPageParam(false)?>" method="post">
+            <div class="order-form__main">
+                <div class="order-form__title">Оформление заказа</div>
+
+                <?foreach ( $arResult['ERROR'] as $error) {?>
+                    <div class="order-error"><?=$error?></div>
+                <? } ?>
+
+                <div class="order-form__section">
+                    <div class="order-form__subtitle order-form__subtitle--offers">Комплименты</div>
+                    <div class="order-offers js-order-offers-slider">
+                        <div class="order-offers__list">
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
+                                    <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-2.jpg" srcset="img/order/offer-2.jpg 1x, img/order/offer-2-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Vaze Classic</div>
+                                    <div class="order-offer__price">+500&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-3.jpg" srcset="img/order/offer-3.jpg 1x, img/order/offer-3-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Fruits Classic</div>
+                                    <div class="order-offer__price">+490&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
+                                    <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
+                                    <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
+                                    <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-offer__text">Конфеты, сделанные из&nbsp;какао-бобов и&nbsp;лесных орехов.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="swiper-button-next"></button>
+                    </div>
+
+                    <a class="order-bookmate" href="#" title="Добавить бесплатную книгу">
+                        <span class="order-bookmate__title">Добавить бесплатную книгу</span>
+                        <span class="order-bookmate__text">
+                            Спецпроект с <span class="order-bookmate__logo"><span class="sr-only">Bookmate</span></span>
+                        </span>
+                    </a>
+
+                    <div class="order-offers js-order-offers-slider">
+                        <div class="order-offers__list">
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Дар</div>
+                                    <div class="order-offer__text">Владимир Набоков</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-5.jpg" srcset="img/order/offer-5.jpg 1x, img/order/offer-5-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Головокружения</div>
+                                    <div class="order-offer__text">В. Г. Зебальд</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-6.jpg" srcset="img/order/offer-3.jpg 1x, img/order/offer-3-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">По направлению к Свану</div>
+                                    <div class="order-offer__text">Марсель Пруст</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Дар</div>
+                                    <div class="order-offer__text">Владимир Набоков</div>
+                                </div>
+                            </div>
+                            <div class="order-offers__item">
+                                <div class="order-offer">
+                                    <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
+                                    <div class="order-offer__image">
+                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                    </div>
+                                    <div class="order-offer__title">Дар</div>
+                                    <div class="order-offer__text">Владимир Набоков</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="swiper-button-next"></button>
+                    </div>
+                </div>
+
+                <div class="order-form__section">
+                    <div class="order-form__subtitle">Адрес доставки</div>
+
+                    <?$prop = $arResult['ORDER_PROPS'][1];?>
+                    <input type="hidden" class="input" name="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>">
+
+                    <div class="promo-order__row">
+                        <?$prop = $arResult['ORDER_PROPS'][2];?>
+                        <div class="promo-order__block js-address-block">
+                            <div class="input__wrapper input__wrapper--mark">
+                                <input id="ORDER_PROP_<?=$prop['ID']?>" type="text" class="input" name="ORDER_PROP_<?=$prop['ID']?>" placeholder="<?=$prop['NAME']?>" value="<?=$prop['VALUE']?>">
+                                <div class="list_street">
+                                    <ul id="search-street"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?$prop = $arResult['ORDER_PROPS'][3];?>
+                        <div class="promo-order__block js-address-block">
+                            <div class="input__wrapper">
+                                <input type="text" class="input" name="ORDER_PROP_<?=$prop['ID']?>" placeholder="<?=$prop['NAME']?>" value="<?=$prop['VALUE']?>">
+                            </div>
+                        </div>
+
+                        <?$prop = $arResult['ORDER_PROPS'][15];?>
+                        <div class="promo-order__block promo-order__block--full">
+                            <div class="styled-checkbox__block u-mb-0">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+                        </div>
+
+                        <div class="promo-order__block promo-order__block--full js-address-block" style="width: 100%;">
+                            <div id="delivery-map" class="order-form__map"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-form__section">
+                    <div class="order-form__subtitle">Когда доставить</div>
+                    <div class="promo-order__row">
+                        <?for ($i=1; $i<=$arResult['COUNT_DATE_DELIVERY']; $i++) {?>
+                            <div class="promo-order__block promo-order__block--full">
+                                <input type="text" class="input order-datetime" name="ORDER_PROP_<?=$prop['ID']?>[<?=$i-1?>]" id="ORDER_PROP_<?=$prop['ID']?>_<?=$i-1?>" placeholder="<?=$prop['NAME']?>" value="<?=$prop['VALUE'][$i-1]?>" data-time="<?=$arResult['DELIVERY_TIME']?>">
+                            </div>
+                        <? } ?>
+                    </div>
+                </div>
+
+                <div class="order-form__section">
+                    <div class="order-form__subtitle">Ваш телефон</div>
+
+                    <div class="promo-order__row">
+                        <div class="promo-order__block">
+                            <div class="input__wrapper input__wrapper--mark">
+                                <input type="text" class="input phomemask" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>" placeholder="+7">
+                            </div>
+                        </div>
+
+                        <div class="promo-order__block promo-order__block--full">
+                            <?$prop = $arResult['ORDER_PROPS'][6];?>
+                            <div class="styled-checkbox__block styled-checkbox__block--full">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                            </div>
+
+                            <?$prop = $arResult['ORDER_PROPS'][7];?>
+                            <div class="styled-checkbox__block styled-checkbox__block--full">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                            </div>
+
+                            <? $prop = $arResult['ORDER_PROPS'][18]; ?>
+                            <div class="styled-checkbox__block styled-checkbox__block--full u-mb-0">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?= $prop['ID'] ?>"
+                                        id="ORDER_PROP_<?= $prop['ID'] ?>" type="checkbox"
+                                        value="Y"<? if (!empty($prop['VALUE'])) {
+                                    echo ' checked';
+                                } ?>>
+                                <label for="ORDER_PROP_<?= $prop['ID'] ?>"><?= $prop['NAME'] ?></label>
+                                <? if (!empty($prop['DESCRIPTION'])) { ?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip"
+                                            data-placement="bottom" title="<?= $prop['DESCRIPTION'] ?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=1.1#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-form__section">
+                    <div class="order-form__subtitle">Данные получателя</div>
+
+                    <div class="promo-order__row">
+                        <?$prop = $arResult['ORDER_PROPS'][8];?>
+                        <div class="promo-order__block">
+                            <div class="input__wrapper input__wrapper--mark">
+                                <input type="text" class="input phomemask" id="ORDER_PROP_<?=$prop['ID']?>" name="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>" placeholder="+7">
+                            </div>
+                        </div>
+
+                        <?$prop = $arResult['ORDER_PROPS'][9];?>
+                        <div class="promo-order__block">
+                            <div class="input__wrapper input__wrapper--mark">
+                                <input type="text" class="input" id="ORDER_PROP_<?=$prop['ID']?>" name="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>" placeholder="Имя">
+                            </div>
+                        </div>
+
+                        <?$prop = $arResult['ORDER_PROPS'][14];?>
+                        <div class="promo-order__block promo-order__block--full hidden" id="write_comment">
+                            <div class="styled-checkbox__block">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+                        </div>
+
+                        <?$prop = $arResult['ORDER_PROPS'][13];?>
+                        <div class="promo-order__block promo-order__block--full" id="note-wrap">
+                            <div class="promo-order__comment">
+                                <textarea name="ORDER_PROP_<?=$prop['ID']?>" class="textarea" placeholder="Текст записки"><?=$prop['VALUE']?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="promo-order__block promo-order__block--full">
+                            <div class="promo-order__comment">
+                                <textarea name="COMMENT" class="textarea" placeholder="Комментарий к заказу" maxlength="400"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="promo-order__block promo-order__block--full">
+                            <?$prop = $arResult['ORDER_PROPS'][10];?>
+                            <div class="styled-checkbox__block">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+
+                            <?if ( !empty($arResult['VASE']) ):?>
+                                <?$prop = $arResult['ORDER_PROPS'][11];?>
+                                <div class="styled-checkbox__block">
+                                    <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                    <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                    <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                        <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                            <svg class="" width="23px" height="23px">
+                                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                            </svg>
+                                        </span>
+                                    <? } ?>
+                                </div>
+                            <?endif;?>
+
+                            <?$prop = $arResult['ORDER_PROPS'][12];?>
+                            <div class="styled-checkbox__block">
+                                <input class="styled-checkbox" name="ORDER_PROP_<?=$prop['ID']?>" id="ORDER_PROP_<?=$prop['ID']?>" type="checkbox" value="Y"<?if(!empty($prop['VALUE']))echo ' checked';?>>
+                                <label for="ORDER_PROP_<?=$prop['ID']?>"><?=$prop['NAME']?></label>
+                                <?if( !empty($prop['DESCRIPTION']) ) {?>
+                                    <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
+                                        <svg class="" width="23px" height="23px">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                        </svg>
+                                    </span>
+                                <? } ?>
+                            </div>
+                        </div>
+
+                        <?if ( !empty($arResult['VASE']) ):?>
+                            <div class="promo-order__optional" id="vase-wrap" data-price="<?=$arResult['VASE']['PRICE']?>">
+                                <div class="promo-order__item">
+                                    <div class="promo-order__item__img">
+                                        <img src="<?=CFile::GetPath($arResult['VASE']['PREVIEW_PICTURE'])?>" alt="<?=$arResult['VASE']['NAME']?>">
+                                    </div>
+                                    <div class="promo-order__item__description">
+                                        <p class="promo-order__item__title"><?=$arResult['VASE']['NAME']?></p>
+
+                                        <div class="promo-order__item__description__text">
+                                            <div class="promo-order__item__price">+<?=number_format($arResult['VASE']['PRICE'],0,'', ' ')?> <span class="rouble"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?endif;?>
+                    </div>
+                </div>
+
+                <div class="order-form__cta">
+                    <button class="btn order-form__submit">Оплатить
+                        <span class="js-order_total">
+                            <?if( $arResult['PRODUCT']['OLD_PRICE'] > 0){?>
+                                <span class="promo-order__submit__old-price" data-price="<?=$arResult['PRODUCT']['OLD_PRICE']?>"><?=number_format($arResult['PRODUCT']['OLD_PRICE'],0,'', ' ')?> <span class="rouble"></span></span>
+                            <? } ?>
+                            <span class="js-orderprice">
+                                <?=number_format($arResult['PRODUCT']['PRICE'],0,'', ' ')?>  </span> <span class="rouble"></span>
+                        </span>
+                    </button>
+                </div>
+                <input type="hidden" name="order_send" value="Y">
+            </div>
+            <div class="order-form__aside">
+                <div class="order-cart">
+                    <div class="order-list">
+                        <div class="order-list__list">
+                            <div class="order-list__item order-item js-detail" data-id="<?=$arResult['PRODUCT']['ID']?>" data-price="<?=$arResult['PRODUCT']['PRICE']?>">
+                                <?if (!empty($arResult['PRODUCT']['PICTURE'])) {?>
+                                    <div class="order-item__image">
+                                        <img src="<?=$arResult['PRODUCT']['PICTURE']?>" alt="<?=$arResult['PRODUCT']['NAME']?>">
+                                    </div>
+                                <? } ?>
+                                <div class="order-item__content">
+                                    <div class="order-item__title"><?=$arResult['PRODUCT']['NAME']?></div>
+                                    <div class="order-item__price">2&nbsp;990&nbsp;<span class="rouble"></span></div>
+                                    <div class="order-item__quantity">
+                                        <div class="quantity-control">
+                                            <button class="quantity-control__minus" type="button">-</button>
+                                            <input class="quantity-control__input" value="1" />
+                                            <button class="quantity-control__plus" type="button">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="order-item__remove">
+                                        <button class="order-item__remove-button" type="button">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-summary">
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Товары</div>
+                            <div class="order-summary__value"><b>2990 <span class="rouble"></span></b></div>
+                        </div>
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Доставка</div>
+                            <div class="order-summary__value"><span class="text-muted">Бесплатно</span></div>
+                        </div>
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Комплимент</div>
+                            <div class="order-summary__value"><b>900 <span class="rouble"></span></b></div>
+                        </div>
+
+                        <!-- Дефолтное состояние -->
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Промокод</div>
+                            <div class="order-summary__value">
+                                <button class="order-summary__coupon-link">Применить</button>
+                            </div>
+                        </div>
+                        <!-- end Дефолтное состояние -->
+
+                        <!-- Форма промокода раскрыта -->
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Промокод</div>
+                            <div class="order-summary__value">
+                                <!-- <button class="order-summary__coupon-link">Применить</button> -->
+                            </div>
+                        </div>
+                        <div class="promo-order__coupon">
+                            <div class="promo-order__row">
+                                <div class="promo-order__block u-mb-0">
+                                    <div class="input__wrapper">
+                                        <input type="text" class="input" placeholder="Введите промокод">
+                                    </div>
+                                    <p class="promo-order__error">Промо-код не найден :(</p>
+                                </div>
+                                <div class="promo-order__block u-mb-0">
+                                    <button class="btn btn__main promo-order__coupon__button">Применить</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end Форма промокода раскрыта -->
+
+                        <!-- Промокод применён -->
+                        <div class="order-summary__item">
+                            <div class="order-summary__label">Промокод</div>
+                            <div class="order-summary__value">
+                                <div class="promo-order__coupon__discount">
+                                    Cкидка 10% (<strong>LOVE10</strong>)
+                                    <div class="promo-order__coupon__discount__cancel">Отменить</div>
+                                </div>
+                                <div class="promo-order__coupon__sum">-299 <span class="rouble"></span></div>
+                            </div>
+                        </div>
+                        <!-- end Промокод применён -->
+
+                        <div class="order-summary__item order-summary__item--total">
+                            <div class="order-summary__label">Итого</div>
+                            <div class="order-summary__value">3 890 <span class="rouble"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
     <div class="content content--order">
         <div class="content__container content__container--thinner">
             <div class="promo-order">
