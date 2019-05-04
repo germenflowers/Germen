@@ -41,7 +41,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-1-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
                                     <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
@@ -52,7 +52,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-2.jpg" srcset="img/order/offer-2.jpg 1x, img/order/offer-2-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-2.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-2.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-2-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Vaze Classic</div>
                                     <div class="order-offer__price">+500&nbsp;<span class="rouble"></span></div>
@@ -63,7 +63,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-3.jpg" srcset="img/order/offer-3.jpg 1x, img/order/offer-3-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-3.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-3.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-3-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Fruits Classic</div>
                                     <div class="order-offer__price">+490&nbsp;<span class="rouble"></span></div>
@@ -74,7 +74,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-1-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
                                     <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
@@ -85,7 +85,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-1-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
                                     <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
@@ -96,7 +96,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-1.jpg" srcset="img/order/offer-1.jpg 1x, img/order/offer-1-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-1.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-1-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Конфеты &laquo;AOKI&raquo;</div>
                                     <div class="order-offer__price">+990&nbsp;<span class="rouble"></span></div>
@@ -120,7 +120,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-4-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Дар</div>
                                     <div class="order-offer__text">Владимир Набоков</div>
@@ -130,7 +130,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-5.jpg" srcset="img/order/offer-5.jpg 1x, img/order/offer-5-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-5.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-5.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-5-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Головокружения</div>
                                     <div class="order-offer__text">В. Г. Зебальд</div>
@@ -140,7 +140,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-6.jpg" srcset="img/order/offer-3.jpg 1x, img/order/offer-3-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-6.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-3.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-3-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">По направлению к Свану</div>
                                     <div class="order-offer__text">Марсель Пруст</div>
@@ -150,7 +150,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-4-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Дар</div>
                                     <div class="order-offer__text">Владимир Набоков</div>
@@ -160,7 +160,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <div class="order-offer">
                                     <button class="order-offer__add" type="button" aria-label="Добавить к заказу">+</button>
                                     <div class="order-offer__image">
-                                        <img src="img/order/offer-4.jpg" srcset="img/order/offer-4.jpg 1x, img/order/offer-4-2x.jpg 2x" alt="" />
+                                        <img src="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/order/offer-4.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/order/offer-4-2x.jpg 2x" alt="" />
                                     </div>
                                     <div class="order-offer__title">Дар</div>
                                     <div class="order-offer__text">Владимир Набоков</div>
@@ -298,7 +298,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <?if( !empty($prop['DESCRIPTION']) ) {?>
                                     <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                         <svg class="" width="23px" height="23px">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#question"></use>
                                         </svg>
                                     </span>
                                 <? } ?>
@@ -327,7 +327,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <?if( !empty($prop['DESCRIPTION']) ) {?>
                                     <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                         <svg class="" width="23px" height="23px">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#question"></use>
                                         </svg>
                                     </span>
                                 <? } ?>
@@ -355,7 +355,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 <?if( !empty($prop['DESCRIPTION']) ) {?>
                                     <span class="promo-tooltip promo-tooltip--question" data-toggle="tooltip" data-placement="bottom" title="<?=$prop['DESCRIPTION']?>">
                                         <svg class="" width="23px" height="23px">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#question"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#question"></use>
                                         </svg>
                                     </span>
                                 <? } ?>
