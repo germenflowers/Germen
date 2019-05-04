@@ -7162,6 +7162,8 @@ input, textarea, button {
   padding-left: 15px;
   padding-right: 15px;
   float: none !important;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
   display: inline-block;
   vertical-align: top;
   margin-bottom: 40px; }
@@ -7302,6 +7304,11 @@ input, textarea, button {
         padding-bottom: 82px; } }
     .promo-review--main .slider-review {
       margin-bottom: 0; }
+  .promo-review .slick-track {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center; }
 
 .item-review__rating {
   display: inline-block;

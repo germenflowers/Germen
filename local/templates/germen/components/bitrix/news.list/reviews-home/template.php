@@ -26,14 +26,14 @@ $this->setFrameMode(true);
             <div id="<?=$this->GetEditAreaId($arItem['ID']);?>">
                 <div class="item-review">
                     <div class="item-review__rating">
-                        <div class="star-ratings-css">
-                            <div class="star-ratings-css-top" style="width: 100%">
+                        <div class="star-ratings-css star-ratings-css--bg" aria-label="<?=$arItem['PROPERTIES']['RATING']['VALUE']?>">
+                            <div class="star-ratings-css-top" style="width: 100%" aria-hidden="true">
                                 <?for( $i=0; $i<$arItem['PROPERTIES']['RATING']['VALUE']; $i++){?>
                                     <span class="star-ratings-css__star">★</span>
                                 <? } ?>
                             </div>
 
-                            <div class="star-ratings-css-bottom">
+                            <div class="star-ratings-css-bottom" aria-hidden="true">
                                 <?for( $i=0; $i<$arItem['PROPERTIES']['RATING']['VALUE']; $i++){?>
                                     <span class="star-ratings-css__star">★</span>
                                 <? } ?>
@@ -58,17 +58,17 @@ $this->setFrameMode(true);
                                 <?if (!empty($arItem['PROPERTIES']['LINK_FB']['VALUE']) ){?>
                                     <a href="<?=$arItem['PROPERTIES']['LINK_FB']['VALUE']?>" target="_blank">
                                         <svg class="item-review__profile__social">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#fb"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#fb"></use>
                                         </svg>
                                     </a>
                                 <? }elseif (!empty($arItem['PROPERTIES']['LINK_YELL']['VALUE']) ){?>
                                     <a href="<?=$arItem['PROPERTIES']['LINK_YELL']['VALUE']?>" target="_blank">
                                         <svg class="item-review__profile__social">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=1.2#yell"></use>
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#yell"></use>
                                         </svg>
                                     </a>
                                 <? } ?>
-                            </p>
+                            </p class="item-review__profile__position">
                             <?if (!empty($arItem['PREVIEW_TEXT']) ){?>
                                 <p><?=$arItem['PREVIEW_TEXT']?></p>
                             <? } ?>
