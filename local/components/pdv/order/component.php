@@ -275,6 +275,11 @@ elseif ( $id > 0 ):
             $mainProducts = [];
         }
 
+        if ($sendOrder) {
+            $mainAddQuantity = $mainProducts[$id];
+        } else {
+            $mainAddQuantity = 1;
+        }
 
         while ( $arBasket = $dbBasket->Fetch() ) {
             if ( $arBasket['PRODUCT_ID'] != $id )
@@ -285,14 +290,18 @@ elseif ( $id > 0 ):
                 if ( $arBasket['DISCOUNT_PRICE'] > 0 )
                     $oldPrice = $arBasket['PRICE'] + $arBasket['DISCOUNT_PRICE'];
 
-                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => $mainProducts[$id]] );
+                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => $mainAddQuantity] );
 
                 $needPropdAdd = false;
             }
         }
 
-        if ( $needPropdAdd )
-            Add2BasketByProductID($id,$mainProducts[$id]);
+        $mainAddQuantity = 0;
+
+
+        if ($needPropdAdd) {
+            Add2BasketByProductID($id, $mainAddQuantity);
+        }
 
             $order = Order::create($siteId, REGISTER_USER_ID__DEFAULT);
             $basket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $siteId);
@@ -302,12 +311,10 @@ elseif ( $id > 0 ):
         foreach ($basket as $basketItem) {
             if ($basketItem->getField('PRODUCT_ID') == $id) {
                 $price = $basketItem->getPrice();
+                $basePrice = $basketItem->getBasePrice();
                 $discPrice = $basketItem->getDiscountPrice();
-                if ($discPrice > 0) {
+                if ( $discPrice > 0)
                     $oldPrice = $price + $discPrice;
-                } else {
-                    $oldPrice = $price;
-                }
             }
         }
         if (!empty($arResult["COUPON"])) {
@@ -322,8 +329,8 @@ elseif ( $id > 0 ):
             'ID' => $arProd['ID'],
             'NAME' => $arProd['NAME'],
             'PICTURE' => $pic,
-            'PRICE' => $oldPrice,
-            'FORMATTED_PRICE' => number_format($oldPrice, 0, '', ' '),
+            'PRICE' => (int)$basePrice,
+            'FORMATTED_PRICE' => number_format($basePrice, 0, '', ' '),
         );
 
         $arResult['ERROR'] = array();

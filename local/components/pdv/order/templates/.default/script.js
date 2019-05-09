@@ -17,10 +17,7 @@ $(function () {
             upSaleSum += (price * quantity);
         }
 
-        $(".js-upsale-sum").text(formatPrice(discountPrice(upSaleSum, discountPercent)))
-        if (upSaleSum > 0) {
-            showOldPrice($(".js-upsale-sum"), upSaleSum)
-        }
+        $(".js-upsale-sum").text(formatPrice(upSaleSum))
 
         var $selectedMainProducts = $(".js-main-products")
         if (!isJson($selectedMainProducts.val())) {
@@ -41,12 +38,19 @@ $(function () {
         $(".js-main-sum").text(formatPrice(discountPrice(mainSum, discountPercent)));
         showOldPrice($(".js-main-sum"), mainSum)
         var totalSum = Number(mainSum) + Number(upSaleSum)
-        $(".js-total-sum").text(formatPrice(discountPrice(totalSum, discountPercent)))
+        var discountTotalSum = discountPrice(Number(mainSum), discountPercent) + Number(upSaleSum)
+
+        $(".js-total-sum").text(formatPrice(discountTotalSum))
+
         showOldPrice($(".js-total-sum"), totalSum)
 
-        $(".js-discount-diff").text(formatPrice(totalSum - discountPrice(totalSum, discountPercent)))
+        $(".js-discount-diff").text(formatPrice(totalSum - discountTotalSum))
 
         $(".js-basket-item").not(".js-basket-item-base").each(function (idx, elem) {
+            if (!$(elem).find(".js-main-basket-item").length) {
+                return true
+            }
+
             var price = $(elem).find(".js-basket-item-info").data("price")
             $(elem).find(".js-price").text(formatPrice(discountPrice(price, discountPercent)))
             if (discountPercent > 0) {
@@ -127,6 +131,10 @@ $(function () {
             $(".js-upsale-products-block").find("[data-id=" + newBasketItem.id + "]").find(".js-add-basket").hide();
         }
 
+        if (productType === "bookmate") {
+            $(".js-bookmate-block").find(".js-add-basket").hide();
+        }
+
         $selectedUpSaleProducts.val(JSON.stringify(products))
         $(document).trigger("reCalcTotal");
 
@@ -169,11 +177,16 @@ $(function () {
         if ($(this).closest(".js-main-basket-item").length) {
             window.location.href = "/"
         } else {
+            var $upSaleProductBlock = $(".js-upsale-products-block")
             var $container = $(this).closest(".js-basket-item")
             var $info = $container.find(".js-basket-item-info")
             var id = Number($info.data("id"))
             if (Number($info.data("price")) <= 0 && id > 0) {
-                $(".js-upsale-products-block").find("[data-id=" + id + "]").find(".js-add-basket").show();
+                $upSaleProductBlock.find("[data-id=" + id + "]").find(".js-add-basket").show();
+            }
+
+            if ($upSaleProductBlock.find("[data-id=" + id + "]").hasClass("js-bookmate-block")) {
+                $(".js-bookmate-block").find(".js-add-basket").show();
             }
 
             $(this).closest(".js-basket-item").remove()
