@@ -270,7 +270,7 @@ elseif ( $id > 0 ):
         $mainProducts = $request->getPost("main_products");
 
         try {
-            $mainProducts = json_decode($mainProducts);
+            $mainProducts = json_decode($mainProducts, true);
         } catch (\Exception $e) {
             $mainProducts = [];
         }
