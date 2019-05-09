@@ -266,6 +266,16 @@ elseif ( $id > 0 ):
             ),
             'select' => array('ID', 'PRODUCT_ID', 'PRICE', 'DISCOUNT_PRICE'),
         ));
+
+        $mainProducts = $request->getPost("main_products");
+
+        try {
+            $mainProducts = json_decode($mainProducts);
+        } catch (\Exception $e) {
+            $mainProducts = [];
+        }
+
+
         while ( $arBasket = $dbBasket->Fetch() ) {
             if ( $arBasket['PRODUCT_ID'] != $id )
                 \CSaleBasket::Delete( $arBasket['ID'] );
@@ -275,14 +285,14 @@ elseif ( $id > 0 ):
                 if ( $arBasket['DISCOUNT_PRICE'] > 0 )
                     $oldPrice = $arBasket['PRICE'] + $arBasket['DISCOUNT_PRICE'];
 
-                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => 1] );
+                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => $mainProducts[$id]] );
 
                 $needPropdAdd = false;
             }
         }
 
         if ( $needPropdAdd )
-            Add2BasketByProductID($id);
+            Add2BasketByProductID($id,$mainProducts[$id]);
 
             $order = Order::create($siteId, REGISTER_USER_ID__DEFAULT);
             $basket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $siteId);
