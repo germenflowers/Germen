@@ -227,7 +227,14 @@ elseif ( $id > 0 ):
         while ($upSaleProduct = $rsUpSaleProducts->GetNext()) {
             $isBookMate = $upSaleProduct["PROPERTY_IS_BOOKMATE_VALUE"] === "Y";
             $arPrice = \CCatalogProduct::GetOptimalPrice($upSaleProduct['ID'], 1, $USER->GetUserGroupArray());
-            $upSaleProduct["PREVIEW_PICTURE"] = CFile::GetFileArray($upSaleProduct["PREVIEW_PICTURE"]);
+            $upSaleProduct["PREVIEW_PICTURE"] = CFile::ResizeImageGet(
+                $upSaleProduct["PREVIEW_PICTURE"],
+                [
+                    "width" => 145,
+                    "height" => 145
+                ],
+                BX_RESIZE_IMAGE_EXACT
+            );
             $upSaleProduct['PRICE'] = $arPrice['DISCOUNT_PRICE'];
 
             if ($isBookMate) {
