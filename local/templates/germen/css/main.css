@@ -6465,6 +6465,23 @@ strong {
 .text--light {
   opacity: 0.27; }
 
+.spinner {
+  display: inline-block;
+  vertical-align: middle;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: rotateSpinner .4s linear infinite; }
+
+@keyframes rotateSpinner {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
 .btn {
   border: none;
   position: relative;
@@ -6490,6 +6507,23 @@ strong {
     .btn__loading--active .btn__loading__icon {
       opacity: 1;
       animation: btn-spin 1.5s cubic-bezier(0.25, 0.47, 0.71, 0.3) infinite; }
+  .btn__text {
+    opacity: 1;
+    transition: opacity .2s ease; }
+  .btn__loader {
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    transform: scale(0.8);
+    transition: opacity .2s ease; }
+    .btn__loader .spinner {
+      width: 100%;
+      height: 100%;
+      border-width: 2px; }
   .btn__promo {
     background-color: transparent;
     padding: 8px 10px 6px 10px;
@@ -6509,6 +6543,10 @@ strong {
       color: #000; }
       .btn__main--white:hover, .btn__main--white:focus {
         color: #000; }
+  .btn--loading .btn__text {
+    opacity: 0; }
+  .btn--loading .btn__loader {
+    display: block; }
   .btn--md {
     padding: 14px 22px;
     -webkit-font-smoothing: antialiased;
@@ -8839,10 +8877,46 @@ input, textarea, button {
     line-height: 31px;
     cursor: pointer;
     transition: background-color .2s ease, color .2s ease; }
+    .order-offer__add:after {
+      content: "";
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); }
     .order-offer__add:hover, .order-offer__add:focus {
       background-color: #FECBA1; }
     .order-offer__add:active {
       background-color: #FDAF71; }
+    .order-offer__add--loading {
+      cursor: default;
+      pointer-events: none; }
+      .order-offer__add--loading, .order-offer__add--loading:focus, .order-offer__add--loading:hover, .order-offer__add--loading:active {
+        background-color: #FEE6D2; }
+      .order-offer__add--loading .order-offer__add-text {
+        opacity: 0; }
+      .order-offer__add--loading .order-offer__add-loader {
+        display: block; }
+  .order-offer__add-text {
+    opacity: 1;
+    transition: opacity .2s ease; }
+  .order-offer__add-loader {
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    border-width: 2px;
+    line-height: 1;
+    transform: scale(0.8);
+    transition: opacity .2s ease; }
+    .order-offer__add-loader .spinner {
+      width: 100%;
+      height: 100%;
+      border-width: 2px; }
   .order-offer__image {
     padding-bottom: 100%;
     margin-bottom: 12px;

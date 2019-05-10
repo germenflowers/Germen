@@ -228,8 +228,9 @@ $(function () {
 
     $(document).on('click', '.js-coupon-apply', function (event) {
         event.preventDefault();
-        var btn = $(this)
-        var field = $(".js-coupon-field")
+        var btn = $(this);
+        var field = $(".js-coupon-field");
+        var loadingClass = 'btn--loading';
 
         btn.removeClass('error');
 
@@ -241,6 +242,7 @@ $(function () {
         field.removeClass('error');
 
         btn.prop('disabled', true);
+        btn.addClass(loadingClass);
 
         $.ajax(
             window.location.href,
@@ -252,6 +254,7 @@ $(function () {
                 success: function (result) {
                     afterEnterCoupon(result);
                     btn.prop('disabled', false);
+                    btn.removeClass(loadingClass);
 
                 },
                 type: "POST",

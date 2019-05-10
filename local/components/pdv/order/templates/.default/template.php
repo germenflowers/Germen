@@ -468,8 +468,11 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                 </div>
                                 <div class="promo-order__coupon__cell promo-order__coupon__cell--button">
                                     <button class="btn btn__main promo-order__coupon__button js-coupon-apply">
-                                        <span class="promo-order__coupon__button__text promo-order__coupon__button__text--desktop">Применить</span>
-                                        <span class="promo-order__coupon__button__text promo-order__coupon__button__text--mobile">&#10003;</span>
+                                        <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--desktop">Применить</span>
+                                        <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--mobile">&#10003;</span>
+                                        <span class="btn__loader">
+                                            <span class="spinner"></span>
+                                        </span>
                                     </button>
                                 </div>
                             </div>
