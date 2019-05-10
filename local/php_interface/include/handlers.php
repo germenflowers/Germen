@@ -28,3 +28,21 @@ $eventManager->addEventHandler (
     )
 );
 
+$eventManager->addEventHandler (
+    'iblock',
+    'OnBeforeIBlockElementAdd',
+    array (
+        '\\PDV\\Handlers\\IBlock',
+        'checkUpSaleImage'
+    )
+);
+
+$eventManager->addEventHandler (
+    'iblock',
+    'OnBeforeIBlockElementUpdate',
+    array (
+        '\\PDV\\Handlers\\IBlock',
+        'checkUpSaleImage'
+    )
+);
+

@@ -209,7 +209,7 @@ elseif ( $id > 0 ):
                 "SORT" => "ASC"
             ],
             [
-                "IBLOCK_ID" => IBLOCK_ID__VASE,
+                "IBLOCK_ID" => IBLOCK_ID__UPSALE,
                 "ACTIVE" => "Y",
             ],
             false,
@@ -227,14 +227,30 @@ elseif ( $id > 0 ):
         while ($upSaleProduct = $rsUpSaleProducts->GetNext()) {
             $isBookMate = $upSaleProduct["PROPERTY_IS_BOOKMATE_VALUE"] === "Y";
             $arPrice = \CCatalogProduct::GetOptimalPrice($upSaleProduct['ID'], 1, $USER->GetUserGroupArray());
-            $upSaleProduct["PREVIEW_PICTURE"] = CFile::ResizeImageGet(
+            $pictureData = \CFile::GetFileArray($upSaleProduct["PREVIEW_PICTURE"]);
+            $width = $pictureData["WIDTH"];
+            $retinaWidth = $width > 290 ? 290 : ($width - 1);
+            $notRetinaWidth = $width <= 145 ? ($width - 1) : 145;
+
+            $upSaleProduct["NOT_RETINA_PICTURE"] = \CFile::ResizeImageGet(
                 $upSaleProduct["PREVIEW_PICTURE"],
                 [
-                    "width" => 145,
-                    "height" => 145
+                    "width" => $notRetinaWidth,
+                    "height" => $notRetinaWidth,
                 ],
                 BX_RESIZE_IMAGE_EXACT
             );
+
+
+            $upSaleProduct["RETINA_PICTURE"] = \CFile::ResizeImageGet(
+                $upSaleProduct["PREVIEW_PICTURE"],
+                [
+                    "width" => $retinaWidth,
+                    "height" => $retinaWidth,
+                ],
+                BX_RESIZE_IMAGE_EXACT
+            );
+
             $upSaleProduct['PRICE'] = $arPrice['DISCOUNT_PRICE'];
 
             if ($isBookMate) {

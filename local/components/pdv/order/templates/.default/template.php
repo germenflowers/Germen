@@ -57,8 +57,8 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                                     +
                                                 </button>
                                                 <div class="order-offer__image js-image-block">
-                                                    <img src="<?= $upSaleProduct["PREVIEW_PICTURE"]["src"] ?>"
-                                                         srcset="<?= $upSaleProduct["PREVIEW_PICTURE"]["src"] ?> 1x, <?= $upSaleProduct["PREVIEW_PICTURE"]["src"] ?> 2x"
+                                                    <img src="<?= $upSaleProduct["NOT_RETINA_PICTURE"]["src"] ?>"
+                                                         srcset="<?= $upSaleProduct["NOT_RETINA_PICTURE"]["src"] ?> 1x, <?= $upSaleProduct["RETINA_PICTURE"]["src"] ?> 2x"
                                                          alt="<?= $upSaleProduct["NAME"] ?>"/>
                                                 </div>
                                                 <div class="order-offer__title js-name"><?= $upSaleProduct["NAME"] ?></div>
@@ -95,8 +95,8 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                                     +
                                                 </button>
                                                 <div class="order-offer__image js-image-block">
-                                                    <img src="<?= $bookMateProduct["PREVIEW_PICTURE"]["src"] ?>"
-                                                         srcset="<?= $bookMateProduct["PREVIEW_PICTURE"]["src"] ?> 1x, <?= $bookMateProduct["PREVIEW_PICTURE"]["src"] ?> 2x"
+                                                    <img src="<?= $bookMateProduct["NOT_RETINA_PICTURE"]["src"] ?>"
+                                                         srcset="<?= $bookMateProduct["NOT_RETINA_PICTURE"]["src"] ?> 1x, <?= $bookMateProduct["RETINA_PICTURE"]["src"] ?> 2x"
                                                          alt="<?= $upSaleProduct["NAME"] ?>"/>
                                                 </div>
                                                 <div class="order-offer__title js-name"><?= $bookMateProduct["NAME"] ?></div>
