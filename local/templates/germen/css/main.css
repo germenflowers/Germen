@@ -8700,10 +8700,7 @@ input, textarea, button {
         width: 360px;
         margin-left: 20px;
         -ms-flex-negative: 0;
-        flex-shrink: 0;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0; }
+        flex-shrink: 0; }
       .order-form__cta {
         width: auto;
         position: relative;
