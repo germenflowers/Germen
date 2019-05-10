@@ -72,6 +72,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <? endforeach; ?>
                                 </div>
                                 <button class="swiper-button-next"></button>
+                                <button class="swiper-button-prev"></button>
                             </div>
                         <? endif; ?>
                         <? if (!empty($arResult["BOOKMATE_PRODUCTS"])): ?>
@@ -105,6 +106,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                                     <? endforeach; ?>
                                 </div>
                                 <button class="swiper-button-next"></button>
+                                <button class="swiper-button-prev"></button>
                             </div>
                         <? endif; ?>
                     </div>
