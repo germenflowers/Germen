@@ -75,13 +75,13 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                             </div>
                         <? endif; ?>
                         <? if (!empty($arResult["BOOKMATE_PRODUCTS"])): ?>
-                            <a class="order-bookmate" href="#" title="Добавить бесплатную книгу">
+                            <a class="order-bookmate js-order-bookmate" href="#" title="Добавить бесплатную книгу">
                                 <span class="order-bookmate__title">Добавить бесплатную книгу</span>
                                 <span class="order-bookmate__text">
                             Спецпроект с <span class="order-bookmate__logo"><span class="sr-only">Bookmate</span></span>
                         </span>
                             </a>
-                            <div class="order-offers js-order-offers-slider">
+                            <div class="order-offers js-order-offers-slider js-order-bookmate-offers hidden">
                                 <div class="order-offers__list">
                                     <? foreach ($arResult["BOOKMATE_PRODUCTS"] as $bookMateProduct): ?>
                                         <div class="order-offers__item js-bookmate-block"

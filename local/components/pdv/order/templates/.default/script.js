@@ -206,6 +206,19 @@ $(function () {
         }
     })
 
+    $(document).on('click', '.js-order-bookmate', function(){
+        event.preventDefault();
+        var $orderBookmateOffers = $('.js-order-bookmate-offers');
+
+        $orderBookmateOffers
+            .removeClass('hidden');
+
+        setTimeout(function(){
+            $orderBookmateOffers
+                .trigger('swiper:update');
+        }, 0);
+    });
+
 
     $(document).on("click", ".js-show-coupon-form", function (event) {
         event.preventDefault();
