@@ -31336,8 +31336,7 @@ $(document).ready(function(){
     var hiddenClass = 'info-bar--hidden';
 
     $(document).on('click', '.info-bar__close', function(e){
-				$(this).closest('.info-bar').addClass(hiddenClass);
-				BX.setCookie("HIDE_INFOBAR", "Y");
+        $(this).closest('.info-bar').addClass(hiddenClass);
         e.preventDefault();
     });
 });
@@ -31364,9 +31363,9 @@ $(document).ready(function(){
 $(document).ready(function(){
     $('.js-order-offers-slider').each(function(){
         var swiperInstance = new Swiper(this, {
-            loop: true,
             navigation: {
-                nextEl: '.swiper-button-next'
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
             },
             slideClass: 'order-offers__item',
             slidesPerView: 'auto',

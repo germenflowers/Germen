@@ -8731,7 +8731,8 @@ input, textarea, button {
     margin-bottom: -35px; }
   .order-offers__item {
     padding-bottom: 35px; }
-  .order-offers .swiper-button-next {
+  .order-offers .swiper-button-next,
+  .order-offers .swiper-button-prev {
     width: 40px;
     height: 40px;
     padding: 0;
@@ -8739,31 +8740,45 @@ input, textarea, button {
     position: absolute;
     display: none;
     top: 53px;
-    right: 0;
+    z-index: 2;
     border: 0;
     border-radius: 50%;
     background: 0;
     background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     outline: 0;
     cursor: pointer; }
-    .order-offers .swiper-button-next:before {
+    .order-offers .swiper-button-next:before,
+    .order-offers .swiper-button-prev:before {
       content: "";
-      width: 12px;
-      height: 20px;
-      margin-left: 2px;
+      width: 10px;
+      height: 18px;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background-repeat: no-repeat;
       background-position: 50%;
-      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxMiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEgMUwxMCAxMEwxIDE5IiBzdHJva2U9IiM3MDc0N0QiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=);
-      background-size: cover; }
-    .no-touch .order-offers .swiper-button-next {
+      background-size: contain; }
+    .no-touch .order-offers .swiper-button-next, .no-touch
+    .order-offers .swiper-button-prev {
       display: block; }
+      .no-touch .order-offers .swiper-button-next.swiper-button-disabled, .no-touch
+      .order-offers .swiper-button-prev.swiper-button-disabled {
+        display: none; }
+  .order-offers .swiper-button-next {
+    right: 0; }
+    .order-offers .swiper-button-next:before {
+      margin-left: 1px;
+      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB3aWR0aD0iMTIiCiAgIGhlaWdodD0iMjAiCiAgIHZpZXdCb3g9IjAgMCAxMiAyMCIKICAgZmlsbD0ibm9uZSIKICAgc3R5bGU9InRyYW5zZm9ybTogcm90YXRlKDE4MGRlZyk7IgogICBpZD0ic3ZnMiIKICAgdmVyc2lvbj0iMS4xIj4KICA8cGF0aCBkPSJtIDEwLjcwMjA1NiwxIC04Ljk5OTk5OTQsOSA4Ljk5OTk5OTQsOSIgc3R5bGU9InN0cm9rZTojNzA3NDdkO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOnJvdW5kIiAvPgo8L3N2Zz4K); }
+  .order-offers .swiper-button-prev {
+    left: 0; }
+    .order-offers .swiper-button-prev:before {
+      margin-left: -1px;
+      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB3aWR0aD0iMTIiCiAgIGhlaWdodD0iMjAiCiAgIHZpZXdCb3g9IjAgMCAxMiAyMCIKICAgZmlsbD0ibm9uZSIKICAgc3R5bGU9InRyYW5zZm9ybTogcm90YXRlKDE4MGRlZyk7IgogICBpZD0ic3ZnMiIKICAgdmVyc2lvbj0iMS4xIj4KICA8cGF0aCBkPSJtIDEuMjk3OTQzMywxIDguOTk5OTk5Nyw5IC04Ljk5OTk5OTcsOSIgc3R5bGU9InN0cm9rZTojNzA3NDdkO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOnJvdW5kIiAvPgo8L3N2Zz4=); }
   .order-offers.swiper-container-horizontal {
     position: relative; }
     .order-offers.swiper-container-horizontal .order-offers__list {
@@ -8795,18 +8810,12 @@ input, textarea, button {
   @media (min-width: 1030px) {
     .order-offers .swiper-button-next {
       margin-right: -14px; }
-    .order-offers.swiper-container-horizontal .order-offers__item.swiper-slide-active ~ .order-offers__item {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease; }
-    .order-offers.swiper-container-horizontal .order-offers__item.swiper-slide-active {
-      opacity: 1;
-      pointer-events: auto; }
-      .order-offers.swiper-container-horizontal .order-offers__item.swiper-slide-active + .order-offers__item,
-      .order-offers.swiper-container-horizontal .order-offers__item.swiper-slide-active + .order-offers__item + .order-offers__item,
-      .order-offers.swiper-container-horizontal .order-offers__item.swiper-slide-active + .order-offers__item + .order-offers__item + .order-offers__item {
-        opacity: 1;
-        pointer-events: auto; } }
+    .order-offers .swiper-button-prev {
+      margin-left: -14px; }
+    .order-offers.swiper-container-horizontal {
+      position: relative; }
+      .order-offers.swiper-container-horizontal .order-offers__item {
+        width: calc(25% - 18px); } }
 
 .order-offer {
   position: relative; }
