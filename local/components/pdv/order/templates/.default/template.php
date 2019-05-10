@@ -22,7 +22,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
 <? if (!$arResult["CONFIRM"]): ?>
     <header class="order-header">
         <div class="order-header__logo">
-            <a href="#" class="logo"></a>
+            <a href="/" class="logo"></a>
         </div>
     </header>
 
