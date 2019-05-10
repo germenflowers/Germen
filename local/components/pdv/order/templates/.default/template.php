@@ -456,17 +456,18 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                             </div>
                         </div>
                         <div class="promo-order__coupon js-coupon-form" style="display: none;">
-                            <div class="promo-order__row">
-                                <div class="promo-order__block u-mb-0">
+                            <div class="promo-order__coupon__group">
+                                <div class="promo-order__coupon__cell promo-order__coupon__cell--input">
                                     <div class="input__wrapper">
                                         <input type="text" class="input js-coupon-field" placeholder="Введите промокод">
                                     </div>
                                     <p class="promo-order__error js-coupon-error" style="display: none">Промо-код не
                                         найден :(</p>
                                 </div>
-                                <div class="promo-order__block u-mb-0">
+                                <div class="promo-order__coupon__cell promo-order__coupon__cell--button">
                                     <button class="btn btn__main promo-order__coupon__button js-coupon-apply">
-                                        Применить
+                                        <span class="promo-order__coupon__button__text promo-order__coupon__button__text--desktop">Применить</span>
+                                        <span class="promo-order__coupon__button__text promo-order__coupon__button__text--mobile">&#10003;</span>
                                     </button>
                                 </div>
                             </div>

@@ -8323,9 +8323,27 @@ input, textarea, button {
     margin-bottom: 36px; }
     .promo-order__coupon__title {
       margin-bottom: 13px; }
+    .promo-order__coupon__group {
+      display: -ms-flexbox;
+      display: flex; }
+    .promo-order__coupon__cell {
+      -ms-flex: 1;
+      flex: 1; }
+      .promo-order__coupon__cell--input .input {
+        width: 100%; }
+      .promo-order__coupon__cell--button {
+        margin-left: 10px;
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto; }
     .promo-order__coupon__button {
       height: 44px;
       background-color: #52b46e; }
+      @media (min-width: 700px) {
+        .promo-order__coupon__button__text--mobile {
+          display: none; } }
+      @media (max-width: 699px) {
+        .promo-order__coupon__button__text--desktop {
+          display: none; } }
       .promo-order__coupon__button.btn {
         padding-right: 20px;
         padding-left: 20px; }
