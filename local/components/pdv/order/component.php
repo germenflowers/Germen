@@ -79,7 +79,7 @@ if ( isset($couponEnter) ):
                 $result['OLD_PRICE'] = $price + $discPrice;
         }
     }
-
+    $result["PERCENT"] = $result['OLD_PRICE'] / ($result['OLD_PRICE'] - $result['PRICE']);
     echo json_encode( $result );
 
     die();
@@ -199,8 +199,69 @@ elseif ( $id > 0 ):
     }
 
     $arProd = \CCatalogProduct::GetByIDEx($id);
-    if ( $arProd ) {
+    if ($arProd) {
         $notIssetProd = false;
+
+        $upSaleProducts = $bookMateProducts = [];
+
+        $rsUpSaleProducts = \CIBlockElement::GetList(
+            [
+                "SORT" => "ASC"
+            ],
+            [
+                "IBLOCK_ID" => IBLOCK_ID__UPSALE,
+                "ACTIVE" => "Y",
+            ],
+            false,
+            false,
+            [
+                "IBLOCK_ID",
+                "ID",
+                "NAME",
+                "PREVIEW_TEXT",
+                "PREVIEW_PICTURE",
+                "PROPERTY_IS_BOOKMATE"
+            ]
+        );
+
+        while ($upSaleProduct = $rsUpSaleProducts->GetNext()) {
+            $isBookMate = $upSaleProduct["PROPERTY_IS_BOOKMATE_VALUE"] === "Y";
+            $arPrice = \CCatalogProduct::GetOptimalPrice($upSaleProduct['ID'], 1, $USER->GetUserGroupArray());
+            $pictureData = \CFile::GetFileArray($upSaleProduct["PREVIEW_PICTURE"]);
+            $width = $pictureData["WIDTH"];
+            $retinaWidth = $width > 290 ? 290 : ($width - 1);
+            $notRetinaWidth = $width <= 145 ? ($width - 1) : 145;
+
+            $upSaleProduct["NOT_RETINA_PICTURE"] = \CFile::ResizeImageGet(
+                $upSaleProduct["PREVIEW_PICTURE"],
+                [
+                    "width" => $notRetinaWidth,
+                    "height" => $notRetinaWidth,
+                ],
+                BX_RESIZE_IMAGE_EXACT
+            );
+
+
+            $upSaleProduct["RETINA_PICTURE"] = \CFile::ResizeImageGet(
+                $upSaleProduct["PREVIEW_PICTURE"],
+                [
+                    "width" => $retinaWidth,
+                    "height" => $retinaWidth,
+                ],
+                BX_RESIZE_IMAGE_EXACT
+            );
+
+            $upSaleProduct['PRICE'] = $arPrice['DISCOUNT_PRICE'];
+
+            if ($isBookMate) {
+                $bookMateProducts[] = $upSaleProduct;
+            } else {
+                $upSaleProducts[] = $upSaleProduct;
+            }
+        }
+
+        $arResult["UPSALE_PRODUCTS"] = $upSaleProducts;
+        $arResult["BOOKMATE_PRODUCTS"] = $bookMateProducts;
 
         $arResult['COUNT_DATE_DELIVERY'] = 1;
         if ( $arProd['IBLOCK_ID'] == IBLOCK_ID__SUBSCRIBE ) {
@@ -221,6 +282,21 @@ elseif ( $id > 0 ):
             ),
             'select' => array('ID', 'PRODUCT_ID', 'PRICE', 'DISCOUNT_PRICE'),
         ));
+
+        $mainProducts = $request->getPost("main_products");
+
+        try {
+            $mainProducts = json_decode($mainProducts, true);
+        } catch (\Exception $e) {
+            $mainProducts = [];
+        }
+
+        if ($sendOrder) {
+            $mainAddQuantity = $mainProducts[$id];
+        } else {
+            $mainAddQuantity = 1;
+        }
+
         while ( $arBasket = $dbBasket->Fetch() ) {
             if ( $arBasket['PRODUCT_ID'] != $id )
                 \CSaleBasket::Delete( $arBasket['ID'] );
@@ -230,27 +306,35 @@ elseif ( $id > 0 ):
                 if ( $arBasket['DISCOUNT_PRICE'] > 0 )
                     $oldPrice = $arBasket['PRICE'] + $arBasket['DISCOUNT_PRICE'];
 
-                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => 1] );
+                \CSaleBasket::Update( $arBasket['ID'], ['QUANTITY' => $mainAddQuantity] );
 
                 $needPropdAdd = false;
             }
         }
 
-        if ( $needPropdAdd )
-            Add2BasketByProductID($id);
+        $mainAddQuantity = 0;
 
-        $order = Order::create($siteId, REGISTER_USER_ID__DEFAULT);
-        $basket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $siteId);
-        $order->setBasket($basket);
-        $order->doFinalAction(true);
 
-        foreach ( $basket as $basketItem ) {
-            if ( $basketItem->getField('PRODUCT_ID') == $id ) {
+        if ($needPropdAdd) {
+            Add2BasketByProductID($id, $mainAddQuantity);
+        }
+
+            $order = Order::create($siteId, REGISTER_USER_ID__DEFAULT);
+            $basket = Sale\Basket::loadItemsForFUser(Sale\Fuser::getId(), $siteId);
+            $order->setBasket($basket);
+            $order->doFinalAction(true);
+
+        foreach ($basket as $basketItem) {
+            if ($basketItem->getField('PRODUCT_ID') == $id) {
                 $price = $basketItem->getPrice();
+                $basePrice = $basketItem->getBasePrice();
                 $discPrice = $basketItem->getDiscountPrice();
                 if ( $discPrice > 0)
                     $oldPrice = $price + $discPrice;
             }
+        }
+        if (!empty($arResult["COUPON"])) {
+            $arResult["COUPON"]["PERCENT"] = $oldPrice / ($oldPrice - $price);
         }
 
         $renderImage = CFile::ResizeImageGet($arProd['PREVIEW_PICTURE'], Array("width" => 300, "height" => 300));
@@ -261,24 +345,9 @@ elseif ( $id > 0 ):
             'ID' => $arProd['ID'],
             'NAME' => $arProd['NAME'],
             'PICTURE' => $pic,
-            'PRICE' => $price,
-            'OLD_PRICE' => $oldPrice
+            'PRICE' => (int)$basePrice,
+            'FORMATTED_PRICE' => number_format($basePrice, 0, '', ' '),
         );
-
-        $arResult['VASE'] = array();
-        $rsElem = CIBlockElement::GetList(
-            array('sort' => 'asc', 'id' => 'desc'),
-            array('IBLOCK_ID' => IBLOCK_ID__VASE, 'ACTIVE' => 'Y'),
-            false,
-            array('nPageSize' => 1),
-            array('ID', 'NAME', 'PREVIEW_PICTURE')
-        );
-        if ( $arElem = $rsElem->GetNext() ) {
-            $arPrice = CCatalogProduct::GetOptimalPrice($arElem['ID'], 1, $USER->GetUserGroupArray());
-            $arElem['PRICE'] = $arPrice['DISCOUNT_PRICE'];
-
-            $arResult['VASE'] = $arElem;
-        }
 
         $arResult['ERROR'] = array();
         $arResult['PERSON_TYPE_ID'] = 0;
@@ -352,8 +421,18 @@ elseif ( $id > 0 ):
 
         if ( $sendOrder && empty($arResult['ERROR']) ) {
             //Создание заказа
-            if ( !empty($arResult['ORDER_PROPS'][11]['VALUE']) )
-                Add2BasketByProductID($arResult['VASE']['ID']);
+
+            $upSaleProducts = $request->getPost("upsale_products");
+
+            try {
+                $upSaleProducts = json_decode($upSaleProducts);
+            } catch (\Exception $e) {
+                $upSaleProducts = [];
+            }
+
+            foreach ($upSaleProducts as $productId => $quantity) {
+                Add2BasketByProductID($productId, $quantity);
+            }
 
             $order = Order::create($siteId, REGISTER_USER_ID__DEFAULT);
             $order->setPersonTypeId( $arResult['PERSON_TYPE_ID'] );
@@ -406,7 +485,7 @@ elseif ( $id > 0 ):
             }
 
             $order->setField('CURRENCY', $order->getCurrency());
-            $order->setField('COMMENTS', $request->getPost('COMMENT'));
+            $order->setField('USER_DESCRIPTION', $request->getPost('COMMENT'));
             $order->save();
 
             DiscountCouponsManager::init();

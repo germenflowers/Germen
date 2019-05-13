@@ -148,10 +148,6 @@ function changeFormData( formOrder ) {
     else
         $('#social-wrap').show();
 
-    if ( props['ORDER_PROP_11'].length == 0 )
-        vaseWrap.hide();
-    else
-        vaseWrap.show();
 
     if ( props['ORDER_PROP_12'].length == 0 )
         $('#note-wrap').hide();
@@ -161,15 +157,6 @@ function changeFormData( formOrder ) {
     var price = 0,
         totalOldPrice = $('.js-orderprice').prev('.promo-order__submit__old-price');
     price += parseInt( $('.promo-order__item').data('price') );
-    if ( props['ORDER_PROP_11'].length > 0 ) {
-        price += parseInt( vaseWrap.data('price') );
-
-        if ( totalOldPrice.length > 0 )
-            totalOldPrice.html($.number( (parseInt(totalOldPrice.data('price')) + parseInt(vaseWrap.data('price'))), 0, '', ' ' ) + ' <span class="rouble"></span>');
-    }
-    else if ( totalOldPrice.length > 0 )
-        totalOldPrice.html($.number( parseInt(totalOldPrice.data('price')), 0, '', ' ' ) + ' <span class="rouble"></span>');
-
 
     $('.js-orderprice').text( $.number( price, 0, '', ' ' ) );
 }
@@ -292,7 +279,11 @@ $(document).ready(function(){
         return s ? s[1] : false;
     }
 
-    body.on('click', '.js-detail', function () {
+    body.on('click', '.js-detail', function (event) {
+        if ($(event.target).closest(".js-quantity-control").length || $(event.target).hasClass("js-remove-basket-item")) {
+            return;
+        }
+
         var id = parseInt($(this).data('id')),
             order = '';
         if (window.location.pathname === '/order/')
@@ -414,11 +405,9 @@ $(document).ready(function(){
         else {
             $('.promo-order').addClass('loader');
             formOrder.find('[type="submit"]').prop('disabled', true);
-            BX.showWait();
             $.post( window.location.href, formOrder.serialize(), function ( orderId ) {
                 if ( orderId > 0 )
                     window.location.href = '/order/?ORDER_ID=' + orderId;
-                BX.closeWait();
             });
         }
 
@@ -434,44 +423,6 @@ $(document).ready(function(){
 
     if ( $('#popup-flowers-success').length )
         $('#popup-flowers-success').modal('show');
-
-    body.on('click', '.js-coupon_link', function() {
-        $('#coupon_wrap').slideToggle();
-        return false;
-    });
-
-    body.on('click', '#coupon_wrap button', function() {
-        var btn = $(this),
-            input = $(this).closest('.promo-order__coupon').find('input'),
-            props = [],
-            val = '';
-
-        btn.prop('disabled', true);
-        input.removeClass('error');
-        if ( input.val().length == 0 )
-            input.addClass('error');
-        else {
-            BX.showWait();
-            $.post( window.location.href, { coupon:input.val() }, function ( result ) {
-                afterEnterCoupon( result );
-                btn.prop('disabled', false);
-                BX.closeWait();
-            }, 'json');
-        }
-
-        return false;
-    });
-
-    body.on('click', '#coupon_wrap .promo-order__coupon__discount__cancel', function() {
-        $(this).hide();
-        BX.showWait();
-        $.post( window.location.href, { coupon:'' }, function ( result ) {
-            afterEnterCoupon( result );
-            BX.closeWait();
-        }, 'json');
-
-        return false;
-    });
 });
 
 // Фикс скролла после закрытия попапа скидки
