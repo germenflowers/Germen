@@ -407,7 +407,7 @@ $(function () {
     }
 
     function formatPrice(price) {
-        price = String(price)
+        price = String(Math.round(price));
         return price.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
     }
 
