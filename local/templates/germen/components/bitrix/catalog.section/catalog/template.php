@@ -4,6 +4,13 @@
     <div class="promo-catalog promo-catalog--main">
         <div class="head-h2 promo-catalog__title"><?=$arParams['BLOCK_TITLE']?></div>
 
+        <!-- Когда есть описание -->
+        <div class="promo-catalog__header">
+            <div class="head-h2 promo-catalog__title">Монобукеты</div>
+            <div class="promo-catalog__desc promo-section-desc">Тщательно подобранная пара из 2 видов цветов, которые по своей сути символизирует взаимодополнение, гармонию.</div>
+        </div>
+        <!-- end Когда есть описание -->
+
         <div class="promo-catalog__block__wrapper">
             <?foreach($arResult["ITEMS"] as $arElement):?>
                 <?
