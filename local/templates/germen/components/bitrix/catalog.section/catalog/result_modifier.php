@@ -6,3 +6,5 @@ foreach( $arResult["ITEMS"] as $key => $arElement ) {
     $arResult["ITEMS"][$key]['PICTURE'] = $renderImage['src'];
     unset($renderImage);
 }
+
+$arParams["SHOW_SECTION_DESC"] = $arParams["SHOW_SECTION_DESC"] === "Y" && !empty($arResult["DESCRIPTION"]);
