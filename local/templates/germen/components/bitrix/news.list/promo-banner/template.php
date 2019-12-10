@@ -28,5 +28,29 @@ $this->setFrameMode(true);
                 <a href="#advantages" class="btn btn__main btn--md btn--base js-scroll-to" title="Как это работает?" data-offset="50">Как это работает?</a>
             </div>
         <? } ?>
+
+        <div class="promo-main__media-rating">
+            <div class="media-rating">
+                <div class="media-rating__logo">
+                    <img src="<?=SITE_TEMPLATE_PATH?>/img/media-rating/yell.png" alt="Yell">
+                </div>
+                <div class="media-rating__content">
+                    <div class="media-rating__rating">
+                        <div class="media-rating__rating-value"><?= $arResult["YELL_RATING"] ?></div>
+                        <div class="media-rating__rating-stars" aria-hidden="true">
+                            <div class="media-rating__rating-stars-filled"
+                                 style="width: <?= $arResult["YELL_RATING_PERCENT"]; ?>%">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-rating__desc">
+                        <span class="media-rating__title">
+                            <a class="media-rating__link" href="https://www.yell.ru/moscow/com/germen_11913117/" title="Yell" target="_blank">Yell</a>
+                        </span>
+                        <span class="media-rating__count"><?= $arResult["DECLENSION_REVIEWS"] ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 <?endforeach;?>
