@@ -34,6 +34,19 @@ $isTextPage = \PDV\Tools::isTextPage();
 <body>
 <?$APPLICATION->ShowPanel()?>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MP6JBLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<?
+$infoLineText = "";
+$infoLineIsShow = false;
+$ratingYell = 0;
+$cntReviewsYell = 0;
+if (\Bitrix\Main\Loader::includeModule("germen.settings")) {
+    $infoLineText = \UniPlug\Settings::get("INFO_LINE_TEXT");
+    $infoLineIsShow = (bool)\UniPlug\Settings::get("INFO_LINE_IS_SHOW");
+    $ratingYell = (float)\UniPlug\Settings::get("YELL_RATING");
+    $cntReviewsYell = (int)\UniPlug\Settings::get("YELL_REVIEWS_CNT");
+}
+?>
+
 <?if( !$isOrderPage ):?>
     <nav id="menu-body" class="promo-menu">
     <div class="promo-menu__burger">
@@ -96,21 +109,15 @@ $isTextPage = \PDV\Tools::isTextPage();
     </div>
 </nav>
 <?endif;?>
-<? if (\Bitrix\Main\Loader::includeModule("germen.settings")): ?>
-    <?
-    $infoLineText = \UniPlug\Settings::get("INFO_LINE_TEXT");
-    $infoLineIsShow = (bool)\UniPlug\Settings::get("INFO_LINE_IS_SHOW");
-
-    if (!empty($infoLineText) && $infoLineIsShow && $_COOKIE["HIDE_INFOBAR"] !== "Y"):?>
-        <div class="info-bar">
-            <button class="info-bar__close" aria-label="close">
-                <svg aria-hidden="true">
-                    <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross-2"></use>
-                </svg>
-            </button>
-            <div class="info-bar__inner"><?= $infoLineText ?></div>
-        </div>
-    <? endif; ?>
+<? if (!empty($infoLineText) && $infoLineIsShow && $_COOKIE["HIDE_INFOBAR"] !== "Y"): ?>
+    <div class="info-bar">
+        <button class="info-bar__close" aria-label="close">
+            <svg aria-hidden="true">
+                <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?= VERSION_SPRITE__ICONS ?>#cross-2"></use>
+            </svg>
+        </button>
+        <div class="info-bar__inner"><?= $infoLineText ?></div>
+    </div>
 <? endif; ?>
 
 <main id="panel-body">
@@ -291,7 +298,9 @@ $isTextPage = \PDV\Tools::isTextPage();
                                 "SORT_BY2" => "SORT",
                                 "SORT_ORDER1" => "DESC",
                                 "SORT_ORDER2" => "ASC",
-                                "STRICT_SECTION_CHECK" => "N"
+                                "STRICT_SECTION_CHECK" => "N",
+                                "YELL_RATING" => $ratingYell,
+                                "YELL_REVIEWS_CNT" => $cntReviewsYell,
                             )
                         );?>
 

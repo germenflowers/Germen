@@ -28,5 +28,8 @@ $this->setFrameMode(true);
                 <a href="#advantages" class="btn btn__main btn--md btn--base js-scroll-to" title="Как это работает?" data-offset="50">Как это работает?</a>
             </div>
         <? } ?>
+
+        <p>Рейтинг <?= $arResult["YELL_RATING"] ?></p>
+        <p>Количество отзывов <?= $arResult["YELL_REVIEWS_CNT"] ?></p>
     </div>
 <?endforeach;?>
