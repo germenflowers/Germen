@@ -38,8 +38,9 @@ $this->setFrameMode(true);
                     <div class="media-rating__rating">
                         <div class="media-rating__rating-value"><?= $arResult["YELL_RATING"] ?></div>
                         <div class="media-rating__rating-stars" aria-hidden="true">
-                            <? $yellRatingPercentage = $arResult["YELL_RATING"] * 100 / 5; ?>
-                            <div class="media-rating__rating-stars-filled" style="width: <?=$yellRatingPercentage;?>%"></div>
+                            <div class="media-rating__rating-stars-filled"
+                                 style="width: <?= $arResult["YELL_RATING_PERCENT"]; ?>%">
+                            </div>
                         </div>
                     </div>
                     <div class="media-rating__desc">

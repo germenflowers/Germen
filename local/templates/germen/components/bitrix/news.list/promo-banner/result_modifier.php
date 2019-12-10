@@ -9,3 +9,4 @@ if ($arResult["YELL_RATING"] < 0) {
     $arResult["YELL_RATING"] = 0;
 }
 $arResult["YELL_RATING"] = number_format($arResult["YELL_RATING"], 1, '.', '');
+$arResult["YELL_RATING_PERCENT"] = $arResult["YELL_RATING"] * 100 / 5;
