@@ -265,7 +265,8 @@ $APPLICATION->SetTitle("Удобный сервис доставки цвето�
                     "USE_PRICE_COUNT" => "N",
                     "USE_PRODUCT_QUANTITY" => "N",
                     "DELIVERY_TIME" => $deliveryTime,
-                    "BLOCK_TITLE" => $arSect['NAME']
+                    "BLOCK_TITLE" => $arSect['NAME'],
+                    "SHOW_SECTION_DESC" => "Y"
                 )
             );?>
         <? } ?>

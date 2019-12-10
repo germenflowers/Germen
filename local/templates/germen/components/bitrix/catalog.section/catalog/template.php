@@ -2,7 +2,12 @@
 
 <?if ( !empty($arResult['ITEMS']) ) {?>
     <div class="promo-catalog promo-catalog--main">
-        <div class="head-h2 promo-catalog__title"><?=$arParams['BLOCK_TITLE']?></div>
+        <div class="promo-catalog__header">
+            <div class="head-h2 promo-catalog__title"><?= $arParams['BLOCK_TITLE'] ?></div>
+            <? if ($arParams['SHOW_SECTION_DESC']): ?>
+                <div class="promo-catalog__desc promo-section-desc"><?= $arResult["DESCRIPTION"] ?></div>
+            <? endif; ?>
+        </div>
 
         <div class="promo-catalog__block__wrapper">
             <?foreach($arResult["ITEMS"] as $arElement):?>
