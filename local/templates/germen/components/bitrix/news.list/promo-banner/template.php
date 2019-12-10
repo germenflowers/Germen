@@ -47,7 +47,7 @@ $this->setFrameMode(true);
                         <span class="media-rating__title">
                             <a class="media-rating__link" href="https://www.yell.ru/moscow/com/germen_11913117/" title="Yell" target="_blank">Yell</a>
                         </span>
-                        <span class="media-rating__count"><?= $arResult["YELL_REVIEWS_CNT"] ?> отзывов</span>
+                        <span class="media-rating__count"><?= $arResult["DECLENSION_REVIEWS"] ?></span>
                     </div>
                 </div>
             </div>
