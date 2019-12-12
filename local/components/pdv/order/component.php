@@ -79,7 +79,7 @@ if ( isset($couponEnter) ):
                 $result['OLD_PRICE'] = $price + $discPrice;
         }
     }
-    $result["PERCENT"] = $result['OLD_PRICE'] / ($result['OLD_PRICE'] - $result['PRICE']);
+    $result["PERCENT"] = (($result['OLD_PRICE'] - $result['PRICE']) * 100) / $result['OLD_PRICE'];
     echo json_encode( $result );
 
     die();
