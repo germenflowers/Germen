@@ -7070,7 +7070,6 @@ input, textarea, button {
   @media (max-width: 991px) {
     .promo-main {
       padding-top: 82px;
-      padding-bottom: 82px;
       height: 488px;
       margin-bottom: 52px; } }
   @media (min-width: 1030px) {
@@ -7088,15 +7087,18 @@ input, textarea, button {
     z-index: -1; }
   .promo-main__content {
     height: 100%;
+    padding-top: 38px;
+    padding-bottom: 38px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
     -ms-flex-pack: center;
     justify-content: center; }
-    @media (max-width: 700px) {
+    @media (min-width: 1030px) {
       .promo-main__content {
-        padding-top: 38px; } }
+        padding-top: 0;
+        padding-bottom: 0; } }
   .promo-main__title {
     font-size: 34px;
     line-height: 1; }
@@ -7110,32 +7112,33 @@ input, textarea, button {
       .promo-main__cta {
         margin-top: 38px; } }
   .promo-main__media-rating {
-    padding-top: 40px;
-    margin-top: auto;
+    position: absolute;
     display: -ms-flexbox;
     display: flex;
+    bottom: 10px;
+    left: 50%;
     -ms-flex-align: center;
     align-items: center;
     -ms-flex-pack: center;
-    justify-content: center; }
-    .promo-main__media-rating:last-child {
-      margin-bottom: -70px; }
+    justify-content: center;
+    transform: translate(-50%, 0); }
     .promo-main__media-rating .media-rating {
       transform: scale(0.6); }
       .promo-main__media-rating .media-rating:hover {
         transform: translate(0, -5px) scale(0.6); }
     @media (min-width: 700px) {
-      .promo-main__media-rating:last-child {
-        margin-bottom: -50px; }
-      .promo-main__media-rating .media-rating {
-        transform: scale(0.8); }
-        .promo-main__media-rating .media-rating:hover {
-          transform: translate(0, -5px) scale(0.8); } }
+      .promo-main__media-rating {
+        bottom: 30px; }
+        .promo-main__media-rating .media-rating {
+          transform: scale(0.8); }
+          .promo-main__media-rating .media-rating:hover {
+            transform: translate(0, -5px) scale(0.8); } }
     @media (min-width: 1030px) {
       .promo-main__media-rating {
-        display: block; }
-        .promo-main__media-rating:last-child {
-          margin-bottom: -22px; }
+        display: block;
+        bottom: 72px;
+        left: auto;
+        transform: none; }
         .promo-main__media-rating .media-rating {
           transform: scale(1); }
           .promo-main__media-rating .media-rating:hover {
