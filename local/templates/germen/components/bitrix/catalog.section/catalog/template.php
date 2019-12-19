@@ -10,7 +10,7 @@
         </div>
 
         <div class="promo-catalog__block__wrapper">
-	        <?if ($GLOBALS[$arParams["FILTER_NAME"]]["!PROPERTY_POPULAR"] === false): ?>
+	        <?if ($arResult["ORIGINAL_PARAMETERS"]["SECTION_CODE"] === "novyy-god-2019"): ?>
 		        <!-- Выводим на главной в блоке Самое популярное -->
 		        <div class="promo-catalog__block promo-catalog__block--wide js-detail" data-id="221">
 			        <div class="promo-main-product">
