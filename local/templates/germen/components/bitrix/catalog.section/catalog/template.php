@@ -21,7 +21,10 @@
                         <div class="promo-main-product__text">Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.</div>
                         <div class="promo-main-product__price">2 990 <span class="rouble"></span></div>
                         <div class="promo-main-product__order">
-                            <a href="#" class="promo-item__delivery promo-main-product__order-button">
+                            <a href="#"
+                               class="promo-item__delivery promo-main-product__order-button js-detail"
+                               data-id="221"
+                            >
                                 <div class="promo-item__delivery__text">Заказать</div>
                                 <div class="promo-item__delivery__time">
                                     <svg class="promo-item__delivery__icon">
