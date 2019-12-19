@@ -10,33 +10,35 @@
         </div>
 
         <div class="promo-catalog__block__wrapper">
-            <!-- Выводим на главной в блоке Самое популярное -->
-            <div class="promo-catalog__block promo-catalog__block--wide">
-                <div class="promo-main-product">
-                    <div class="promo-main-product__image promo-main-product__image--free-delivery">
-                        <img src="<?=SITE_TEMPLATE_PATH?>/img/main-product/xtree.png" srcset="<?=SITE_TEMPLATE_PATH?>/img/main-product/xtree.png 1x, <?=SITE_TEMPLATE_PATH?>/img/main-product/xtree@2x.png 2x" alt="">
-                    </div>
-                    <div class="promo-main-product__content">
-                        <div class="promo-main-product__title">Пихта Нордмана</div>
-                        <div class="promo-main-product__text">Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.</div>
-                        <div class="promo-main-product__price">2 990 <span class="rouble"></span></div>
-                        <div class="promo-main-product__order">
-                            <a href="#"
-                               class="promo-item__delivery promo-main-product__order-button js-detail"
-                               data-id="221"
-                            >
-                                <div class="promo-item__delivery__text">Заказать</div>
-                                <div class="promo-item__delivery__time">
-                                    <svg class="promo-item__delivery__icon">
-                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#properties-car-mini"></use>
-                                    </svg>
-                                    <div class="promo-item__delivery__time__text">60 мин.</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+	        <?if ($GLOBALS[$arParams["FILTER_NAME"]]["!PROPERTY_POPULAR"] === false): ?>
+		        <!-- Выводим на главной в блоке Самое популярное -->
+		        <div class="promo-catalog__block promo-catalog__block--wide js-detail" data-id="221">
+			        <div class="promo-main-product">
+				        <div class="promo-main-product__image promo-main-product__image--free-delivery">
+					        <img src="<?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree.png"
+					             srcset="<?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree.png 1x, <?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree@2x.png 2x"
+					             alt="">
+				        </div>
+				        <div class="promo-main-product__content">
+					        <div class="promo-main-product__title">Пихта Нордмана</div>
+					        <div class="promo-main-product__text">Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.</div>
+					        <div class="promo-main-product__price">2 990 <span class="rouble"></span></div>
+					        <div class="promo-main-product__order">
+						        <a href="/order/?id=221"
+						           class="promo-item__delivery promo-main-product__order-button js-order_link">
+							        <div class="promo-item__delivery__text">Заказать</div>
+							        <div class="promo-item__delivery__time">
+								        <svg class="promo-item__delivery__icon">
+									        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg#properties-car-mini"></use>
+								        </svg>
+								        <div class="promo-item__delivery__time__text">60 мин.</div>
+							        </div>
+						        </a>
+					        </div>
+				        </div>
+			        </div>
+		        </div>
+	        <? endif; ?>
 
             <?foreach($arResult["ITEMS"] as $arElement):?>
                 <?

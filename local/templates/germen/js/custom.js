@@ -280,7 +280,9 @@ $(document).ready(function(){
     }
 
     body.on('click', '.js-detail', function (event) {
-        if ($(event.target).closest(".js-quantity-control").length || $(event.target).hasClass("js-remove-basket-item")) {
+        if ($(event.target).closest(".js-quantity-control").length
+          || $(event.target).hasClass("js-remove-basket-item")
+          || $(event.target).closest(".js-order_link").length) {
             return;
         }
 
