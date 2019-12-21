@@ -22,7 +22,7 @@
 				        <div class="promo-main-product__content">
 					        <div class="promo-main-product__title">Пихта Нордмана</div>
 					        <div class="promo-main-product__text">Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.</div>
-					        <div class="promo-main-product__price">2 990 <span class="rouble"></span></div>
+					        <div class="promo-main-product__price">4 990 <span class="rouble"></span></div>
 					        <div class="promo-main-product__order">
 						        <a href="/order/?id=221"
 						           class="promo-item__delivery promo-main-product__order-button js-order_link">
