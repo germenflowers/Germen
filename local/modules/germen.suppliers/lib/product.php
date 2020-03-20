@@ -65,4 +65,51 @@ class Product
 
         return $suppliersProductsId;
     }
+
+    /**
+     * @param array $productsId
+     * @return array
+     */
+    public function getItems($productsId): array
+    {
+        $items = array();
+
+        $properties = array('IMAGES', 'COMPOSITION');
+        $filter = array('IBLOCK_ID' => $this->iblockId, 'ID' => $productsId);
+        $select = array('IBLOCK_ID', 'ID', 'NAME', 'PREVIEW_PICTURE', 'DETAIL_PICTURE');
+        $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
+        while ($rowResult = $result->getNextElement(true, false)) {
+            $row = $rowResult->getFields();
+            foreach ($properties as $code) {
+                $row['PROPERTIES'][$code] = $rowResult->getProperty($code);
+            }
+
+            $imageId = 0;
+            if (!empty((int)$row['PREVIEW_PICTURE'])) {
+                $imageId = (int)$row['PREVIEW_PICTURE'];
+            } elseif (!empty((int)$row['DETAIL_PICTURE'])) {
+                $imageId = (int)$row['DETAIL_PICTURE'];
+            } elseif (!empty((int)$row['PROPERTIES']['IMAGES']['VALUE'][0])) {
+                $imageId = (int)$row['PROPERTIES']['IMAGES']['VALUE'][0];
+            }
+
+            $image = array('src' => '');
+            if (!empty($imageId)) {
+                $image = \CFile::ResizeImageGet(
+                    $imageId,
+                    array('width' => 700, 'height' => 700),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            }
+
+            $items[(int)$row['ID']] = array(
+                'id' => (int)$row['ID'],
+                'name' => $row['NAME'],
+                'image' => $image['src'],
+                'composition' => $row['PROPERTIES']['COMPOSITION']['~VALUE']['TEXT'],
+            );
+        }
+
+        return $items;
+    }
 }

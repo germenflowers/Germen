@@ -11,7 +11,6 @@ use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\NotImplementedException;
 use Exception;
-use ShortCode\Random;
 
 /**
  * Class Supplier
@@ -98,7 +97,7 @@ class Supplier
         $suppliersFields = array();
         $allSuppliersProductsId = array();
         foreach ($suppliersProductsId as $supplierId => $supplierProductsId) {
-            $token = $this->createToken();
+            $token = Tools::getToken();
 
             $suppliersFields[] = array(
                 'supplier_id' => $supplierId,
@@ -111,7 +110,7 @@ class Supplier
                 'note' => $orderFields['note'],
                 'status' => 'create',
                 'token' => $token,
-                'url' => $this->createUrl($token),
+                'url' => Tools::createUrl($token),
             );
 
             foreach ($supplierProductsId as $productId) {
@@ -188,23 +187,6 @@ class Supplier
     }
 
     /**
-     * @return string
-     */
-    private function createToken(): string
-    {
-        return Random::get();
-    }
-
-    /**
-     * @param string $token
-     * @return string
-     */
-    private function createUrl($token): string
-    {
-        return 'https://'.SITE_SERVER_NAME.'/suppliers/'.$token;
-    }
-
-    /**
      * @param int $deliveryTime
      * @param int $orderId
      * @return array
@@ -245,19 +227,50 @@ class Supplier
 
     /**
      * @param int $id
+     * @param string $status
      * @return array
      * @throws Exception
      */
-    public function setStatusSend($id): array
+    private function setStatus($id, $status): array
     {
         $return = array('error' => false, 'message' => '');
 
-        $result = SuppliersTable::update($id, array('status' => 'send'));
+        $result = SuppliersTable::update($id, array('status' => $status));
         if (!$result->isSuccess()) {
             $return = array('error' => true, 'message' => $result->getErrorMessages());
         }
 
         return $return;
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusSend($id): array
+    {
+        return $this->setStatus($id, 'send');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusAccepted($id): array
+    {
+        return $this->setStatus($id, 'accepted');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusAssembled($id): array
+    {
+        return $this->setStatus($id, 'assembled');
     }
 
     /**
@@ -283,5 +296,71 @@ class Supplier
         }
 
         return $phones;
+    }
+
+    /**
+     * @param string $token
+     * @return array
+     * @throws ArgumentException
+     * @throws LoaderException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public function getByToken($token): array
+    {
+        $data = array();
+
+        $result = SuppliersTable::getList(
+            array(
+                'filter' => array('token' => $token),
+                'select' => array(
+                    'id',
+                    'order_id',
+                    'products_id',
+                    'compliments_id',
+                    'delivery_time',
+                    'comment',
+                    'note',
+                    'status',
+                ),
+            )
+        );
+        if ($row = $result->fetch()) {
+            $data = array(
+                'id' => $row['id'],
+                'orderId' => $row['order_id'],
+                'productsId' => $row['products_id'],
+                'complimentsId' => $row['compliments_id'],
+                'deliveryTime' => $row['delivery_time']->getTimestamp(),
+                'comment' => $row['comment'],
+                'note' => $row['note'],
+                'status' => $row['status'],
+            );
+        }
+
+        if (empty($data)) {
+            return $data;
+        }
+
+        $data['courierTime'] = $data['deliveryTime'] - 90 * 60;
+
+        $data['deliveryTimeFormat'] = date('d.m.Y H:i', $data['deliveryTime']);
+        $data['courierTimeFormat'] = date('d.m.Y H:i', $data['courierTime']);
+
+        $data['products'] = array();
+        if (!empty($data['productsId'])) {
+            $product = new Product;
+
+            $data['products'] = $product->getItems($data['productsId']);
+        }
+
+        $data['compliments'] = array();
+        if (!empty($data['complimentsId'])) {
+            $compliment = new Compliment;
+
+            $data['compliments'] = $compliment->getItems($data['complimentsId']);
+        }
+
+        return $data;
     }
 }
