@@ -24,7 +24,7 @@ class eventHandlers
      * @throws NotImplementedException
      * @throws SystemException
      */
-    public static function OnSaleOrderBeforeSaved(Event $event): void
+    public static function OnSaleOrderSaved(Event $event): void
     {
         $order = $event->getParameter('ENTITY');
 
