@@ -347,10 +347,10 @@ class germen_suppliers extends CModule
         $eventManager = EventManager::getInstance();
         $eventManager->registerEventHandler(
             'sale',
-            'OnSaleOrderBeforeSaved',
+            'OnSaleOrderSaved',
             $this->MODULE_ID,
             'eventHandlers',
-            'OnSaleOrderBeforeSaved'
+            'OnSaleOrderSaved'
         );
         $eventManager->registerEventHandler(
             'sale',
@@ -369,10 +369,10 @@ class germen_suppliers extends CModule
         $eventManager = EventManager::getInstance();
         $eventManager->unRegisterEventHandler(
             'main',
-            'OnSaleOrderBeforeSaved',
+            'OnSaleOrderSaved',
             $this->MODULE_ID,
             'eventHandlers',
-            'OnSaleOrderBeforeSaved'
+            'OnSaleOrderSaved'
         );
         $eventManager->unRegisterEventHandler(
             'main',
