@@ -71,11 +71,7 @@
                                         </svg>
                                     <?php endif; ?>
                                     <div class="promo-item__delivery__time__text js-prod_time">
-                                        <?php if (empty($arParams['DELIVERY_TIME'])): ?>
-                                            <?=$arElement['BUTTON_PARAMS']['time']?>
-                                        <?php else: ?>
-                                            <?=$arParams['DELIVERY_TIME']?>
-                                        <?php endif; ?>
+                                        <?=$arElement['BUTTON_PARAMS']['time']?>
                                     </div>
                                 </div>
                             </a>
