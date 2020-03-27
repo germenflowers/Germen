@@ -58,15 +58,25 @@
 
                             <div class="promo-item__price"><?=number_format($arElement['ITEM_PRICES'][0]['PRICE'],0, '', ' ')?> <span class="rouble"></span></div>
 
-                            <a href="/order/?id=<?=$arElement['ID']?>" class="promo-item__delivery">
-                                <div class="promo-item__delivery__text">Заказать</div>
-
+                            <a
+                                href="/order/?id=<?=$arElement['ID']?>"
+                                class="promo-item__delivery"
+                                style="background-color: #<?=$arElement['BUTTON_PARAMS']['background']?>;"
+                            >
+                                <div class="promo-item__delivery__text"><?=$arElement['BUTTON_PARAMS']['text']?></div>
                                 <div class="promo-item__delivery__time">
-                                    <svg class="promo-item__delivery__icon">
-                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#properties-car-mini"></use>
-                                    </svg>
-
-                                    <div class="promo-item__delivery__time__text js-prod_time"><?=$arParams['DELIVERY_TIME']?></div>
+                                    <?php if ($arElement['BUTTON_PARAMS']['showIcon']): ?>
+                                        <svg class="promo-item__delivery__icon">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#properties-car-mini"></use>
+                                        </svg>
+                                    <?php endif; ?>
+                                    <div class="promo-item__delivery__time__text js-prod_time">
+                                        <?php if (empty($arParams['DELIVERY_TIME'])): ?>
+                                            <?=$arElement['BUTTON_PARAMS']['time']?>
+                                        <?php else: ?>
+                                            <?=$arParams['DELIVERY_TIME']?>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </a>
                         </div>
