@@ -228,16 +228,31 @@ class Supplier
     /**
      * @param int $id
      * @param string $status
+     * @param string $bitrixStatus
      * @return array
-     * @throws Exception
+     * @throws ArgumentException
+     * @throws LoaderException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
-    private function setStatus($id, $status): array
+    private function setStatus($id, $status, $bitrixStatus = ''): array
     {
         $return = array('error' => false, 'message' => '');
 
         $result = SuppliersTable::update($id, array('status' => $status));
         if (!$result->isSuccess()) {
             $return = array('error' => true, 'message' => $result->getErrorMessages());
+        }
+
+        $result = SuppliersTable::getList(
+            array(
+                'filter' => array('id' => $id),
+                'select' => array('order_id'),
+            )
+        );
+        if ($row = $result->fetch()) {
+            $order = new Order;
+            $order->setStatus($row['order_id'], $bitrixStatus);
         }
 
         return $return;
@@ -250,7 +265,7 @@ class Supplier
      */
     public function setStatusSend($id): array
     {
-        return $this->setStatus($id, 'send');
+        return $this->setStatus($id, 'send', 'SS');
     }
 
     /**
@@ -260,7 +275,27 @@ class Supplier
      */
     public function setStatusAccepted($id): array
     {
-        return $this->setStatus($id, 'accepted');
+        return $this->setStatus($id, 'accepted', 'SA');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusInWork($id): array
+    {
+        return $this->setStatus($id, 'in-work', 'SW');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusNotAvailable($id): array
+    {
+        return $this->setStatus($id, 'not-available', 'SN');
     }
 
     /**
@@ -270,7 +305,17 @@ class Supplier
      */
     public function setStatusAssembled($id): array
     {
-        return $this->setStatus($id, 'assembled');
+        return $this->setStatus($id, 'assembled', 'SP');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function setStatusCourier($id): array
+    {
+        return $this->setStatus($id, 'courier', 'SC');
     }
 
     /**
@@ -345,8 +390,9 @@ class Supplier
         $data['courierTime'] = $data['deliveryTime'] - 90 * 60;
 
         $data['deliveryTimeFormat'] = date('d.m.Y H:i', $data['deliveryTime']);
-        $data['courierTimeFormat'] = date('d.m.Y H:i', $data['courierTime']);
-
+        $data['courierDateTimeFormat'] = date('d.m.Y H:i', $data['courierTime']);
+        $data['courierDateFormat'] = date('d.m.Y', $data['courierTime']);
+        $data['courierTimeFormat'] = date('H:i', $data['courierTime']);
         $data['products'] = array();
         if (!empty($data['productsId'])) {
             $product = new Product;
@@ -362,5 +408,71 @@ class Supplier
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $status
+     * @return array
+     */
+    public function getStatusList($status = ''): array
+    {
+        $items = array(
+            'create' => array(
+                'id' => 'create',
+                'name' => 'Создан',
+                'selected' => false,
+            ),
+            'accepted' => array(
+                'id' => 'accepted',
+                'name' => 'Принят',
+                'selected' => false,
+            ),
+            'in-work' => array(
+                'id' => 'in-work',
+                'name' => 'В работе',
+                'selected' => false,
+            ),
+            'not-available' => array(
+                'id' => 'not-available',
+                'name' => 'Нет в наличие',
+                'selected' => false,
+            ),
+            'assembled' => array(
+                'id' => 'assembled',
+                'name' => 'Собран',
+                'selected' => false,
+            ),
+            'courier' => array(
+                'id' => 'courier',
+                'name' => 'Передан курьеру',
+                'selected' => false,
+            ),
+        );
+
+        switch ($status) {
+            case 'send':
+            case 'create':
+                $items['create']['selected'] = true;
+                break;
+            case 'accepted':
+                $items['accepted']['selected'] = true;
+                break;
+            case 'in-work':
+                $items['in-work']['selected'] = true;
+                break;
+            case 'not-available':
+                $items['not-available']['selected'] = true;
+                break;
+            case 'assembled':
+                $items['assembled']['selected'] = true;
+                break;
+            case 'courier':
+                $items['courier']['selected'] = true;
+                break;
+            default:
+                $items['create']['selected'] = true;
+        }
+
+        return $items;
     }
 }

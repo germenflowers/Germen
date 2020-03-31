@@ -91,6 +91,7 @@ class germen_suppliers extends CModule
     {
         $this->installSuppliersIblock();
         $this->installProductProperties();
+        $this->installOrderStatuses();
 
         $connection = Application::getConnection();
 
@@ -246,6 +247,73 @@ class germen_suppliers extends CModule
             if (!$result->fetch()) {
                 $CIBlockProperty->Add($fields);
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws LoaderException
+     */
+    public function installOrderStatuses(): bool
+    {
+        if (!Loader::includeModule('sale')) {
+            return false;
+        }
+
+        $statuses = array();
+        $filter = array();
+        $select = array('ID');
+        $result = \CSaleStatus::GetList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            if (!in_array($row['ID'], $statuses, true)) {
+                $statuses[] = $row['ID'];
+            }
+        }
+
+        $newStatuses = array(
+            array(
+                'id' => 'SS',
+                'name' => 'Отправлен поставщику',
+            ),
+            array(
+                'id' => 'SA',
+                'name' => 'Принят поставщиком',
+            ),
+            array(
+                'id' => 'SW',
+                'name' => 'В работе у поставщика',
+            ),
+            array(
+                'id' => 'SN',
+                'name' => 'Нет в наличие у поставщика',
+            ),
+            array(
+                'id' => 'SP',
+                'name' => 'Собран поставщиком',
+            ),
+            array(
+                'id' => 'SC',
+                'name' => 'Передан курьеру поставщиком',
+            ),
+        );
+
+        foreach ($newStatuses as $status) {
+            if (in_array($status['id'], $statuses, true)) {
+                continue;
+            }
+
+            $fields = array(
+                'ID' => $status['id'],
+                'SORT' => 3000,
+                'LANG' => array(
+                    array('LID' => 'ru', 'NAME' => $status['name'], 'DESCRIPTION' => ''),
+                    array('LID' => 'en', 'NAME' => $status['name'], 'DESCRIPTION' => ''),
+                ),
+            );
+
+            \CSaleStatus::Add($fields);
         }
 
         return true;

@@ -46,12 +46,27 @@ if ($post['action'] === 'changeStatus') {
         die(json_encode(array('error' => true, 'message' => 'Bad Request')));
     }
 
+    if ($post['status'] === 'create') {
+        $result = $supplier->setStatusSend($data['id']);
+    }
     if ($post['status'] === 'accepted') {
         $result = $supplier->setStatusAccepted($data['id']);
     }
 
+    if ($post['status'] === 'in-work') {
+        $result = $supplier->setStatusInWork($data['id']);
+    }
+
+    if ($post['status'] === 'not-available') {
+        $result = $supplier->setStatusNotAvailable($data['id']);
+    }
+
     if ($post['status'] === 'assembled') {
         $result = $supplier->setStatusAssembled($data['id']);
+    }
+
+    if ($post['status'] === 'courier') {
+        $result = $supplier->setStatusCourier($data['id']);
     }
 }
 

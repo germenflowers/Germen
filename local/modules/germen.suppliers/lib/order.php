@@ -8,6 +8,7 @@ use Bitrix\Main\LoaderException;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ArgumentNullException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\NotImplementedException;
 
 /**
@@ -92,5 +93,32 @@ class Order
         );
 
         return $fields;
+    }
+
+    /**
+     * @param int $orderId
+     * @param string $status
+     * @return bool
+     * @throws ArgumentException
+     * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
+     */
+    public function setStatus($orderId, $status = ''): bool
+    {
+        $result = false;
+
+        if (empty($status)) {
+            return $result;
+        }
+
+        $order = BitrixOrder::load($orderId);
+        if ($order === null) {
+            return $result;
+        }
+
+        $order->setField('STATUS_ID', $status);
+        $result = $order->save();
+
+        return (bool)$result->isSuccess();
     }
 }
