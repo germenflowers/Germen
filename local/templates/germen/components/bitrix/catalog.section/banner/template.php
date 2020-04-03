@@ -6,10 +6,16 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 
 $item = $arResult['ITEMS'][0];
 
-$img = array('src' => $item['PICTURE']);
+$img = array('src' => '');
 if (!empty($item['PROPERTIES']['BANNER_IMG']['VALUE'])) {
     $img = CFile::ResizeImageGet(
         $item['PROPERTIES']['BANNER_IMG']['VALUE'],
+        array('width' => 1200, 'height' => 600),
+        BX_RESIZE_IMAGE_PROPORTIONAL
+    );
+} elseif (!empty($item['PREVIEW_PICTURE'])) {
+    $img = CFile::ResizeImageGet(
+        $item['PREVIEW_PICTURE'],
         array('width' => 1200, 'height' => 600),
         BX_RESIZE_IMAGE_PROPORTIONAL
     );
