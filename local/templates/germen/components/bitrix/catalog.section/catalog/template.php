@@ -2,13 +2,14 @@
 
 <?if ( !empty($arResult['ITEMS']) ) {?>
     <div class="promo-catalog promo-catalog--main">
+        <?php /*
         <div class="promo-catalog__header">
             <div class="head-h2 promo-catalog__title"><?= $arParams['BLOCK_TITLE'] ?></div>
             <? if ($arParams['SHOW_SECTION_DESC']): ?>
                 <div class="promo-catalog__desc promo-section-desc"><?= $arResult["DESCRIPTION"] ?></div>
             <? endif; ?>
         </div>
-
+        */ ?>
         <div class="promo-catalog__block__wrapper">
 	        <?if ($arResult["CODE"] === "novyy-god-2019"): ?>
 		        <!-- Выводим на главной в блоке Самое популярное -->
@@ -39,7 +40,6 @@
 			        </div>
 		        </div>
 	        <? endif; ?>
-
             <?foreach($arResult["ITEMS"] as $arElement):?>
                 <?
                 $this->AddEditAction($arElement['ID'], $arElement['EDIT_LINK'], CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "ELEMENT_EDIT"));
@@ -80,7 +80,6 @@
                 </div>
             <?endforeach;?>
         </div>
-
         <?=$arResult["NAV_STRING"]?>
     </div>
 <?}?>
