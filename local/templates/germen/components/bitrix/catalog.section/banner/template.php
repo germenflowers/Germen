@@ -6,7 +6,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 
 $item = $arResult['ITEMS'][0];
 
-$img = array('src' => '');
+$img = array('src' => $item['PICTURE']);
 if (!empty($item['PROPERTIES']['BANNER_IMG']['VALUE'])) {
     $img = CFile::ResizeImageGet(
         $item['PROPERTIES']['BANNER_IMG']['VALUE'],
@@ -23,12 +23,16 @@ if (!empty($item['PROPERTIES']['BANNER_IMG']['VALUE'])) {
         <?php endif; ?>
     </div>
     <?php if (!empty($item)): ?>
-        <img src="<?=$img['src']?>">
-        <?php if (empty($item['PROPERTIES']['BANNER_TITLE']['VALUE'])): ?>
-            <?=$item['NAME']?>
-        <?php else: ?>
-            <?=$item['PROPERTIES']['BANNER_TITLE']['VALUE']?>
-        <?php endif; ?>
+        <a href="#" class="js-detail" data-id="<?=$item['ID']?>">
+            <img src="<?=$img['src']?>" alt="<?=$item['NAME']?>">
+        </a>
+        <a href="#" class="promo-item__title js-detail" data-id="<?=$item['ID']?>">
+            <?php if (empty($item['PROPERTIES']['BANNER_TITLE']['VALUE'])): ?>
+                <?=$item['NAME']?>
+            <?php else: ?>
+                <?=$item['PROPERTIES']['BANNER_TITLE']['VALUE']?>
+            <?php endif; ?>
+        </a>
         <?php if (empty($item['PROPERTIES']['BANNER_TEXT']['VALUE']['TEXT'])): ?>
             <?=$item['PREVIEW_TEXT']?>
         <?php else: ?>
