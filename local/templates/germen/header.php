@@ -15,6 +15,10 @@ $isTextPage = \PDV\Tools::isTextPage();
     <title><?$APPLICATION->ShowTitle()?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="apple-touch-icon" href="<?=SITE_TEMPLATE_PATH?>/img/apple-touch-icon.png">
+    <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl100.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl500.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl700.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.13">
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
     <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css?v=1.1">
