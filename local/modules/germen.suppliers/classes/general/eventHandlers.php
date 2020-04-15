@@ -39,6 +39,14 @@ class eventHandlers
 
     /**
      * @param Event $event
+     */
+    public static function OnSaleOrderBeforeSaved(Event $event): void
+    {
+
+    }
+
+    /**
+     * @param Event $event
      * @throws ArgumentException
      * @throws LoaderException
      * @throws ObjectPropertyException
