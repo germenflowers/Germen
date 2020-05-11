@@ -237,6 +237,32 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                     </div>
                 </div>
 
+                <?php
+                foreach ($arResult['ORDER_PROPS'] as $property) {
+                    if($property['CODE'] === 'EMAIL') {
+                        $prop = $property;
+                    }
+                }
+                ?>
+                <?php if (!empty($prop)): ?>
+                    <div class="order-form__section">
+                        <div class="order-form__subtitle">Отправить электронный чек на E-mail</div>
+                        <div class="promo-order__row">
+                            <div class="promo-order__block">
+                                <div class="input__wrapper input__wrapper--mark">
+                                    <input
+                                            type="email"
+                                            class="input"
+                                            name="ORDER_PROP_<?=$prop['ID']?>"
+                                            id="ORDER_PROP_<?=$prop['ID']?>" value="<?=$prop['VALUE']?>"
+                                            placeholder="E-mail"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <div class="order-form__section">
                     <div class="order-form__subtitle">Данные получателя</div>
 
