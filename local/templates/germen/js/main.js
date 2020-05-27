@@ -31316,7 +31316,6 @@ $(document).ready(function() {
     });
 });
 
-
 $(document).ready(function(){
     var $productSlider = $('[data-product-slider]');
 
@@ -43073,3 +43072,52 @@ module.exports = exports["default"];
   return Swiper;
 
 }));
+
+function initPhoneMask(num)
+{
+  if ($('#phone-mask-'+num).length > 0) {
+    let maskList = $.masksSort($.masksLoad('/local/templates/germen/js/phone-codes.json'), ['#'], /[0-9]|#/,
+      'mask'),
+      maskOpts = {
+        inputmask: {
+          definitions: {
+            '#': {
+              validator: '[0-9]',
+              cardinality: 1,
+            },
+          },
+          //clearIncomplete: true,
+          showMaskOnHover: false,
+          autoUnmask: true,
+        },
+        match: /[0-9]/,
+        replace: '#',
+        list: maskList,
+        listKey: 'mask',
+        onMaskChange: function(maskObj, completed)
+        {
+          $(this).attr('placeholder', $(this).inputmask('getemptymask').join(''));
+        },
+      },
+      checkbox = $('#phone-mask-'+num),
+      input = $('.js-phone-'+num);
+
+    checkbox.change(function()
+    {
+      if (checkbox.is(':checked')) {
+        input.inputmasks(maskOpts);
+      } else {
+        input.inputmask('+[####################]', maskOpts.inputmask).attr('placeholder',
+          input.inputmask('getemptymask'));
+      }
+    });
+
+    checkbox.change();
+  }
+}
+
+$(document).ready(function()
+{
+  initPhoneMask('1');
+  initPhoneMask('2');
+});

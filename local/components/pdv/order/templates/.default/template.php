@@ -189,9 +189,14 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                     <div class="promo-order__row">
                         <div class="promo-order__block">
                             <div class="input__wrapper input__wrapper--mark">
-                                <input type="text" class="input phomemask" name="ORDER_PROP_<?= $prop['ID'] ?>"
-                                       id="ORDER_PROP_<?= $prop['ID'] ?>" value="<?= $prop['VALUE'] ?>"
-                                       placeholder="+7">
+                                <input
+                                        type="text"
+                                        name="ORDER_PROP_<?=$prop['ID']?>"
+                                        value="<?=$prop['VALUE']?>"
+                                        id="ORDER_PROP_<?=$prop['ID']?>"
+                                        class="input js-phone-1"
+                                >
+                                <input type="checkbox" id="phone-mask-1" checked style="display:none;">
                             </div>
                         </div>
 
@@ -270,9 +275,14 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                         <? $prop = $arResult['ORDER_PROPS'][8]; ?>
                         <div class="promo-order__block">
                             <div class="input__wrapper input__wrapper--mark">
-                                <input type="text" class="input phomemask" id="ORDER_PROP_<?= $prop['ID'] ?>"
-                                       name="ORDER_PROP_<?= $prop['ID'] ?>" value="<?= $prop['VALUE'] ?>"
-                                       placeholder="+7">
+                                <input
+                                        type="text"
+                                        name="ORDER_PROP_<?=$prop['ID']?>"
+                                        value="<?=$prop['VALUE']?>"
+                                        id="ORDER_PROP_<?=$prop['ID']?>"
+                                        class="input js-phone-2"
+                                >
+                                <input type="checkbox" id="phone-mask-2" checked style="display:none;">
                             </div>
                         </div>
 
