@@ -243,12 +243,10 @@ if ($USER->IsAdmin()) {
             }
         }
 
-        if (!empty($values)) {
-            $items[] = array(
-                'orderId' => $row['ORDER_ID'],
-                'values' => $values,
-            );
-        }
+        $items[] = array(
+            'orderId' => $row['ORDER_ID'],
+            'values' => $values,
+        );
     }
 
     $currentValues = array();
@@ -280,19 +278,8 @@ if ($USER->IsAdmin()) {
             continue;
         }
 
-        foreach ($item['values'] as $key => $value) {
+        if (empty($item['values'])) {
             $propertyCode = 'DELIVERY_DATE';
-            if ($key !== 0) {
-                $propertyCode = 'DELIVERY_DATE'.'_'.++$key;
-            }
-
-            if (empty($orderProperties[$propertyCode]['ID'])) {
-                continue;
-            }
-
-            if (empty($orderProperties[$propertyCode]['NAME'])) {
-                continue;
-            }
 
             if (!empty($currentValues[$item['orderId']][$propertyCode])) {
                 continue;
@@ -304,9 +291,38 @@ if ($USER->IsAdmin()) {
                     'CODE' => $propertyCode,
                     'ORDER_PROPS_ID' => $orderProperties[$propertyCode]['ID'],
                     'ORDER_ID' => $item['orderId'],
-                    'VALUE' => $value,
+                    'VALUE' => '',
                 )
             );
+        } else {
+            foreach ($item['values'] as $key => $value) {
+                $propertyCode = 'DELIVERY_DATE';
+                if ($key !== 0) {
+                    $propertyCode = 'DELIVERY_DATE'.'_'.++$key;
+                }
+
+                if (empty($orderProperties[$propertyCode]['ID'])) {
+                    continue;
+                }
+
+                if (empty($orderProperties[$propertyCode]['NAME'])) {
+                    continue;
+                }
+
+                if (!empty($currentValues[$item['orderId']][$propertyCode])) {
+                    continue;
+                }
+
+                CSaleOrderPropsValue::Add(
+                    array(
+                        'NAME' => $orderProperties[$propertyCode]['NAME'],
+                        'CODE' => $propertyCode,
+                        'ORDER_PROPS_ID' => $orderProperties[$propertyCode]['ID'],
+                        'ORDER_ID' => $item['orderId'],
+                        'VALUE' => $value,
+                    )
+                );
+            }
         }
     }
 }

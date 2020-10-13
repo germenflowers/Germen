@@ -59,11 +59,12 @@ class Tools
 
     /**
      * @param $datetime
+     * @param null $timeZone
      * @return DateTime
      * @throws Exception
      */
-    public static function stripTime($datetime): DateTime
+    public static function stripTime($datetime, $timeZone = null): DateTime
     {
-        return new DateTime($datetime->format('Y-m-d'));
+        return new DateTime($datetime->format('Y-m-d'), $timeZone ?: new \DateTimeZone('UTC'));
     }
 }
