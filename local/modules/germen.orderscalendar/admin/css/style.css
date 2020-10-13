@@ -1,0 +1,25 @@
+.germen-orders-calendar {
+    background-color: white;
+    margin: 10px auto;
+    padding: 10px 10px;
+}
+
+.germen-orders-calendar-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    background-color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #25282C;
+}
+
+.germen-orders-calendar-warning {
+    display: none; /* flex */
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    background-color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: red;
+}
