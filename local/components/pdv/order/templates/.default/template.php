@@ -1,24 +1,27 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+<?php
+
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
-/** @var array $arParams */
-/** @var array $arResult */
+
 /** @global CMain $APPLICATION */
 /** @global CUser $USER */
 /** @global CDatabase $DB */
+/** @var array $arParams */
+/** @var array $arResult */
 /** @var CBitrixComponentTemplate $this */
 /** @var string $templateName */
 /** @var string $templateFile */
 /** @var string $templateFolder */
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
+
 $this->setFrameMode(true);
 
 use \Bitrix\Sale\DiscountCouponsManager;
 
 $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
 ?>
-
 <? if (!$arResult["CONFIRM"]): ?>
     <header class="order-header">
         <div class="order-header__logo">
@@ -111,6 +114,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
                         <? endif; ?>
                     </div>
                 <? endif; ?>
+
                 <div class="order-form__section">
                     <div class="order-form__subtitle">Адрес доставки</div>
 
@@ -525,8 +529,6 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
             </div>
         </form>
     </div>
-
-
 <? else: ?>
     <div class="modal fade" id="popup-flowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">

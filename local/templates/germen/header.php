@@ -31,6 +31,7 @@ $isTextPage = \PDV\Tools::isTextPage();
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.mask.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
     Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
+    Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/moment-with-locales.min.js');
     ?>
     <script data-skip-moving="true">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
