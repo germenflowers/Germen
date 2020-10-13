@@ -290,13 +290,18 @@ class Order
                     'timeDelivery' => '',
                     'timeDeliveryTo' => '',
                     'emptyTimesDelivery' => true,
-                    'color' => 'red'
+                    'color' => 'red',
                 );
             } else {
                 /**
                  * ИЗбавимся от случаев дублирования времени доставки для одного заказа
                  */
                 $timesDelivery = array();
+
+                /**
+                 * Если несколько времён доставок у заказа, то это подписка на цветы
+                 */
+                $isSubscribe = count($order['timesDelivery']) > 1;
 
                 foreach ($order['timesDelivery'] as $key => $timeDelivery) {
                     if (in_array((int)$timeDelivery, $timesDelivery, true)) {
@@ -315,7 +320,7 @@ class Order
                         }
                     }
 
-                    $test = array(
+                    $event = array(
                         'title' => (int)$order['id'],
                         'url' => $order['url'],
                         'start' => $deliveryDateTime->format('Y-m-d\TH:i:s'),
@@ -331,7 +336,11 @@ class Order
                         'emptyTimesDelivery' => false,
                     );
 
-                    $events[] = $test;
+                    if ($isSubscribe) {
+                        $event['color'] = 'green';
+                    }
+
+                    $events[] = $event;
                 }
             }
         }
