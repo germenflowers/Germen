@@ -175,7 +175,7 @@ class Order
                     $ordersId[] = (int)$row['ORDER_ID'];
                 }
 
-                if (isset($orders[(int)$row['ORDER_ID']])) {
+                if (isset($ordersTmp[(int)$row['ORDER_ID']])) {
                     $ordersTmp[(int)$row['ORDER_ID']]['timesDelivery'][$settings[$row['CODE']]['key']] = $timestamp;
                 } else {
                     $ordersTmp[(int)$row['ORDER_ID']] = array(
