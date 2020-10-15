@@ -89,6 +89,7 @@ class Order
     public function getOrdersFilterDeliveryDate(int $timeStart, int $timeEnd): array
     {
         $orders = array();
+        $ordersTmp = array();
 
         /**
          * Избавляемся от таймзоны
@@ -175,9 +176,9 @@ class Order
                 }
 
                 if (isset($orders[(int)$row['ORDER_ID']])) {
-                    $orders[(int)$row['ORDER_ID']]['timesDelivery'][$settings[$row['CODE']]['key']] = $timestamp;
+                    $ordersTmp[(int)$row['ORDER_ID']]['timesDelivery'][$settings[$row['CODE']]['key']] = $timestamp;
                 } else {
-                    $orders[(int)$row['ORDER_ID']] = array(
+                    $ordersTmp[(int)$row['ORDER_ID']] = array(
                         'id' => (int)$row['ORDER_ID'],
                         'timesDelivery' => array($settings[$row['CODE']]['key'] => $timestamp),
                     );
@@ -203,7 +204,7 @@ class Order
                 $ordersId[] = (int)$row['ORDER_ID'];
             }
 
-            $orders[(int)$row['ORDER_ID']] = array(
+            $ordersTmp[(int)$row['ORDER_ID']] = array(
                 'id' => (int)$row['ORDER_ID'],
                 'timesDelivery' => array(),
             );
@@ -220,22 +221,23 @@ class Order
         $result = BitrixOrder::getList(
             array(
                 'order' => array('ID' => 'ASC'),
-                'filter' => array('ID' => $ordersId),
+                'filter' => array('ID' => $ordersId, 'PAYED' => 'Y'),
                 'select' => array('ID', 'STATUS_ID', 'DATE_INSERT', 'PRICE', 'PAYED'),
             )
         );
         while ($row = $result->fetch()) {
-            if (empty($ordersDeliveryDateTo[(int)$row['ID']])) {
-                $orders[(int)$row['ID']]['timesDeliveryTo'] = array();
-            } else {
-                $orders[(int)$row['ID']]['timesDeliveryTo'] = $ordersDeliveryDateTo[(int)$row['ID']];
-            }
+            $deliveryDateTo = $ordersDeliveryDateTo[(int)$row['ID']];
 
-            $orders[(int)$row['ID']]['statusId'] = $row['STATUS_ID'];
-            $orders[(int)$row['ID']]['timeCreate'] = $row['DATE_INSERT']->getTimestamp();
-            $orders[(int)$row['ID']]['url'] = $this->createOrderUrl((int)$row['ID']);
-            $orders[(int)$row['ID']]['sum'] = (int)$row['PRICE'];
-            $orders[(int)$row['ID']]['paid'] = $row['PAYED'];
+            $orders[(int)$row['ID']] = array(
+                'id' => (int)$row['ID'],
+                'timeCreate' => $row['DATE_INSERT']->getTimestamp(),
+                'timesDelivery' => $ordersTmp[(int)$row['ID']]['timesDelivery'],
+                'timesDeliveryTo' => empty($deliveryDateTo) ? array() : $deliveryDateTo,
+                'statusId' => $row['STATUS_ID'],
+                'url' => $this->createOrderUrl((int)$row['ID']),
+                'sum' => (int)$row['PRICE'],
+                'paid' => $row['PAYED'],
+            );
         }
 
         ksort($orders);
