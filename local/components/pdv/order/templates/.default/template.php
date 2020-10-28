@@ -20,7 +20,7 @@ $this->setFrameMode(true);
 
 use \Bitrix\Sale\DiscountCouponsManager;
 
-$APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU');
+$APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af938-2c94-4c62-9652-a7d13f30ea20');
 ?>
 <? if (!$arResult["CONFIRM"]): ?>
     <header class="order-header">
