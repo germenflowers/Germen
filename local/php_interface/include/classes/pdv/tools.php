@@ -1,50 +1,69 @@
 <?php
+
 namespace PDV;
 
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\Data\Cache;
 
-class Tools {
-    const DEFAULT_TIME = 'от 60 мин.';
+class Tools
+{
+    public const DEFAULT_TIME = 'от 60 мин.';
 
-    public function isHomePage(){
+    public static function isHomePage(): bool
+    {
         global $APPLICATION;
 
-        if ( $APPLICATION->GetCurPage(true) == '/index.php' )
+        return $APPLICATION->GetCurPage(true) === '/index.php';
+    }
+
+    public static function is404(): bool
+    {
+        global $APPLICATION;
+
+        if (defined('ERROR_404')) {
             return true;
-        else
-            return false;
+        }
+
+        return $APPLICATION->GetCurPage() === SITE_DIR.'404.php';
     }
 
-    public function is404() {
+    public static function isArticlePage(): bool
+    {
         global $APPLICATION;
 
-        if ( defined('ERROR_404') )
-            return true;
-        else
-            return $APPLICATION->GetCurPage() == SITE_DIR . '404.php';
+        return (
+            $APPLICATION->GetCurPage() === SITE_DIR.'contacts/' ||
+            $APPLICATION->GetCurPage() === SITE_DIR.'payment/'
+        );
     }
 
-    public function isArticlePage() {
+    public static function isOrderPage(): bool
+    {
+        return \CSite::InDir(SITE_DIR.'order/');
+    }
+
+    public static function isSubscribePage(): bool
+    {
         global $APPLICATION;
 
-        return ( $APPLICATION->GetCurPage() == SITE_DIR . 'contacts/' || $APPLICATION->GetCurPage() == SITE_DIR . 'payment/' );
+        return $APPLICATION->GetCurPage() === SITE_DIR.'subscribe/';
     }
 
-    public function isOrderPage() {
-        return \CSite::InDir(SITE_DIR . 'order/');
-    }
-
-    public function isSubscribePage() {
+    public static function isSubscribeTestPage(): bool
+    {
         global $APPLICATION;
 
-        return $APPLICATION->GetCurPage() == SITE_DIR . 'subscribe/';
+        return $APPLICATION->GetCurPage() === SITE_DIR.'subscribe-test/' ||
+            $APPLICATION->GetCurPage() === SITE_DIR.'subscribe-test/second.php';
     }
 
-    public function isTextPage() {
+    public static function isTextPage(): bool
+    {
         global $APPLICATION;
 
-        return  $APPLICATION->GetCurPage() == SITE_DIR . 'subscribe/' || $APPLICATION->GetCurPage() == SITE_DIR . 'about/' || $APPLICATION->GetCurPage() == SITE_DIR . 'agreement/' || $APPLICATION->GetCurPage() == SITE_DIR . 'delivery/';
+        return $APPLICATION->GetCurPage() === SITE_DIR.'about/' ||
+            $APPLICATION->GetCurPage() === SITE_DIR.'agreement/' ||
+            $APPLICATION->GetCurPage() === SITE_DIR.'delivery/';
     }
 
     /**
@@ -56,23 +75,31 @@ class Tools {
      *
      * @return string
      */
-    public static function Declension ($digit, $expr, $onlyword = false) {
-        if (!is_array ( $expr )) {
-            $expr = array_filter ( explode ( ' ',
+    public static function Declension($digit, $expr, $onlyword = false): string
+    {
+        if (!is_array($expr)) {
+            $expr = array_filter(
+                explode(
+                    ' ',
                     $expr
                 )
             );
         }
+
         if (empty ($expr [2])) {
             $expr [2] = $expr [1];
         }
-        $i = preg_replace ( '/[^0-9]+/s',
+
+        $i = preg_replace(
+                '/[^0-9]+/s',
                 '',
                 $digit
             ) % 100;
+
         if ($onlyword) {
             $digit = '';
         }
+
         if ($i >= 5 && $i <= 20) {
             $res = $digit.' '.$expr [2];
         } else {
@@ -85,27 +112,28 @@ class Tools {
                 $res = $digit.' '.$expr [2];
             }
         }
-        return trim ( $res );
+
+        return trim($res);
     }
 
-    public static function getDeliveryTime(){
+    public static function getDeliveryTime()
+    {
         $cache = Cache::createInstance();
-        if ( $cache->initCache(86400, "delivery_time") ) {
+        if ($cache->initCache(86400, "delivery_time")) {
             $arr = $cache->getVars();
-        }
-        elseif ( $cache->startDataCache() ) {
+        } elseif ($cache->startDataCache()) {
             Loader::includeModule('sale');
             $arr = [];
             $res = \Bitrix\Sale\Delivery\Services\Table::getList(
                 array(
                     'order' => array('SORT' => 'ASC'),
-                    'filter' => array('ACTIVE' => 'Y')
+                    'filter' => array('ACTIVE' => 'Y'),
                 )
             );
-            while ( $arDeliv = $res->Fetch() ) {
-                if ( $arDeliv['CONFIG']['MAIN']['PERIOD']['TO'] > 0 ) {
+            while ($arDeliv = $res->Fetch()) {
+                if ($arDeliv['CONFIG']['MAIN']['PERIOD']['TO'] > 0) {
                     $type = '';
-                    switch ( $arDeliv['CONFIG']['MAIN']['PERIOD']['TYPE'] ) {
+                    switch ($arDeliv['CONFIG']['MAIN']['PERIOD']['TYPE']) {
                         case 'MIN':
                             $type = 'мин.';
                             break;
@@ -119,10 +147,10 @@ class Tools {
                             $type = 'мес.';
                             break;
                     }
-                    $arr[ $arDeliv['ID'] ] = array(
+                    $arr[$arDeliv['ID']] = array(
                         'NAME' => $arDeliv['NAME'],
                         'TIME' => $arDeliv['CONFIG']['MAIN']['PERIOD']['TO'].' '.$type,
-                        'TIME_NUMBER' => $arDeliv['CONFIG']['MAIN']['PERIOD']['TO']
+                        'TIME_NUMBER' => $arDeliv['CONFIG']['MAIN']['PERIOD']['TO'],
                     );
                 }
             }
@@ -133,31 +161,33 @@ class Tools {
         return $arr;
     }
 
-    public function getTimeByDelivery() {
+    public function getTimeByDelivery()
+    {
         $time = '';
         $id = intval(\Bitrix\Main\Context::getCurrent()->getRequest()->getCookie('USER_DELIVERY_ID'));
-        if ( $id > 0 ) {
+        if ($id > 0) {
             $arrDeliv = self::getDeliveryTime();
-            if ( isset($arrDeliv[$id]['TIME']) )
+            if (isset($arrDeliv[$id]['TIME'])) {
                 $time = $arrDeliv[$id]['TIME'];
-        }
-        else
+            }
+        } else {
             $time = self::DEFAULT_TIME;
+        }
 
         return $time;
     }
 
-    public function getInstagramPosts() {
+    public function getInstagramPosts()
+    {
         $cache = Cache::createInstance();
-        if ( $cache->initCache(86400, "ig_posts") ) {
+        if ($cache->initCache(86400, "ig_posts")) {
             $arrVars = $cache->getVars();
             $arr = $arrVars['data'];
-        }
-        elseif ( $cache->startDataCache() ) {
+        } elseif ($cache->startDataCache()) {
             Loader::includeModule('sale');
             $arr = \PDV\Instagram::getPosts();
 
-            $cache->endDataCache( array('data' => $arr) );
+            $cache->endDataCache(array('data' => $arr));
         }
 
         return $arr;
@@ -166,34 +196,38 @@ class Tools {
     /*
     * Агент отправки смс, если заказ не оплачен
     */
-    public function sendSmsNotPayedOrder(){
+    public function sendSmsNotPayedOrder()
+    {
         Loader::includeModule('sale');
 
         $dateFrom = new \Bitrix\Main\Type\DateTime();
         $dateTo = new \Bitrix\Main\Type\DateTime();
-        $dateFrom->add('-' . 11 . ' minutes');
-        $dateTo->add('-' . 10 . ' minutes');
+        $dateFrom->add('-'. 11 .' minutes');
+        $dateTo->add('-'. 10 .' minutes');
 
         $filter = array('><DATE_INSERT' => array($dateFrom->format('d.m.Y H:i:s'), $dateTo->format('d.m.Y H:i:s')));
         $filter['PAYED'] = 'N';
 
-        $ordersIterator = \Bitrix\Sale\Internals\OrderTable::getList(array(
-            'select' => array('ID'),
-            'filter' => $filter,
-            'order' => array('ID' => 'ASC'),
-        ));
-        while ( $order = $ordersIterator->fetch() ) {
+        $ordersIterator = \Bitrix\Sale\Internals\OrderTable::getList(
+            array(
+                'select' => array('ID'),
+                'filter' => $filter,
+                'order' => array('ID' => 'ASC'),
+            )
+        );
+        while ($order = $ordersIterator->fetch()) {
             $phone = '';
             $rsPropsValue = \Bitrix\Sale\Internals\OrderPropsValueTable::getList(
                 array(
                     'filter' => array('ORDER_ID' => $order['ID'], 'CODE' => 'PHONE'),
-                    'select' => array('VALUE')
+                    'select' => array('VALUE'),
                 )
             );
-            if ( $arPropsValue = $rsPropsValue->fetch() )
-                $phone = trim(str_replace(array('+','-','(',')',' '), '', $arPropsValue['VALUE']));
+            if ($arPropsValue = $rsPropsValue->fetch()) {
+                $phone = trim(str_replace(array('+', '-', '(', ')', ' '), '', $arPropsValue['VALUE']));
+            }
 
-            if ( !empty($phone) ) {
+            if (!empty($phone)) {
                 $textSms = '';
                 $rsElem = \CIBlockElement::GetList(
                     array('sort' => 'asc', 'id' => 'desc'),
@@ -202,7 +236,7 @@ class Tools {
                     array('nPageSize' => 1),
                     array('PREVIEW_TEXT')
                 );
-                if ( $arElem = $rsElem->GetNext() ) {
+                if ($arElem = $rsElem->GetNext()) {
                     $textSms = str_replace(
                         array('#ORDER_ID#'),
                         array($order['ID']),
@@ -210,13 +244,13 @@ class Tools {
                     );
                 }
 
-                if ( !empty($textSms) ) {
-                    if ( $handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'a+') ) {
+                if (!empty($textSms)) {
+                    if ($handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'a+')) {
                         fwrite($handle, $phone." ".$textSms."\n");
                         fclose($handle);
                     }
 
-                    \PDV\Smsaero::sendSMS( $phone, $textSms );
+                    \PDV\Smsaero::sendSMS($phone, $textSms);
                 }
             }
         }
