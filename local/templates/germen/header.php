@@ -72,10 +72,6 @@ $phone = trim(
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/moment-with-locales.min.js');
-
-        if ($isSubscribeTestPage) {
-            Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/subscribe.min.js');
-        }
         ?>
 
         <script data-skip-moving="true">
