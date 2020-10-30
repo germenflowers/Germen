@@ -6,7 +6,7 @@ global $APPLICATION;
 
 $APPLICATION->SetTitle('Подписка на цветы');
 ?>
-<div class="container">
+<div class="container-block">
     <div class="hero">
         <div class="hero__slider">
             <div class="swiper-container hero__slider-container">

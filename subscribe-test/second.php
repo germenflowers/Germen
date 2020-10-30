@@ -6,7 +6,7 @@ global $APPLICATION;
 
 $APPLICATION->SetTitle('Подписка на цветы');
 ?>
-<div class="container subscribe-container">
+<div class="container-block subscribe-container">
     <div class="subscribe-page hero">
         <div class="subscribe-page__sticky">
             <div class="hero__slider">
