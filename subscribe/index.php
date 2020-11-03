@@ -9,7 +9,7 @@ $APPLICATION->SetTitle('Подписка на цветы');
 <div class="container-block">
     <div class="hero">
         <div class="hero__slider">
-            <div class="swiper-container hero__slider-container">
+            <div class="swiper-container hero__slider-container-index">
                 <?php $APPLICATION->IncludeComponent(
                     'bitrix:news.list',
                     'flower_subscription_slider',

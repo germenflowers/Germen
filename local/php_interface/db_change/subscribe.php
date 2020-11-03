@@ -732,6 +732,17 @@ if ($USER->IsAdmin()) {
                 'TIME' => 'Y',
             ),
         ),
+        'DELIVERY_DATE_24' => array(
+            'NAME' => 'Дата доставки 24',
+            'CODE' => 'DELIVERY_DATE_24',
+            'PERSON_TYPE_ID' => $personTypeId,
+            'PROPS_GROUP_ID' => $groupId,
+            'TYPE' => 'DATE',
+            'SORT' => 450,
+            'SETTINGS' => array(
+                'TIME' => 'Y',
+            ),
+        ),
         'TYPE_BOUQUET' => array(
             'NAME' => 'Тип букета (Подписка на цветы)',
             'CODE' => 'TYPE_BOUQUET',

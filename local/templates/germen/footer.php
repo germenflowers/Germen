@@ -89,7 +89,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
         include_once 'include/modals.php';
         ?>
 
-        <?php if ($isSubscribeTestPage): ?>
+        <?php if ($isSubscribePage): ?>
             <script src="<?=SITE_TEMPLATE_PATH?>/js/subscribe.min.js"></script>
         <?php endif; ?>
 
