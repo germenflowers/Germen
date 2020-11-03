@@ -1,6 +1,4 @@
-<?
-$sSectionName = "Подписка";
-$arDirProperties = Array(
+<?php
 
-);
-?>
+$sSectionName = 'Подписка на цветы';
+$arDirProperties = array();

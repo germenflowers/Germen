@@ -389,7 +389,7 @@ $(document).ready(function () {
         firstErrorInput = $('#ORDER_PROP_5');
     }
 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 24; i++) {
       if (props['ORDER_PROP_4[' + i + ']'] !== undefined) {
         if (
           props['ORDER_PROP_4[' + i + ']'].length === 0 ||
@@ -439,6 +439,13 @@ $(document).ready(function () {
 
   if ($('#popup-flowers-success').length)
     $('#popup-flowers-success').modal('show');
+
+  $(document).on('click', 'input[name=size]', function (e) {
+    let size = $(this).val();
+
+    $('.js-subscribe').hide();
+    $('.js-subscribe[data-size='+size+']').show().filter(':first').find('input[type=radio]').prop('checked', true);
+  });
 });
 
 // Фикс скролла после закрытия попапа скидки

@@ -46,15 +46,8 @@ class Tools
     {
         global $APPLICATION;
 
-        return $APPLICATION->GetCurPage() === SITE_DIR.'subscribe/';
-    }
-
-    public static function isSubscribeTestPage(): bool
-    {
-        global $APPLICATION;
-
-        return $APPLICATION->GetCurPage() === SITE_DIR.'subscribe-test/' ||
-            $APPLICATION->GetCurPage() === SITE_DIR.'subscribe-test/second.php';
+        return $APPLICATION->GetCurPage() === SITE_DIR.'subscribe/' ||
+            $APPLICATION->GetCurPage() === SITE_DIR.'subscribe/choice/';
     }
 
     public static function isTextPage(): bool

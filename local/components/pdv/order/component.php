@@ -4,17 +4,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-/** @var CBitrixComponent $this */
-/** @var array $arParams */
-/** @var array $arResult */
-/** @var string $componentPath */
-/** @var string $componentName */
-/** @var string $componentTemplate */
-/** @global CDatabase $DB */
-/** @global CUser $USER */
-
-/** @global CMain $APPLICATION */
-
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\Application;
 use \Bitrix\Sale\Internals\OrderPropsTable;
@@ -91,15 +80,15 @@ if (isset($couponEnter)) {
 
     echo json_encode($result);
     die();
-} elseif ($orderId > 0) {
+}
+
+elseif ($orderId > 0) {
     $arResult["CONFIRM"] = true;
     $notIssetProd = false;
 
     $registry = Sale\Registry::getInstance(Sale\Registry::REGISTRY_TYPE_ORDER);
-    /** @var Order $orderClassName */
     $orderClassName = $registry->getOrderClassName();
 
-    /** @var Order $order */
     if ($order = $orderClassName::loadByAccountNumber($orderId)) {
         $arOrder = $order->getFieldValues();
         $arResult["ORDER_ID"] = $arOrder["ID"];
@@ -110,20 +99,19 @@ if (isset($couponEnter)) {
         $arResult["PAYMENT"] = array();
         if ($order->isAllowPay()) {
             $paymentCollection = $order->getPaymentCollection();
-            /** @var Payment $payment */
             foreach ($paymentCollection as $payment) {
                 $arResult["PAYMENT"][$payment->getId()] = $payment->getFieldValues();
 
-                if (intval($payment->getPaymentSystemId()) > 0 && !$payment->isPaid()) {
+                if ((int)$payment->getPaymentSystemId() > 0 && !$payment->isPaid()) {
                     $paySystemService = PaySystem\Manager::getObjectById($payment->getPaymentSystemId());
-                    if (!empty($paySystemService)) {
+
+                    if ($paySystemService !== null) {
                         $arPaySysAction = $paySystemService->getFieldsValues();
 
                         if (
                             $paySystemService->getField('NEW_WINDOW') === 'N' ||
                             $paySystemService->getField('ID') == PaySystem\Manager::getInnerPaySystemId()
                         ) {
-                            /** @var PaySystem\ServiceResult $initResult */
                             $initResult = $paySystemService->initiatePay(
                                 $payment,
                                 null,
@@ -147,8 +135,7 @@ if (isset($couponEnter)) {
                             $arPaySysAction["LOGOTIP"] = CFile::GetFileArray($arPaySysAction["LOGOTIP"]);
                         }
 
-                        if ($this->arParams['COMPATIBLE_MODE'] == 'Y' && !$payment->isInner()) {
-                            // compatibility
+                        if ($this->arParams['COMPATIBLE_MODE'] === 'Y' && !$payment->isInner()) {
                             \CSalePaySystemAction::InitParamArrays(
                                 $order->getFieldValues(),
                                 $order->getId(),
@@ -162,7 +149,7 @@ if (isset($couponEnter)) {
                                 $arPaySysAction["ACTION_FILE"] = $oldHandler;
                             }
 
-                            if (strlen($arPaySysAction["ACTION_FILE"]) > 0 && $arPaySysAction["NEW_WINDOW"] != "Y") {
+                            if (strlen($arPaySysAction["ACTION_FILE"]) > 0 && $arPaySysAction["NEW_WINDOW"] !== "Y") {
                                 $pathToAction = Main\Application::getDocumentRoot().$arPaySysAction["ACTION_FILE"];
 
                                 $pathToAction = str_replace("\\", "/", $pathToAction);
@@ -196,7 +183,9 @@ if (isset($couponEnter)) {
     }
 
     $this->includeComponentTemplate();
-} elseif ($id > 0) {
+}
+
+elseif ($id > 0) {
     Loader::includeModule('catalog');
 
     $arResult['COUPON'] = array();
@@ -217,29 +206,20 @@ if (isset($couponEnter)) {
     $arProd = \CCatalogProduct::GetByIDEx($id);
     if ($arProd) {
         $notIssetProd = false;
+        $upSaleProducts = array();
+        $bookMateProducts = array();
 
-        $upSaleProducts = $bookMateProducts = [];
-
-        $rsUpSaleProducts = \CIBlockElement::GetList(
-            [
-                "SORT" => "ASC",
-            ],
-            [
-                "IBLOCK_ID" => IBLOCK_ID__UPSALE,
-                "ACTIVE" => "Y",
-            ],
-            false,
-            false,
-            [
-                "IBLOCK_ID",
-                "ID",
-                "NAME",
-                "PREVIEW_TEXT",
-                "PREVIEW_PICTURE",
-                "PROPERTY_IS_BOOKMATE",
-            ]
+        $order = array("SORT" => "ASC");
+        $filter = array("IBLOCK_ID" => IBLOCK_ID__UPSALE, "ACTIVE" => "Y");
+        $select = array(
+            "IBLOCK_ID",
+            "ID",
+            "NAME",
+            "PREVIEW_TEXT",
+            "PREVIEW_PICTURE",
+            "PROPERTY_IS_BOOKMATE",
         );
-
+        $rsUpSaleProducts = \CIBlockElement::GetList($order, $filter, false, false, $select);
         while ($upSaleProduct = $rsUpSaleProducts->GetNext()) {
             $isBookMate = $upSaleProduct["PROPERTY_IS_BOOKMATE_VALUE"] === "Y";
             $arPrice = \CCatalogProduct::GetOptimalPrice($upSaleProduct['ID'], 1, $USER->GetUserGroupArray());
@@ -279,30 +259,24 @@ if (isset($couponEnter)) {
         $arResult["BOOKMATE_PRODUCTS"] = $bookMateProducts;
 
         $arResult['COUNT_DATE_DELIVERY'] = 1;
-        if ($arProd['IBLOCK_ID'] == IBLOCK_ID__SUBSCRIBE) {
-            if (intval($arProd['PREVIEW_TEXT']) > 0) {
-                $arResult['COUNT_DATE_DELIVERY'] = intval($arProd['PREVIEW_TEXT']);
+        if ((int)$arProd['IBLOCK_ID'] === IBLOCK_ID__SUBSCRIBE_OFFERS) {
+            if ((int)$arProd['PROPERTIES']['COUNT_DELIVERIES']['VALUE'] > 0) {
+                $arResult['COUNT_DATE_DELIVERY'] = (int)$arProd['PROPERTIES']['COUNT_DELIVERIES']['VALUE'];
+            }
+
+            $filter = array('ID' => $arProd['PROPERTIES']['CML2_LINK']['VALUE']);
+            $select = array('IBLOCK_ID', 'ID', 'NAME');
+            $result = CIBlockElement::GetList(array(), $filter, false, false, $select);
+            if ($row = $result->Fetch()) {
+                $arProd['NAME'] = $row['NAME'];
             }
         }
 
-        $needPropdAdd = true;
+        $needProductAdd = true;
         $siteId = Context::getCurrent()->getSite();
         $price = 0;
         $oldPrice = 0;
-        $dbBasket = BasketTable::getList(
-            array(
-                'filter' => array(
-                    'FUSER_ID' => Sale\Fuser::getId(),
-                    'ORDER_ID' => null,
-                    'LID' => $siteId,
-                    'CAN_BUY' => 'Y',
-                ),
-                'select' => array('ID', 'PRODUCT_ID', 'PRICE', 'DISCOUNT_PRICE'),
-            )
-        );
-
         $mainProducts = $request->getPost("main_products");
-
         try {
             $mainProducts = json_decode($mainProducts, true);
         } catch (\Exception $e) {
@@ -315,6 +289,17 @@ if (isset($couponEnter)) {
             $mainAddQuantity = 1;
         }
 
+        $dbBasket = BasketTable::getList(
+            array(
+                'filter' => array(
+                    'FUSER_ID' => Sale\Fuser::getId(),
+                    'ORDER_ID' => null,
+                    'LID' => $siteId,
+                    'CAN_BUY' => 'Y',
+                ),
+                'select' => array('ID', 'PRODUCT_ID', 'PRICE', 'DISCOUNT_PRICE'),
+            )
+        );
         while ($arBasket = $dbBasket->Fetch()) {
             if ($arBasket['PRODUCT_ID'] != $id) {
                 \CSaleBasket::Delete($arBasket['ID']);
@@ -327,13 +312,12 @@ if (isset($couponEnter)) {
 
                 \CSaleBasket::Update($arBasket['ID'], ['QUANTITY' => $mainAddQuantity]);
 
-                $needPropdAdd = false;
+                $needProductAdd = false;
             }
         }
 
         $mainAddQuantity = 0;
-
-        if ($needPropdAdd) {
+        if ($needProductAdd) {
             Add2BasketByProductID($id, $mainAddQuantity);
         }
 
@@ -369,6 +353,11 @@ if (isset($couponEnter)) {
             'FORMATTED_PRICE' => number_format($basePrice, 0, '', ' '),
         );
 
+        if ((int)$arProd['IBLOCK_ID'] === IBLOCK_ID__SUBSCRIBE_OFFERS) {
+            $arResult['PRODUCT']['type'] = $_REQUEST['type'];
+            $arResult['PRODUCT']['delivery'] = $_REQUEST['delivery'];
+        }
+
         $arResult['ERROR'] = array();
         $arResult['PERSON_TYPE_ID'] = 0;
         $arResult['ORDER_PROPS'] = array();
@@ -389,23 +378,23 @@ if (isset($couponEnter)) {
             )
         );
         while ($arProperty = $dbProperties->fetch()) {
-            if ($arResult['PERSON_TYPE_ID'] == 0) {
+            if ((int)$arResult['PERSON_TYPE_ID'] === 0) {
                 $arResult['PERSON_TYPE_ID'] = $arProperty['PERSON_TYPE_ID'];
             }
 
-            if ($arProperty['IS_LOCATION'] == 'Y') {
+            if ($arProperty['IS_LOCATION'] === 'Y') {
                 $arProperty['VALUE'] = LOCATION_ID__DEFAULT;
             } else {
                 $arProperty['VALUE'] = $request->getPost('ORDER_PROP_'.$arProperty['ID']);
             }
 
             $arProperty['ERROR'] = false;
-            if ($arProperty['REQUIRED'] == 'Y' && empty($arProperty['VALUE']) && $sendOrder) {
+            if ($arProperty['REQUIRED'] === 'Y' && empty($arProperty['VALUE']) && $sendOrder) {
                 $arResult['ERROR'][] = 'Заполните поле "'.$arProperty['NAME'].'"';
             }
 
             $arProperty['VARIANTS'] = array();
-            if ($arProperty['TYPE'] == 'ENUM') {
+            if ($arProperty['TYPE'] === 'ENUM') {
                 $db_vars = CSaleOrderPropsVariant::GetList(
                     array('SORT' => 'ASC'),
                     array('ORDER_PROPS_ID' => $arProperty['ID'])
@@ -421,7 +410,7 @@ if (isset($couponEnter)) {
         $deliveryId = 0;
         $deliveryName = '';
         $deliveryTime = 0;
-        $idDeliveryId = intval(Context::getCurrent()->getRequest()->getCookie('USER_DELIVERY_ID'));
+        $idDeliveryId = (int)Context::getCurrent()->getRequest()->getCookie('USER_DELIVERY_ID');
         $arrDeliv = \PDV\Tools::getDeliveryTime();
         if ($idDeliveryId > 0 && isset($arrDeliv[$id]['NAME'])) {
             $deliveryId = $idDeliveryId;
@@ -429,7 +418,7 @@ if (isset($couponEnter)) {
             $deliveryTime = $arrDeliv[$idDeliveryId]['TIME_NUMBER'];
         }
 
-        if ($deliveryId == 0) {
+        if ((int)$deliveryId === 0) {
             $deliveryId = DELIVERY_ID__DEFAULT;
             $deliveryName = $arrDeliv[DELIVERY_ID__DEFAULT]['NAME'];
             $deliveryTime = $arrDeliv[DELIVERY_ID__DEFAULT]['TIME_NUMBER'];
@@ -455,7 +444,6 @@ if (isset($couponEnter)) {
             //Создание заказа
 
             $upSaleProducts = $request->getPost("upsale_products");
-
             try {
                 $upSaleProducts = json_decode($upSaleProducts);
             } catch (\Exception $e) {

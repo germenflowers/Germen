@@ -15,7 +15,6 @@ $isHome = Tools::isHomePage();
 $isArticlePage = Tools::isArticlePage();
 $isOrderPage = Tools::isOrderPage();
 $isSubscribePage = Tools::isSubscribePage();
-$isSubscribeTestPage = Tools::isSubscribeTestPage();
 $isTextPage = Tools::isTextPage();
 
 $infoLineText = '';
@@ -58,7 +57,7 @@ $phone = trim(
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.13">
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css?v=1.1">
 
-        <?php if ($isSubscribeTestPage): ?>
+        <?php if ($isSubscribePage): ?>
             <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/subscribe.min.css">
         <?php endif; ?>
 
@@ -219,8 +218,8 @@ $phone = trim(
                     </div>
                 </div>
                 
-                <div class="content <?=(!$isArticlePage && !$isSubscribePage && !$isSubscribeTestPage) ? 'content--main' : ''?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage && !$isSubscribeTestPage): ?>
+                <div class="content <?=(!$isArticlePage && !$isSubscribePage) ? 'content--main' : ''?>">
+                    <?php if (!$isArticlePage && !$isSubscribePage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();

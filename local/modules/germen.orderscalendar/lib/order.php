@@ -151,6 +151,54 @@ class Order
                 'code' => 'DELIVERY_DATE_12',
                 'key' => 11,
             ),
+            'DELIVERY_DATE_13' => array(
+                'code' => 'DELIVERY_DATE_13',
+                'key' => 12,
+            ),
+            'DELIVERY_DATE_14' => array(
+                'code' => 'DELIVERY_DATE_14',
+                'key' => 13,
+            ),
+            'DELIVERY_DATE_15' => array(
+                'code' => 'DELIVERY_DATE_15',
+                'key' => 14,
+            ),
+            'DELIVERY_DATE_16' => array(
+                'code' => 'DELIVERY_DATE_16',
+                'key' => 15,
+            ),
+            'DELIVERY_DATE_17' => array(
+                'code' => 'DELIVERY_DATE_17',
+                'key' => 16,
+            ),
+            'DELIVERY_DATE_18' => array(
+                'code' => 'DELIVERY_DATE_18',
+                'key' => 17,
+            ),
+            'DELIVERY_DATE_19' => array(
+                'code' => 'DELIVERY_DATE_19',
+                'key' => 18,
+            ),
+            'DELIVERY_DATE_20' => array(
+                'code' => 'DELIVERY_DATE_20',
+                'key' => 19,
+            ),
+            'DELIVERY_DATE_21' => array(
+                'code' => 'DELIVERY_DATE_21',
+                'key' => 20,
+            ),
+            'DELIVERY_DATE_22' => array(
+                'code' => 'DELIVERY_DATE_22',
+                'key' => 21,
+            ),
+            'DELIVERY_DATE_23' => array(
+                'code' => 'DELIVERY_DATE_23',
+                'key' => 22,
+            ),
+            'DELIVERY_DATE_24' => array(
+                'code' => 'DELIVERY_DATE_24',
+                'key' => 23,
+            ),
         );
 
         /**
@@ -440,6 +488,54 @@ class Order
             'DELIVERY_DATE_TO_12' => array(
                 'code' => 'DELIVERY_DATE_TO_12',
                 'key' => 11,
+            ),
+            'DELIVERY_DATE_TO_13' => array(
+                'code' => 'DELIVERY_DATE_TO_13',
+                'key' => 12,
+            ),
+            'DELIVERY_DATE_TO_14' => array(
+                'code' => 'DELIVERY_DATE_TO_14',
+                'key' => 13,
+            ),
+            'DELIVERY_DATE_TO_15' => array(
+                'code' => 'DELIVERY_DATE_TO_15',
+                'key' => 14,
+            ),
+            'DELIVERY_DATE_TO_16' => array(
+                'code' => 'DELIVERY_DATE_TO_16',
+                'key' => 15,
+            ),
+            'DELIVERY_DATE_TO_17' => array(
+                'code' => 'DELIVERY_DATE_TO_17',
+                'key' => 16,
+            ),
+            'DELIVERY_DATE_TO_18' => array(
+                'code' => 'DELIVERY_DATE_TO_18',
+                'key' => 17,
+            ),
+            'DELIVERY_DATE_TO_19' => array(
+                'code' => 'DELIVERY_DATE_TO_19',
+                'key' => 18,
+            ),
+            'DELIVERY_DATE_TO_20' => array(
+                'code' => 'DELIVERY_DATE_TO_20',
+                'key' => 19,
+            ),
+            'DELIVERY_DATE_TO_21' => array(
+                'code' => 'DELIVERY_DATE_TO_21',
+                'key' => 20,
+            ),
+            'DELIVERY_DATE_TO_22' => array(
+                'code' => 'DELIVERY_DATE_TO_22',
+                'key' => 21,
+            ),
+            'DELIVERY_DATE_TO_23' => array(
+                'code' => 'DELIVERY_DATE_TO_23',
+                'key' => 22,
+            ),
+            'DELIVERY_DATE_TO_24' => array(
+                'code' => 'DELIVERY_DATE_TO_24',
+                'key' => 23,
             ),
         );
         $result = OrderPropsValueTable::GetList(
