@@ -83,7 +83,7 @@ $APPLICATION->SetTitle('Подписка на цветы');
                     )
                 ); ?>
             </div>
-            <a href="/subscribe/choice/" class="hero__btn button">Подписаться</a>
+            <a href="/subscribe/choice/" class="hero__btn button">Подробнее</a>
         </div>
     </div>
     <?php $APPLICATION->IncludeComponent(
@@ -308,7 +308,7 @@ $APPLICATION->SetTitle('Подписка на цветы');
                 )
             ); ?>
         </p>
-        <a href="/subscribe/choice/" class="button subscribe__btn">Оформить подписку</a>
+        <a href="/subscribe/choice/" class="button subscribe__btn">Подобрать подписку</a>
     </div>
     <?php $APPLICATION->IncludeComponent(
         'bitrix:news.list',
