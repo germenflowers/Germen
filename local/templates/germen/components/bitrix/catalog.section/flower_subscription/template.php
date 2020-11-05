@@ -39,12 +39,12 @@ foreach ($arResult['ITEMS'] as $item) {
         <input type="radio" id="assembled" name="delivery" value="assembled" checked>
         <label for="assembled">
             <h3>Собранный букет</h3>
-            <span>Это дешевле на 40% чем покупать по одному букету</span>
+            <span>Флорист собирает цветы на свой вкус</span>
         </label>
         <input type="radio" id="set" name="delivery" value="set">
         <label for="set">
             <h3>Набор</h3>
-            <span>Это дешевле на 40% чем покупать по одному букету</span>
+            <span>Мы привезем зачищенные цветы - вы сделаете композицию сами</span>
         </label>
     </fieldset>
     <fieldset>
@@ -53,20 +53,20 @@ foreach ($arResult['ITEMS'] as $item) {
             <input type="radio" id="standart" name="size" value="standart" checked>
             <label for="standart">
                 <h3>Стандартный</h3>
-                <span>Это дешевле на 40% чем покупать по одному букету</span>
+                <span>Около 15 стеблей, средний размер около 30-40 см.</span>
             </label>
         <?php endif; ?>
         <?php if (!empty($offers['big'])): ?>
             <input type="radio" id="big" name="size" value="big" <?=empty($offers['standart']) ? 'checked' : ''?>>
             <label for="big">
                 <h3>Увеличенный</h3>
-                <span>Это дешевле на 40% чем покупать по одному букету</span>
+                <span>Больше стандратного в 1,5 раза.</span>
             </label>
         <?php endif; ?>
     </fieldset>
     <fieldset>
         <legend>
-            Выберите срок подписки <span>Все букеты с бесплатной доставкой.</span>
+            Выберите срок подписки <span>Доставка бесплатная в пределах МКАД.</span>
         </legend>
         <?php
         $first = true;
