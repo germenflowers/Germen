@@ -24,12 +24,22 @@ foreach ($arResult['ITEMS'] as $item) {
     <fieldset class="subscribe-page__form-type">
         <legend>Выберите букеты</legend>
         <input type="radio" id="mono" name="type" value="mono" checked>
-        <label class="subscribe-page__form-type--mono" for="mono">
+        <label
+                class="subscribe-page__form-type--mono js-bouquet-type"
+                for="mono"
+                data-title="Монобукеты"
+                data-text="Букеты из сезонных цветов одного вида. Охапка цветов одного сорта - пионовидные тюльпаны, кустовые садовые розы, анемоны, пионы."
+        >
             <img src="<?=SITE_TEMPLATE_PATH?>/img/bunch-mono@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/bunch-mono@2x.jpg 2x" alt="">
             <h3>Монобукеты</h3>
         </label>
         <input type="radio" id="compose" name="type" value="compose">
-        <label class="subscribe-page__form-type--compose" for="compose">
+        <label
+                class="subscribe-page__form-type--compose js-bouquet-type"
+                for="compose"
+                data-title="Составные букеты"
+                data-text="Букеты из нескольких видов сезонных цветов, подобранных флористом. Интересные детали и тонкие сочетания."
+        >
             <img src="<?=SITE_TEMPLATE_PATH?>/img/bunch-compose@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/bunch-compose@2x.jpg 2x" alt="">
             <h3>Составные букеты</h3>
         </label>

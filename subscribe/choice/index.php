@@ -188,8 +188,8 @@ $APPLICATION->SetTitle('Подписка на цветы');
             ); ?>
         </div>
         <div class="subscribe-page__form-block">
-            <div class="subscribe-page__title"><?php $APPLICATION->ShowTitle(); ?></div>
-            <div class="subscribe-page__text">
+            <div class="subscribe-page__title js-bouquet-title">Монобукеты</div>
+            <div class="subscribe-page__text js-bouquet-text">
                 <?php $APPLICATION->IncludeComponent(
                     'bitrix:main.include',
                     '',

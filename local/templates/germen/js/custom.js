@@ -446,6 +446,11 @@ $(document).ready(function () {
     $('.js-subscribe').hide();
     $('.js-subscribe[data-size='+size+']').show().filter(':first').find('input[type=radio]').prop('checked', true);
   });
+
+  $(document).on('click', '.js-bouquet-type', function (e) {
+    $('.js-bouquet-title').html($(this).data('title'));
+    $('.js-bouquet-text').html($(this).data('text'));
+  });
 });
 
 // Фикс скролла после закрытия попапа скидки
