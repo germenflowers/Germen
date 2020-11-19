@@ -1,17 +1,24 @@
 <?php
 
+use \Bitrix\Main\Loader;
+use \PDV\Tools;
+
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
+
+global $APPLICATION;
 
 $APPLICATION->SetTitle('Удобный сервис доставки цветов. Подписка на цветы');
 
-\Bitrix\Main\Loader::includeModule('iblock');
+Loader::includeModule('iblock');
 
-$deliveryTime = \PDV\Tools::getTimeByDelivery();
+$deliveryTime = Tools::getTimeByDelivery();
 
 $arrFilterPopular = array('!PROPERTY_POPULAR' => false, 'PROPERTY_BANNER' => false);
 $bannerPopularFilter = array('!PROPERTY_POPULAR' => false, '!PROPERTY_BANNER' => false);
 $catalogFilter = array('PROPERTY_BANNER' => false);
 $bannerFilter = array('!PROPERTY_BANNER' => false);
+
+$popularPageSize = 4;
 ?>
 <div class="content__container">
     <div class="promo-catalog__wrapper">
@@ -181,7 +188,7 @@ $bannerFilter = array('!PROPERTY_BANNER' => false);
                 'PAGER_SHOW_ALWAYS' => 'Y',
                 'PAGER_TEMPLATE' => 'catalog',
                 'PAGER_TITLE' => '',
-                'PAGE_ELEMENT_COUNT' => 4,
+                'PAGE_ELEMENT_COUNT' => $popularPageSize,
                 'PARTIAL_PRODUCT_PROPERTIES' => 'N',
                 'PRICE_CODE' => array('BASE'),
                 'PRICE_VAT_INCLUDE' => 'Y',
@@ -268,9 +275,15 @@ $bannerFilter = array('!PROPERTY_BANNER' => false);
         <?php
         $order = array('sort' => 'asc');
         $filter = array('IBLOCK_ID' => IBLOCK_ID__CATALOG, 'ACTIVE' => 'Y');
-        $select = array('IBLOCK_ID', 'ID', 'NAME');
+        $select = array('IBLOCK_ID', 'ID', 'NAME', 'UF_PAGE_SIZE');
         $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
-        while ($arSect = $rsSect->GetNext()) { ?>
+        while ($arSect = $rsSect->Fetch()) { ?>
+            <?php
+            $pageSize = 4;
+            if ((int)$arSect['UF_PAGE_SIZE'] > 0) {
+                $pageSize = (int)$arSect['UF_PAGE_SIZE'];
+            }
+            ?>
             <?php $APPLICATION->IncludeComponent(
                 'bitrix:catalog.section',
                 'banner',
@@ -379,111 +392,111 @@ $bannerFilter = array('!PROPERTY_BANNER' => false);
                 )
             ); ?>
             <?php $APPLICATION->IncludeComponent(
-                "bitrix:catalog.section",
-                "catalog",
+                'bitrix:catalog.section',
+                'catalog',
                 Array(
-                    "ACTION_VARIABLE" => "action",
-                    "ADD_PICT_PROP" => "-",
-                    "ADD_PROPERTIES_TO_BASKET" => "N",
-                    "ADD_SECTIONS_CHAIN" => "N",
-                    "ADD_TO_BASKET_ACTION" => "ADD",
-                    "AJAX_MODE" => "N",
-                    "AJAX_OPTION_ADDITIONAL" => "",
-                    "AJAX_OPTION_HISTORY" => "N",
-                    "AJAX_OPTION_JUMP" => "N",
-                    "AJAX_OPTION_STYLE" => "N",
-                    "BACKGROUND_IMAGE" => "-",
-                    "BASKET_URL" => "/personal/basket.php",
-                    "BROWSER_TITLE" => "-",
-                    "CACHE_FILTER" => "N",
-                    "CACHE_GROUPS" => "Y",
-                    "CACHE_TIME" => "36000000",
-                    "CACHE_TYPE" => "A",
-                    "COMPATIBLE_MODE" => "N",
-                    "CONVERT_CURRENCY" => "N",
-                    "CUSTOM_FILTER" => "",
-                    "DETAIL_URL" => "",
-                    "DISABLE_INIT_JS_IN_COMPONENT" => "N",
-                    "DISPLAY_BOTTOM_PAGER" => "Y",
-                    "DISPLAY_COMPARE" => "N",
-                    "DISPLAY_TOP_PAGER" => "N",
-                    "ELEMENT_SORT_FIELD" => "sort",
-                    "ELEMENT_SORT_FIELD2" => "id",
-                    "ELEMENT_SORT_ORDER" => "asc",
-                    "ELEMENT_SORT_ORDER2" => "desc",
-                    "ENLARGE_PRODUCT" => "STRICT",
-                    "FILTER_NAME" => "catalogFilter",
-                    "HIDE_NOT_AVAILABLE" => "N",
-                    "HIDE_NOT_AVAILABLE_OFFERS" => "N",
-                    "IBLOCK_ID" => IBLOCK_ID__CATALOG,
-                    "IBLOCK_TYPE" => "germen",
-                    "INCLUDE_SUBSECTIONS" => "Y",
-                    "LABEL_PROP" => array(),
-                    "LAZY_LOAD" => "N",
-                    "LINE_ELEMENT_COUNT" => "3",
-                    "LOAD_ON_SCROLL" => "N",
-                    "MESSAGE_404" => "",
-                    "MESS_BTN_ADD_TO_BASKET" => "В корзину",
-                    "MESS_BTN_BUY" => "Купить",
-                    "MESS_BTN_DETAIL" => "Подробнее",
-                    "MESS_BTN_SUBSCRIBE" => "Подписаться",
-                    "MESS_NOT_AVAILABLE" => "Нет в наличии",
-                    "META_DESCRIPTION" => "-",
-                    "META_KEYWORDS" => "-",
-                    "OFFERS_LIMIT" => "5",
-                    "PAGER_BASE_LINK_ENABLE" => "N",
-                    "PAGER_DESC_NUMBERING" => "N",
-                    "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",
-                    "PAGER_SHOW_ALL" => "N",
-                    "PAGER_SHOW_ALWAYS" => "Y",
-                    "PAGER_TEMPLATE" => "catalog",
-                    "PAGER_TITLE" => "",
-                    "PAGE_ELEMENT_COUNT" => "4",
-                    "PARTIAL_PRODUCT_PROPERTIES" => "N",
-                    "PRICE_CODE" => array("BASE"),
-                    "PRICE_VAT_INCLUDE" => "Y",
-                    "PRODUCT_BLOCKS_ORDER" => "price,props,sku,quantityLimit,quantity,buttons",
-                    "PRODUCT_ID_VARIABLE" => "id",
-                    "PRODUCT_PROPERTIES" => array(""),
-                    "PRODUCT_PROPS_VARIABLE" => "prop",
-                    "PRODUCT_QUANTITY_VARIABLE" => "quantity",
-                    "PRODUCT_ROW_VARIANTS" => "[{'VARIANT':'2','BIG_DATA':false},{'VARIANT':'2','BIG_DATA':false},{'VARIANT':'2','BIG_DATA':false},{'VARIANT':'2','BIG_DATA':false},{'VARIANT':'2','BIG_DATA':false},{'VARIANT':'2','BIG_DATA':false}]",
-                    "PRODUCT_SUBSCRIPTION" => "N",
-                    "PROPERTY_CODE" => array("", ""),
-                    "PROPERTY_CODE_MOBILE" => array(),
-                    "RCM_PROD_ID" => "",
-                    "RCM_TYPE" => "personal",
-                    "SECTION_CODE" => "",
-                    "SECTION_ID" => $arSect['ID'],
-                    "SECTION_ID_VARIABLE" => "SECTION_ID",
-                    "SECTION_URL" => "",
-                    "SECTION_USER_FIELDS" => array("", ""),
-                    "SEF_MODE" => "N",
-                    "SET_BROWSER_TITLE" => "N",
-                    "SET_LAST_MODIFIED" => "N",
-                    "SET_META_DESCRIPTION" => "N",
-                    "SET_META_KEYWORDS" => "N",
-                    "SET_STATUS_404" => "N",
-                    "SET_TITLE" => "N",
-                    "SHOW_404" => "N",
-                    "SHOW_ALL_WO_SECTION" => "Y",
-                    "SHOW_CLOSE_POPUP" => "N",
-                    "SHOW_DISCOUNT_PERCENT" => "N",
-                    "SHOW_FROM_SECTION" => "N",
-                    "SHOW_MAX_QUANTITY" => "N",
-                    "SHOW_OLD_PRICE" => "N",
-                    "SHOW_PRICE_COUNT" => "1",
-                    "SHOW_SLIDER" => "N",
-                    "SLIDER_INTERVAL" => "3000",
-                    "SLIDER_PROGRESS" => "N",
-                    "TEMPLATE_THEME" => "blue",
-                    "USE_ENHANCED_ECOMMERCE" => "N",
-                    "USE_MAIN_ELEMENT_SECTION" => "N",
-                    "USE_PRICE_COUNT" => "N",
-                    "USE_PRODUCT_QUANTITY" => "N",
-                    "DELIVERY_TIME" => $deliveryTime,
-                    "BLOCK_TITLE" => $arSect['NAME'],
-                    "SHOW_SECTION_DESC" => "Y",
+                    'ACTION_VARIABLE' => '',
+                    'ADD_PICT_PROP' => '',
+                    'ADD_PROPERTIES_TO_BASKET' => 'N',
+                    'ADD_SECTIONS_CHAIN' => 'N',
+                    'ADD_TO_BASKET_ACTION' => '',
+                    'AJAX_MODE' => 'N',
+                    'AJAX_OPTION_ADDITIONAL' => '',
+                    'AJAX_OPTION_HISTORY' => 'N',
+                    'AJAX_OPTION_JUMP' => 'N',
+                    'AJAX_OPTION_STYLE' => 'N',
+                    'BACKGROUND_IMAGE' => '',
+                    'BASKET_URL' => '',
+                    'BROWSER_TITLE' => '',
+                    'CACHE_FILTER' => 'N',
+                    'CACHE_GROUPS' => 'Y',
+                    'CACHE_TIME' => 36000000,
+                    'CACHE_TYPE' => 'A',
+                    'COMPATIBLE_MODE' => 'N',
+                    'CONVERT_CURRENCY' => 'N',
+                    'CUSTOM_FILTER' => '',
+                    'DETAIL_URL' => '',
+                    'DISABLE_INIT_JS_IN_COMPONENT' => 'N',
+                    'DISPLAY_BOTTOM_PAGER' => 'Y',
+                    'DISPLAY_COMPARE' => 'N',
+                    'DISPLAY_TOP_PAGER' => 'N',
+                    'ELEMENT_SORT_FIELD' => 'sort',
+                    'ELEMENT_SORT_FIELD2' => 'id',
+                    'ELEMENT_SORT_ORDER' => 'asc',
+                    'ELEMENT_SORT_ORDER2' => 'desc',
+                    'ENLARGE_PRODUCT' => '',
+                    'FILTER_NAME' => 'catalogFilter',
+                    'HIDE_NOT_AVAILABLE' => 'N',
+                    'HIDE_NOT_AVAILABLE_OFFERS' => 'N',
+                    'IBLOCK_ID' => IBLOCK_ID__CATALOG,
+                    'IBLOCK_TYPE' => 'germen',
+                    'INCLUDE_SUBSECTIONS' => 'Y',
+                    'LABEL_PROP' => array(),
+                    'LAZY_LOAD' => 'N',
+                    'LINE_ELEMENT_COUNT' => 0,
+                    'LOAD_ON_SCROLL' => 'N',
+                    'MESSAGE_404' => '',
+                    'MESS_BTN_ADD_TO_BASKET' => '',
+                    'MESS_BTN_BUY' => '',
+                    'MESS_BTN_DETAIL' => '',
+                    'MESS_BTN_SUBSCRIBE' => '',
+                    'MESS_NOT_AVAILABLE' => '',
+                    'META_DESCRIPTION' => '',
+                    'META_KEYWORDS' => '',
+                    'OFFERS_LIMIT' => 0,
+                    'PAGER_BASE_LINK_ENABLE' => 'N',
+                    'PAGER_DESC_NUMBERING' => 'N',
+                    'PAGER_DESC_NUMBERING_CACHE_TIME' => 36000,
+                    'PAGER_SHOW_ALL' => 'N',
+                    'PAGER_SHOW_ALWAYS' => 'Y',
+                    'PAGER_TEMPLATE' => 'catalog',
+                    'PAGER_TITLE' => '',
+                    'PAGE_ELEMENT_COUNT' => $pageSize,
+                    'PARTIAL_PRODUCT_PROPERTIES' => 'N',
+                    'PRICE_CODE' => array('BASE'),
+                    'PRICE_VAT_INCLUDE' => 'Y',
+                    'PRODUCT_BLOCKS_ORDER' => '',
+                    'PRODUCT_ID_VARIABLE' => '',
+                    'PRODUCT_PROPERTIES' => array(),
+                    'PRODUCT_PROPS_VARIABLE' => '',
+                    'PRODUCT_QUANTITY_VARIABLE' => '',
+                    'PRODUCT_ROW_VARIANTS' => '',
+                    'PRODUCT_SUBSCRIPTION' => 'N',
+                    'PROPERTY_CODE' => array(),
+                    'PROPERTY_CODE_MOBILE' => array(),
+                    'RCM_PROD_ID' => '',
+                    'RCM_TYPE' => '',
+                    'SECTION_CODE' => '',
+                    'SECTION_ID' => $arSect['ID'],
+                    'SECTION_ID_VARIABLE' => '',
+                    'SECTION_URL' => '',
+                    'SECTION_USER_FIELDS' => array(),
+                    'SEF_MODE' => 'N',
+                    'SET_BROWSER_TITLE' => 'N',
+                    'SET_LAST_MODIFIED' => 'N',
+                    'SET_META_DESCRIPTION' => 'N',
+                    'SET_META_KEYWORDS' => 'N',
+                    'SET_STATUS_404' => 'N',
+                    'SET_TITLE' => 'N',
+                    'SHOW_404' => 'N',
+                    'SHOW_ALL_WO_SECTION' => 'Y',
+                    'SHOW_CLOSE_POPUP' => 'N',
+                    'SHOW_DISCOUNT_PERCENT' => 'N',
+                    'SHOW_FROM_SECTION' => 'N',
+                    'SHOW_MAX_QUANTITY' => 'N',
+                    'SHOW_OLD_PRICE' => 'N',
+                    'SHOW_PRICE_COUNT' => 1,
+                    'SHOW_SLIDER' => 'N',
+                    'SLIDER_INTERVAL' => 0,
+                    'SLIDER_PROGRESS' => 'N',
+                    'TEMPLATE_THEME' => '',
+                    'USE_ENHANCED_ECOMMERCE' => 'N',
+                    'USE_MAIN_ELEMENT_SECTION' => 'N',
+                    'USE_PRICE_COUNT' => 'N',
+                    'USE_PRODUCT_QUANTITY' => 'N',
+                    'DELIVERY_TIME' => $deliveryTime,
+                    'BLOCK_TITLE' => $arSect['NAME'],
+                    'SHOW_SECTION_DESC' => 'Y',
                 )
             ); ?>
         <?php } ?>
@@ -558,7 +571,9 @@ $bannerFilter = array('!PROPERTY_BANNER' => false);
     );?>
 </div>
 
-<?/*require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");*/?>
+<?php /*
+require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");
+*/ ?>
 
 <div class="promo-sub promo-sub--main u-pt-0">
     <?$APPLICATION->IncludeComponent(
