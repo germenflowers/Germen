@@ -1,85 +1,150 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();?>
+<?php
 
-<?if ( !empty($arResult['ITEMS']) ) {?>
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+?>
+<?php if (!empty($arResult['ITEMS']) || !empty($arResult['BANNER'])): ?>
     <div class="promo-catalog promo-catalog--main">
-        <?php /*
         <div class="promo-catalog__header">
-            <div class="head-h2 promo-catalog__title"><?= $arParams['BLOCK_TITLE'] ?></div>
-            <? if ($arParams['SHOW_SECTION_DESC']): ?>
-                <div class="promo-catalog__desc promo-section-desc"><?= $arResult["DESCRIPTION"] ?></div>
-            <? endif; ?>
+            <div class="head-h2 promo-catalog__title"><?=$arParams['BLOCK_TITLE']?></div>
+            <?php if ($arParams['SHOW_SECTION_DESC']): ?>
+                <div class="promo-catalog__desc promo-section-desc"><?=$arResult['DESCRIPTION']?></div>
+            <?php endif; ?>
         </div>
-        */ ?>
+
+        <?php if (!empty($arResult['BANNER'])): ?>
+            <div class="promo-catalog__banner" style="margin-bottom: 30px;">
+                <a href="#" class="js-detail" data-id="<?=$arResult['BANNER']['id']?>">
+                    <picture>
+                        <source srcset="<?=$arResult['BANNER']['image']['src']?>" media="(max-width: 768px)">
+                        <img src="<?=$arResult['BANNER']['image']['src']?>" alt="<?=$arResult['BANNER']['name']?>">
+                    </picture>
+                </a>
+                <div class="promo-catalog__banner-block">
+                    <h3>
+                        <a href="#" class="js-detail" data-id="<?=$arResult['BANNER']['id']?>">
+                            <?=$arResult['BANNER']['title']?>
+                        </a>
+                    </h3>
+                    <p><?=$arResult['BANNER']['text']?></p>
+                    <span class="promo-catalog__banner-price">
+                        <?=$arResult['BANNER']['priceFormat']?>
+                        <span class="rouble"></span>
+                    </span>
+                    <a
+                            href="/order/?id=<?=$arResult['BANNER']['id']?>"
+                            class="promo-item__delivery"
+                            style="background-color: #<?=$arResult['BANNER']['buttonParams']['background']?>;"
+                    >
+                        <div class="promo-item__delivery__text"><?=$arResult['BANNER']['buttonParams']['text']?></div>
+                        <div class="promo-item__delivery__time">
+                            <?php if ($arResult['BANNER']['buttonParams']['showIcon']): ?>
+                                <svg class="promo-item__delivery__icon">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#properties-car-mini"></use>
+                                </svg>
+                            <?php endif; ?>
+                            <div class="promo-item__delivery__time__text js-prod_time">
+                                <?=$arResult['BANNER']['buttonParams']['time']?>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <div class="promo-catalog__block__wrapper">
-	        <?if ($arResult["CODE"] === "novyy-god-2019"): ?>
-		        <!-- Выводим на главной в блоке Самое популярное -->
-		        <div class="promo-catalog__block promo-catalog__block--wide js-detail" data-id="221">
-			        <div class="promo-main-product">
-				        <div class="promo-main-product__image promo-main-product__image--free-delivery">
-					        <img src="<?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree.png"
-					             srcset="<?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree.png 1x, <?= SITE_TEMPLATE_PATH ?>/img/main-product/xtree@2x.png 2x"
-					             alt="">
-				        </div>
-				        <div class="promo-main-product__content">
-					        <div class="promo-main-product__title">Пихта Нордмана</div>
-					        <div class="promo-main-product__text">Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.</div>
-					        <div class="promo-main-product__price">4 990 <span class="rouble"></span></div>
-					        <div class="promo-main-product__order">
-						        <a href="/order/?id=221"
-						           class="promo-item__delivery promo-main-product__order-button js-order_link">
-							        <div class="promo-item__delivery__text">Заказать</div>
-							        <div class="promo-item__delivery__time">
-								        <svg class="promo-item__delivery__icon">
-									        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg#properties-car-mini"></use>
-								        </svg>
-								        <div class="promo-item__delivery__time__text">60 мин.</div>
-							        </div>
-						        </a>
-					        </div>
-				        </div>
-			        </div>
-		        </div>
-	        <? endif; ?>
-            <?foreach($arResult["ITEMS"] as $arElement):?>
-                <?
-                $this->AddEditAction($arElement['ID'], $arElement['EDIT_LINK'], CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "ELEMENT_EDIT"));
-                $this->AddDeleteAction($arElement['ID'], $arElement['DELETE_LINK'], CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "ELEMENT_DELETE"), array("CONFIRM" => GetMessage('CT_BCS_ELEMENT_DELETE_CONFIRM')));
+            <?php if ($arResult['CODE'] === 'novyy-god-2019'): ?>
+                <!-- Выводим на главной в блоке Самое популярное -->
+                <div class="promo-catalog__block promo-catalog__block--wide js-detail" data-id="221">
+                    <div class="promo-main-product">
+                        <div class="promo-main-product__image promo-main-product__image--free-delivery">
+                            <img
+                                    src="<?=SITE_TEMPLATE_PATH?>/img/main-product/xtree.png"
+                                    srcset="<?=SITE_TEMPLATE_PATH?>/img/main-product/xtree.png 1x, <?=SITE_TEMPLATE_PATH?>/img/main-product/xtree@2x.png 2x"
+                                    alt=""
+                            >
+                        </div>
+                        <div class="promo-main-product__content">
+                            <div class="promo-main-product__title">Пихта Нордмана</div>
+                            <div class="promo-main-product__text">
+                                Прямиком из лесного питомника — пушистая датская ель, ростом примерно 2,4м.
+                            </div>
+                            <div class="promo-main-product__price">
+                                4 990
+                                <span class="rouble"></span>
+                            </div>
+                            <div class="promo-main-product__order">
+                                <a href="/order/?id=221"
+                                   class="promo-item__delivery promo-main-product__order-button js-order_link">
+                                    <div class="promo-item__delivery__text">Заказать</div>
+                                    <div class="promo-item__delivery__time">
+                                        <svg class="promo-item__delivery__icon">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#properties-car-mini"></use>
+                                        </svg>
+                                        <div class="promo-item__delivery__time__text">60 мин.</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php foreach ($arResult['ITEMS'] as $item): ?>
+                <?php
+                $this->AddEditAction(
+                    $item['ID'],
+                    $item['EDIT_LINK'],
+                    CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'ELEMENT_EDIT')
+                );
+                $this->AddDeleteAction(
+                    $item['ID'],
+                    $item['DELETE_LINK'],
+                    CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'ELEMENT_DELETE'),
+                    array('CONFIRM' => GetMessage('CT_BCS_ELEMENT_DELETE_CONFIRM'))
+                );
                 ?>
-                <div class="promo-catalog__block" id="<?=$this->GetEditAreaId($arElement['ID']);?>">
+                <div class="promo-catalog__block" id="<?=$this->GetEditAreaId($item['ID'])?>">
                     <div class="promo-item">
                         <div class="promo-item__img js-detail">
-                            <a href="#" class="js-detail" data-id="<?=$arElement['ID']?>">
-                                <img src="<?=$arElement['PICTURE']?>" alt="<?=$arElement['NAME']?>">
+                            <a href="#" class="js-detail" data-id="<?=$item['ID']?>">
+                                <img src="<?=$item['PICTURE']?>" alt="<?=$item['NAME']?>">
                             </a>
                         </div>
 
                         <div class="promo-item__description">
-                            <a href="#" class="promo-item__title js-detail" data-id="<?=$arElement['ID']?>"><?=$arElement['NAME']?></a>
+                            <a href="#" class="promo-item__title js-detail" data-id="<?=$item['ID']?>">
+                                <?=$item['NAME']?>
+                            </a>
 
-                            <div class="promo-item__price"><?=number_format($arElement['ITEM_PRICES'][0]['PRICE'],0, '', ' ')?> <span class="rouble"></span></div>
+                            <div class="promo-item__price">
+                                <?=number_format($item['ITEM_PRICES'][0]['PRICE'], 0, '', ' ')?>
+                                <span class="rouble"></span>
+                            </div>
 
                             <a
-                                href="/order/?id=<?=$arElement['ID']?>"
-                                class="promo-item__delivery"
-                                style="background-color: #<?=$arElement['BUTTON_PARAMS']['background']?>;"
+                                    href="/order/?id=<?=$item['ID']?>"
+                                    class="promo-item__delivery"
+                                    style="background-color: #<?=$item['BUTTON_PARAMS']['background']?>;"
                             >
-                                <div class="promo-item__delivery__text"><?=$arElement['BUTTON_PARAMS']['text']?></div>
+                                <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>
                                 <div class="promo-item__delivery__time">
-                                    <?php if ($arElement['BUTTON_PARAMS']['showIcon']): ?>
+                                    <?php if ($item['BUTTON_PARAMS']['showIcon']): ?>
                                         <svg class="promo-item__delivery__icon">
                                             <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#properties-car-mini"></use>
                                         </svg>
                                     <?php endif; ?>
                                     <div class="promo-item__delivery__time__text js-prod_time">
-                                        <?=$arElement['BUTTON_PARAMS']['time']?>
+                                        <?=$item['BUTTON_PARAMS']['time']?>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     </div>
                 </div>
-            <?endforeach;?>
+            <?php endforeach; ?>
         </div>
-        <?=$arResult["NAV_STRING"]?>
+        <?=$arResult['NAV_STRING']?>
     </div>
-<?}?>
+<?php endif; ?>

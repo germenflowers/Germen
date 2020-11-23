@@ -1,16 +1,19 @@
 <?php
 
-foreach ($arResult["ITEMS"] as $key => $arElement) {
-    $arResult["ITEMS"][$key]['PICTURE'] = '';
+use Germen\BuyButton;
+use Germen\Content;
 
-    $renderImage = CFile::ResizeImageGet($arElement['PREVIEW_PICTURE'], Array("width" => 600, "height" => 600));
-    $arResult["ITEMS"][$key]['PICTURE'] = $renderImage['src'];
+foreach ($arResult['ITEMS'] as $key => $arElement) {
+    $arResult['ITEMS'][$key]['PICTURE'] = '';
+
+    $renderImage = CFile::ResizeImageGet($arElement['PREVIEW_PICTURE'], array('width' => 600, 'height' => 600));
+    $arResult['ITEMS'][$key]['PICTURE'] = $renderImage['src'];
     unset($renderImage);
 }
 
-$arParams["SHOW_SECTION_DESC"] = $arParams["SHOW_SECTION_DESC"] === "Y" && !empty($arResult["DESCRIPTION"]);
+$arParams['SHOW_SECTION_DESC'] = $arParams['SHOW_SECTION_DESC'] === 'Y' && !empty($arResult['DESCRIPTION']);
 
-$buyButton = new Germen\buybutton();
+$buyButton = new BuyButton();
 $defaultButton = $buyButton->getDefaultParams();
 $buyButtons = $buyButton->getList();
 
@@ -22,4 +25,25 @@ foreach ($arResult['ITEMS'] as $i => $item) {
     }
 
     $arResult['ITEMS'][$i] = $item;
+}
+
+$arResult['BANNER'] = array();
+if ($arParams['POPULAR'] === 'Y') {
+    $arResult['BANNER'] = Content::getBannerCached(
+        array(
+            'defaultButton' => $defaultButton,
+            'iblockId' => (int)$arParams['IBLOCK_ID'],
+            'sectionId' => (int)$arParams['SECTION_ID'],
+            'popular' => true,
+        )
+    );
+} elseif (!empty((int)$arParams['SECTION_ID'])) {
+    $arResult['BANNER'] = Content::getBannerCached(
+        array(
+            'defaultButton' => $defaultButton,
+            'iblockId' => (int)$arParams['IBLOCK_ID'],
+            'sectionId' => (int)$arParams['SECTION_ID'],
+            'popular' => false,
+        )
+    );
 }
