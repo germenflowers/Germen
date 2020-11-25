@@ -10172,7 +10172,7 @@ input, textarea, button {
     left: 50%;
     min-width: 100%;
     min-height: 100%;
-    max-width: 120%;
+    max-width: 100%;
 }
 
 .promo-item__description {
