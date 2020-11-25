@@ -75,8 +75,8 @@ class Content
             }
 
             $buttonParams = $params['defaultButton'];
-            if (!empty($item['PROPERTY_BUTTON_VALUE']) && !empty($buyButtons[$item['PROPERTY_BUTTON_VALUE']])) {
-                $buttonParams = $buyButtons[$item['PROPERTY_BUTTON_VALUE']];
+            if (!empty($row['PROPERTY_BUTTON_VALUE']) && !empty($buyButtons[$row['PROPERTY_BUTTON_VALUE']])) {
+                $buttonParams = $buyButtons[$row['PROPERTY_BUTTON_VALUE']];
             }
 
             $banner = array(
