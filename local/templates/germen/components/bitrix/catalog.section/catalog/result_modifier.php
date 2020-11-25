@@ -32,6 +32,7 @@ if ($arParams['POPULAR'] === 'Y') {
     $arResult['BANNER'] = Content::getBannerCached(
         array(
             'defaultButton' => $defaultButton,
+            'buyButtons' => $buyButtons,
             'iblockId' => (int)$arParams['IBLOCK_ID'],
             'sectionId' => (int)$arParams['SECTION_ID'],
             'popular' => true,
@@ -41,6 +42,7 @@ if ($arParams['POPULAR'] === 'Y') {
     $arResult['BANNER'] = Content::getBannerCached(
         array(
             'defaultButton' => $defaultButton,
+            'buyButtons' => $buyButtons,
             'iblockId' => (int)$arParams['IBLOCK_ID'],
             'sectionId' => (int)$arParams['SECTION_ID'],
             'popular' => false,
