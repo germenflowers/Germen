@@ -1,5 +1,7 @@
 <?php
 
+use Germen\Price;
+
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -7,6 +9,15 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 $this->setFrameMode(true);
 
 $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af938-2c94-4c62-9652-a7d13f30ea20');
+
+$price = new Price();
+$userGroups = $price->getUserGroups();
+$price->setPricesIdByName(array('BASE'));
+$pricesId = $price->getPricesId();
+$prices = $price->getItemPrices((int)$arResult['PRODUCT']['ID'], 1, $pricesId, $userGroups);
+
+$price = (int)$prices['PRICES'][0];
+$priceFormatted = number_format($price, 0, '', ' ');
 ?>
 <?php if (!$arResult['CONFIRM']): ?>
     <header class="order-header">
@@ -513,7 +524,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af93
                     <button class="btn order-form__submit">
                         Оплатить
                         <span class="js-order_total js-total-sum">
-                            <?=$arResult['PRODUCT']['FORMATTED_PRICE']?>
+                            <?=$priceFormatted?>
                         </span>
                         <span class="rouble"></span>
                     </button>
@@ -563,7 +574,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af93
                             <div
                                     class="order-list__item order-item js-detail js-basket-item-info js-main-basket-item"
                                     data-id="<?=$arResult['PRODUCT']['ID']?>"
-                                    data-price="<?=$arResult['PRODUCT']['PRICE']?>"
+                                    data-price="<?=$price?>"
                             >
                                 <?php if (!empty($arResult['PRODUCT']['PICTURE'])): ?>
                                     <div class="order-item__image">
@@ -577,7 +588,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af93
                                     <div class="order-item__title"><?=$arResult['PRODUCT']['NAME']?></div>
                                     <div class="order-item__price">
                                         <span class="js-price">
-                                            <?=$arResult['PRODUCT']['FORMATTED_PRICE']?>
+                                            <?=$priceFormatted?>
                                         </span>
                                         <span class="rouble"></span>
                                     </div>
@@ -606,7 +617,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af93
                             <div class="order-summary__label">Товары</div>
                             <div class="order-summary__value">
                                 <b>
-                                    <span class="js-main-sum"><?=$arResult['PRODUCT']['FORMATTED_PRICE']?></span>
+                                    <span class="js-main-sum"><?=$priceFormatted?></span>
                                     <span class="rouble"></span>
                                 </b>
                             </div>
@@ -686,7 +697,7 @@ $APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af93
                         <div class="order-summary__item order-summary__item--total">
                             <div class="order-summary__label">Итого</div>
                             <div class="order-summary__value">
-                                <span class="js-total-sum"><?=$arResult['PRODUCT']['FORMATTED_PRICE']?></span>
+                                <span class="js-total-sum"><?=$priceFormatted?></span>
                                 <span class="rouble"></span>
                             </div>
                         </div>

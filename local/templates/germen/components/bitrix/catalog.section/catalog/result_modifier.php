@@ -33,6 +33,7 @@ if ($arParams['POPULAR'] === 'Y') {
         array(
             'defaultButton' => $defaultButton,
             'buyButtons' => $buyButtons,
+            'priceCode' => $arResult['ORIGINAL_PARAMETERS']['PRICE_CODE'],
             'iblockId' => (int)$arParams['IBLOCK_ID'],
             'sectionId' => (int)$arParams['SECTION_ID'],
             'popular' => true,
@@ -43,6 +44,7 @@ if ($arParams['POPULAR'] === 'Y') {
         array(
             'defaultButton' => $defaultButton,
             'buyButtons' => $buyButtons,
+            'priceCode' => $arResult['ORIGINAL_PARAMETERS']['PRICE_CODE'],
             'iblockId' => (int)$arParams['IBLOCK_ID'],
             'sectionId' => (int)$arParams['SECTION_ID'],
             'popular' => false,

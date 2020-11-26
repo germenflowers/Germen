@@ -31,6 +31,10 @@ class Content
             return $banner;
         }
 
+        if (empty($params['priceCode'])) {
+            return $banner;
+        }
+
         $order = array('sort' => 'asc', 'id' => 'desc');
         $filter = array(
             'IBLOCK_ID' => $params['iblockId'],
@@ -80,6 +84,12 @@ class Content
                 $buttonParams = $params['buyButtons'][$row['PROPERTY_BUTTON_VALUE']];
             }
 
+            $price = new Price();
+            $userGroups = $price->getUserGroups();
+            $price->setPricesIdByName($params['priceCode']);
+            $pricesId = $price->getPricesId();
+            $prices = $price->getItemPrices((int)$row['ID'], $params['iblockId'], $pricesId, $userGroups);
+
             $banner = array(
                 'id' => (int)$row['ID'],
                 'name' => $row['NAME'],
@@ -89,6 +99,7 @@ class Content
                 'price' => (int)$row['PRICE_1'],
                 'priceFormat' => number_format((int)$row['PRICE_1'], 0, '', ' '),
                 'buttonParams' => $buttonParams,
+                'prices' => $prices,
             );
         }
 

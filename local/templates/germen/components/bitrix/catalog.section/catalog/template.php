@@ -29,7 +29,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                     </h3>
                     <p><?=$arResult['BANNER']['text']?></p>
                     <span class="promo-catalog__banner-price">
-                        <?=$arResult['BANNER']['priceFormat']?>
+                        <?=number_format((int)$arResult['BANNER']['prices']['PRICES'][0], 0, '', ' ')?>
                         <span class="rouble"></span>
                     </span>
                     <?php
