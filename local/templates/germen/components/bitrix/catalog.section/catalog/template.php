@@ -32,11 +32,13 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                         <?=$arResult['BANNER']['priceFormat']?>
                         <span class="rouble"></span>
                     </span>
-                    <a
-                            href="/order/?id=<?=$arResult['BANNER']['id']?>"
-                            class="promo-item__delivery"
-                            style="background-color: #<?=$arResult['BANNER']['buttonParams']['background']?>;"
-                    >
+                    <?php
+                    $style = 'background-color: #'.$arResult['BANNER']['buttonParams']['background'].';';
+                    if (!empty($arResult['BANNER']['buttonParams']['textColor'])) {
+                        $style .= ' color: #'.$arResult['BANNER']['buttonParams']['textColor'].';';
+                    }
+                    ?>
+                    <a href="/order/?id=<?=$arResult['BANNER']['id']?>" class="promo-item__delivery" style="<?=$style?>">
                         <div class="promo-item__delivery__text"><?=$arResult['BANNER']['buttonParams']['text']?></div>
                         <div class="promo-item__delivery__time">
                             <?php if ($arResult['BANNER']['buttonParams']['showIcon']): ?>
@@ -123,11 +125,13 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <span class="rouble"></span>
                             </div>
 
-                            <a
-                                    href="/order/?id=<?=$item['ID']?>"
-                                    class="promo-item__delivery"
-                                    style="background-color: #<?=$item['BUTTON_PARAMS']['background']?>;"
-                            >
+                            <?php
+                            $style = 'background-color: #'.$item['BUTTON_PARAMS']['background'].';';
+                            if (!empty($item['BUTTON_PARAMS']['textColor'])) {
+                                $style .= ' color: #'.$item['BUTTON_PARAMS']['textColor'].';';
+                            }
+                            ?>
+                            <a href="/order/?id=<?=$item['ID']?>" class="promo-item__delivery" style="<?=$style?>">
                                 <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>
                                 <div class="promo-item__delivery__time">
                                     <?php if ($item['BUTTON_PARAMS']['showIcon']): ?>

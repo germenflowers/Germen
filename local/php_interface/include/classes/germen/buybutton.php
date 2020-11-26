@@ -17,6 +17,7 @@ class BuyButton
 {
     private $defaultParams = array(
         'background' => 'fee6d2',
+        'textColor' => '1f2533',
         'text' => 'Заказать',
         'time' => '120 мин.',
         'showIcon' => true,
@@ -77,6 +78,7 @@ class BuyButton
             'IBLOCK_ID',
             'ID',
             'PROPERTY_BACKGROUND',
+            'PROPERTY_TEXT_COLOR',
             'PROPERTY_TEXT',
             'PROPERTY_TIME',
             'PROPERTY_SHOW_ICON',
@@ -86,6 +88,7 @@ class BuyButton
             $items[(int)$row['ID']] = array(
                 'id' => (int)$row['ID'],
                 'background' => $row['PROPERTY_BACKGROUND_VALUE'],
+                'textColor' => $row['PROPERTY_TEXT_COLOR_VALUE'],
                 'text' => $row['PROPERTY_TEXT_VALUE'],
                 'time' => $row['PROPERTY_TIME_VALUE'],
                 'showIcon' => !empty($row['PROPERTY_SHOW_ICON_VALUE']),
@@ -107,15 +110,26 @@ class BuyButton
             'IBLOCK_ID',
             'ID',
             'PROPERTY_BACKGROUND',
+            'PROPERTY_TEXT_COLOR',
             'PROPERTY_TEXT',
             'PROPERTY_TIME',
             'PROPERTY_SHOW_ICON',
         );
         $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
         if ($row = $result->Fetch()) {
-            $defaultParams['background'] = $row['PROPERTY_BACKGROUND_VALUE'];
-            $defaultParams['text'] = $row['PROPERTY_TEXT_VALUE'];
-            $defaultParams['time'] = $row['PROPERTY_TIME_VALUE'];
+            if (!empty($row['PROPERTY_BACKGROUND_VALUE'])) {
+                $defaultParams['background'] = $row['PROPERTY_BACKGROUND_VALUE'];
+            }
+            if (!empty($row['PROPERTY_TEXT_COLOR_VALUE'])) {
+                $defaultParams['textColor'] = $row['PROPERTY_TEXT_COLOR_VALUE'];
+            }
+            if (!empty($row['PROPERTY_TEXT_VALUE'])) {
+                $defaultParams['text'] = $row['PROPERTY_TEXT_VALUE'];
+            }
+            if (!empty($row['PROPERTY_TIME_VALUE'])) {
+                $defaultParams['time'] = $row['PROPERTY_TIME_VALUE'];
+            }
+
             $defaultParams['showIcon'] = !empty($row['PROPERTY_SHOW_ICON_VALUE']);
         }
 
