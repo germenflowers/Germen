@@ -262,6 +262,9 @@ $priceFormatted = number_format($price, 0, '', ' ');
                                         id="ORDER_PROP_<?=$prop['ID']?>_<?=$i - 1?>"
                                         placeholder="<?=$prop['NAME']?>" value="<?=$prop['VALUE'][$i - 1]?>"
                                         data-time="<?=$arResult['DELIVERY_TIME']?>"
+                                        <?php if (!empty($arResult['PRODUCT']['ACTIVE_END_DATE']['VALUE'])): ?>
+                                            data-maxtime="<?=strtotime($arResult['PRODUCT']['ACTIVE_END_DATE']['VALUE'])?>"
+                                        <?php endif; ?>
                                 >
                             </div>
                         <?php endfor; ?>

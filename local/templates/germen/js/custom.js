@@ -221,7 +221,8 @@ $(document).ready(function () {
   var startDate = new Date(),
     orderData = $('.order-datetime'),
     minHours = 8,
-    maxHours = 21;
+    maxHours = 21,
+    maxTime = orderData.data('maxtime');
 
   startDate.setMinutes(startDate.getMinutes() + parseInt(orderData.data('time')));
   startDate.setHours(startDate.getHours() + 1);
@@ -237,7 +238,17 @@ $(document).ready(function () {
     startDate: startDate,
     minDate: startDate,
     minHours: minHours,
-    maxHours: maxHours
+    maxHours: maxHours,
+    onRenderCell: function (date, cellType) {
+      if (typeof maxTime !== 'undefined' && cellType === 'day') {
+        let timestamp = date.getTime() / 1000,
+          isDisabled = timestamp >= maxTime;
+
+        return {
+          disabled: isDisabled
+        }
+      }
+    }
   });
 
   $('.phomemask').mask("+7 (999) 999-99-99");

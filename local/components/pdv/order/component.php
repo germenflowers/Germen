@@ -204,6 +204,7 @@ elseif ($id > 0) {
     }
 
     $arProd = \CCatalogProduct::GetByIDEx($id);
+
     if ($arProd) {
         $notIssetProd = false;
         $upSaleProducts = array();
@@ -351,6 +352,10 @@ elseif ($id > 0) {
             'PICTURE' => $pic,
             'PRICE' => (int)$basePrice,
             'FORMATTED_PRICE' => number_format($basePrice, 0, '', ' '),
+            'ACTIVE_WEEK_DAYS' => $arProd['PROPERTIES']['ACTIVE_WEEK_DAYS'],
+            'ACTIVE_START_SHIFT' => $arProd['PROPERTIES']['ACTIVE_START_SHIFT'],
+            'ACTIVE_END_SHIFT' => $arProd['PROPERTIES']['ACTIVE_END_SHIFT'],
+            'ACTIVE_END_DATE' => $arProd['PROPERTIES']['ACTIVE_END_DATE'],
         );
 
         if ((int)$arProd['IBLOCK_ID'] === IBLOCK_ID__SUBSCRIBE_OFFERS) {
