@@ -2,10 +2,12 @@
 
 use Bitrix\Main\Context;
 use Germen\Content;
+use PDV\Tools;
 
 $USER_DELIVERY_ID = (int)Context::getCurrent()->getRequest()->getCookie('USER_DELIVERY_ID');
 
 $informationBanner = Content::getInformationBannerCached();
+$isHome = Tools::isHomePage();
 ?>
 <?php if ($USER_DELIVERY_ID === 0): ?>
     <div class="modal fade" id="popup-login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -66,7 +68,7 @@ $informationBanner = Content::getInformationBannerCached();
         </div>
     </div>
 
-<?php if (!empty($informationBanner)): ?>
+<?php if ($isHome && !empty($informationBanner)): ?>
     <div class="temporary-closed modal-show">
         <div class="temporary-closed__inner">
             <button class="temporary-closed__close">
