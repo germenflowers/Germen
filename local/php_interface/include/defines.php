@@ -8,6 +8,7 @@ define('IBLOCK_ID__PROMO_BANNER', 4);
 define('IBLOCK_ID__PROMO_ICONS', 5);
 define('IBLOCK_ID__UPSALE', 8);
 define('IBLOCK_ID__SMS', 9);
+define('IBLOCK_ID__INFORMATION_BANNER', 20);
 
 define('IBLOCK_ID__SUBSCRIBE', 18);
 define('IBLOCK_ID__SUBSCRIBE_OFFERS', 19);

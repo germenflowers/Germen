@@ -89,9 +89,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
         include_once 'include/modals.php';
         ?>
 
-        <?php if ($isSubscribePage): ?>
-            <script src="<?=SITE_TEMPLATE_PATH?>/js/subscribe.min.js"></script>
-        <?php endif; ?>
+        <script src="<?=SITE_TEMPLATE_PATH?>/js/subscribe.min.js"></script>
 
         <script src="//mssg.me/widget/germen_flowers" async></script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120818642-1"></script>

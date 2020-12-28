@@ -56,10 +56,7 @@ $phone = trim(
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.13">
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css?v=1.1">
-
-        <?php if ($isSubscribePage): ?>
-            <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/subscribe.min.css">
-        <?php endif; ?>
+        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/subscribe.min.css">
 
         <?php
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');

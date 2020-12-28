@@ -119,4 +119,36 @@ class Content
             $params
         );
     }
+
+    /**
+     * @return array
+     */
+    public static function getInformationBanner(): array
+    {
+        $banner = array();
+
+        $filter = array(
+            'IBLOCK_ID' => IBLOCK_ID__INFORMATION_BANNER,
+            'CODE' => 'informatsionnyy-banner',
+            'ACTIVE' => 'Y',
+        );
+        $select = array('IBLOCK_ID', 'ID', 'NAME', 'PREVIEW_TEXT');
+        $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
+        if ($row = $result->Fetch()) {
+            $banner = array(
+                'title' => $row['NAME'],
+                'text' => $row['PREVIEW_TEXT'],
+            );
+        }
+
+        return $banner;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getInformationBannerCached(): array
+    {
+        return Tools::returnResultCache(60 * 60, 'getInformationBanner', array(__CLASS__, 'getInformationBanner'));
+    }
 }
