@@ -1,6 +1,7 @@
 <?php
 
 use Germen\Price;
+use Germen\Content;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -18,6 +19,8 @@ $prices = $price->getItemPrices((int)$arResult['PRODUCT']['ID'], 1, $pricesId, $
 
 $price = (int)$prices['PRICES'][0];
 $priceFormatted = number_format($price, 0, '', ' ');
+
+$informationBanner = Content::getInformationBannerCached();
 ?>
 <?php if (!$arResult['CONFIRM']): ?>
     <header class="order-header">
@@ -264,6 +267,9 @@ $priceFormatted = number_format($price, 0, '', ' ');
                                         data-time="<?=$arResult['DELIVERY_TIME']?>"
                                         <?php if (!empty($arResult['PRODUCT']['ACTIVE_END_DATE']['VALUE'])): ?>
                                             data-maxtime="<?=strtotime($arResult['PRODUCT']['ACTIVE_END_DATE']['VALUE'])?>"
+                                        <?php endif; ?>
+                                        <?php if (!empty($informationBanner)): ?>
+                                            data-mintime="<?=strtotime(date('d.m.Y').' 23:59')?>"
                                         <?php endif; ?>
                                 >
                             </div>

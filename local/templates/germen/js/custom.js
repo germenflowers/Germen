@@ -222,7 +222,8 @@ $(document).ready(function () {
     orderData = $('.order-datetime'),
     minHours = 8,
     maxHours = 21,
-    maxTime = orderData.data('maxtime');
+    maxTime = orderData.data('maxtime'),
+    minTime = orderData.data('mintime');
 
   startDate.setMinutes(startDate.getMinutes() + parseInt(orderData.data('time')));
   startDate.setHours(startDate.getHours() + 1);
@@ -240,9 +241,23 @@ $(document).ready(function () {
     minHours: minHours,
     maxHours: maxHours,
     onRenderCell: function (date, cellType) {
-      if (typeof maxTime !== 'undefined' && cellType === 'day') {
+      if (cellType === 'day') {
         let timestamp = date.getTime() / 1000,
-          isDisabled = timestamp >= maxTime;
+          isDisabled = false,
+          isDisabledMax = false,
+          isDisableMin = false;
+
+        if (typeof maxTime !== 'undefined') {
+          isDisabledMax = timestamp >= maxTime;
+        }
+
+        if (typeof minTime !== 'undefined') {
+          isDisableMin = timestamp <= minTime;
+        }
+
+        if (isDisabledMax || isDisableMin) {
+          isDisabled = true;
+        }
 
         return {
           disabled: isDisabled
@@ -455,7 +470,11 @@ $(document).ready(function () {
     let size = $(this).val();
 
     $('.js-subscribe').hide();
-    $('.js-subscribe[data-size='+size+']').show().filter(':first').find('input[type=radio]').prop('checked', true);
+    $('.js-subscribe[data-size=' + size + ']')
+    .show()
+    .filter(':first')
+    .find('input[type=radio]')
+    .prop('checked', true);
   });
 
   $(document).on('click', '.js-bouquet-type', function (e) {

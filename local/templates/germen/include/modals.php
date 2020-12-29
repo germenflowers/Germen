@@ -9,7 +9,7 @@ $USER_DELIVERY_ID = (int)Context::getCurrent()->getRequest()->getCookie('USER_DE
 $informationBanner = Content::getInformationBannerCached();
 $isHome = Tools::isHomePage();
 ?>
-<?php if ($USER_DELIVERY_ID === 0): ?>
+<?php if (false && $USER_DELIVERY_ID === 0): ?>
     <div class="modal fade" id="popup-login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog--mini">
             <div class="modal-content">
@@ -55,18 +55,18 @@ $isHome = Tools::isHomePage();
     </div>
 <?php endif; ?>
 
-    <div class="modal fade product-modal" id="popup-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <button class="modal-close" type="button" data-dismiss="modal" aria-label="Close">
-                    <svg width="24px" height="24px">
-                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross"></use>
-                    </svg>
-                </button>
-                <div class="product-info js-body"></div>
-            </div>
+<div class="modal fade product-modal" id="popup-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button class="modal-close" type="button" data-dismiss="modal" aria-label="Close">
+                <svg width="24px" height="24px">
+                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross"></use>
+                </svg>
+            </button>
+            <div class="product-info js-body"></div>
         </div>
     </div>
+</div>
 
 <?php if ($isHome && !empty($informationBanner)): ?>
     <div class="temporary-closed modal-show">
