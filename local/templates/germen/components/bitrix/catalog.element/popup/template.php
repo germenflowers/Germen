@@ -1,8 +1,8 @@
 <div class="product-info__gallery">
     <div class="product-slider" data-product-slider="">
-        <? foreach ($arResult["IMAGES"] as $arImage): ?>
+        <?php foreach ($arResult["IMAGES"] as $arImage): ?>
             <div class="product-slider__item">
-                <? /*
+                <?php /*
                 <div class="type-label">
                     <svg width="16px" height="13px">
                         <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#aroma"></use>
@@ -10,9 +10,9 @@
                     Ароматная роза
                 </div>
                 */ ?>
-                <img data-lazy="<?= $arImage["SRC"] ?>" alt="">
+                <img data-lazy="<?=$arImage["SRC"]?>" alt="">
             </div>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </div>
 </div>
 
@@ -20,27 +20,186 @@
     <div class="product-info__content-inner">
         <div class="product-info__header">
             <h2 class="product-info__title">
-                <?= $arResult["NAME"] ?>
+                <?=$arResult["NAME"]?>
             </h2>
-            <div class="product-info__text"> <?= $arResult["PREVIEW_TEXT"] ?></div>
+            <form>
+                <div class="product-info__color">
+                    <div class="product-info__color-inner">
+                        <input class="visually-hidden" id="red" type="radio" name="color" value="red" checked>
+                        <label for="red" style="background-color: #942945; border: 1px solid #942945;"></label>
+                        <input class="visually-hidden" id="black" type="radio" name="color" value="black">
+                        <label for="black" style="background-color: #3A2F3D; border: 1px solid #3A2F3D;"></label>
+                        <input class="visually-hidden" id="green" type="radio" name="color" value="green">
+                        <label for="green" style="background-color: #557464; border: 1px solid #557464;"></label>
+                    </div>
+                </div>
+                <div class="product-info__cover">
+                    <div class="product-info__cover-inner">
+                        <input class="visually-hidden" id="craft" type="radio" name="cover" value="craft" checked>
+                        <label for="craft">Крафт</label>
+                        <input class="visually-hidden" id="film" type="radio" name="cover" value="film">
+                        <label for="film">Пленка</label>
+                        <input class="visually-hidden" id="nothing" type="radio" name="cover" value="nothing">
+                        <label for="nothing">Без упаковки</label>
+                        <div class="product-info__chosen"></div>
+                    </div>
+                </div>
+            </form>
+            <div class="product-info__text"></div>
+        </div>
+        <div class="product-info__add">
+            <div class="product-info__add-slider swiper-container product-add-slider">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/sweets.jpg" alt="Конфеты">
+                        <h3 class="product-add-slider__title">Конфеты AOKI</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">990 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/glasses.jpg" alt="букет">
+                        <h3 class="product-add-slider__title">Vaze Classic</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">550 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/fruits.jpg" alt="букет">
+                        <h3 class="product-add-slider__title">Fruits Classic</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">550 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/sweets.jpg" alt="Конфеты">
+                        <h3 class="product-add-slider__title">Конфеты AOKI</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">990 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/glasses.jpg" alt="букет">
+                        <h3 class="product-add-slider__title">Vaze Classic</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">550 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide product-add-slider__item">
+                        <img src="<?=SITE_TEMPLATE_PATH?>/img/fruits.jpg" alt="букет">
+                        <h3 class="product-add-slider__title">Fruits Classic</h3>
+                        <div class="product-add-slider__add-to-cart">
+                            <div class="product-add-slider__price">550 Р</div>
+                            <div class="product-add-slider__btn">
+                                <svg width="24" height="24" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#plus"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-info__discription">
+            <h3 class="product-info__discription-title">Описание</h3>
+            <div class="product-info__discription-text"><?=$arResult["PREVIEW_TEXT"]?>
+                <div class="product-info__discription-show"></div>
+            </div>
+        </div>
+
+        <div class="product-info__features">
+            <div class="product-info__feature">
+                <div class="product-info__feature-icon">
+                    <svg width="26px" height="22px">
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-car"></use>
+                    </svg>
+                </div>
+                <h5 class="product-info__feature-title">Бесплатная доставка</h5>
+                <p class="product-info__feature-text">
+                    Бесплатно и&nbsp;быстро доставим букет&nbsp;&mdash; от&nbsp;60 минут в&nbsp;пределах МКАД.*
+                </p>
+                <p class="product-info__feature-note">
+                    <span class="product-info__feature-note-star">*</span>
+                    Доставка за&nbsp;МКАД&nbsp;&mdash;500&nbsp;руб
+                </p>
+            </div>
+            <div class="product-info__feature">
+                <div class="product-info__feature-icon">
+                    <svg width="19px" height="26px">
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-paper"></use>
+                    </svg>
+                </div>
+                <h5 class="product-info__feature-title">Открытка в&nbsp;подарок</h5>
+                <p class="product-info__feature-text">
+                    К&nbsp;каждому букету дарим открытку в&nbsp;конверте, подписанную от&nbsp;вашего имени. Просто введите текст при оформлении заказа.
+                </p>
+            </div>
+            <div class="product-info__feature">
+                <div class="product-info__feature-icon">
+                    <svg width="26px" height="22px">
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-camera"></use>
+                    </svg>
+                </div>
+                <h5 class="product-info__feature-title">Контроль на&nbsp;каждом этапе</h5>
+                <p class="product-info__feature-text">
+                    Пришлем фото всех цветов на&nbsp;базе, сфотографируем букет и&nbsp;подписанную открытку перед отправкой.
+                </p>
+            </div>
+            <div class="product-info__feature">
+                <div class="product-info__feature-icon">
+                    <svg width="20px" height="26px">
+                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-badge"></use>
+                    </svg>
+                </div>
+                <h5 class="product-info__feature-title">Гарантия качества</h5>
+                <p class="product-info__feature-text">
+                    Возвращаем деньги, если цветы окажутся несвежими или завянут в&nbsp;день доставки.
+                </p>
+            </div>
         </div>
         <div class="product-info__row product-info__row--baseline">
-            <div class="product-info__cell">
-                            <span class="product-info__price">
-                                <?= number_format($arResult["PRICES"]["BASE"]["VALUE"], 0, '', ' ') ?>
-                                <span class="product-info__price-currency">руб</span>
-                            </span>
+            <div class="product-info__cell product-info__time">
+                <svg width="28" height="18" aria-hidden="true">
+                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#delivery-time"></use>
+                </svg>
+                <span><?=$arResult["DELIVERY_TIME"]?></span>
             </div>
+
             <div class="product-info__cell">
                 <div class="payment-systems">
                     <div class="payment-systems__item" aria-label="Оплата по счёту">
                         <svg class="payment-systems__icon payment-systems__icon--invoice">
-                            <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#payment-invoice"></use>
+                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#payment-invoice"></use>
                         </svg>
                     </div>
                     <div class="payment-systems__item" aria-label="MasterCard">
                         <svg class="payment-systems__icon payment-systems__icon--mastercard">
-                            <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#payment-mastercard"></use>
+                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#payment-mastercard"></use>
                         </svg>
                     </div>
                     <div class="payment-systems__item" aria-label="Visa">
@@ -61,59 +220,23 @@
                 </div>
             </div>
         </div>
-        <? if (!$arResult["IS_ORDER"]): ?>
+        <?php if (!$arResult["IS_ORDER"]): ?>
             <div class="product-info__action">
-                <a class="promo-item__delivery product-info__order-button" href="/order/?id=<?= $arResult["ID"] ?>">
-                    <div class="promo-item__delivery__text">Заказать</div>
-                    <div class="promo-item__delivery__time">
-                        <div class="promo-item__delivery__time__text"><?= $arResult["DELIVERY_TIME"] ?></div>
+                <div class="product-info__ammount" id="input_div">
+                    <input id="moins" type="button" value="-">
+                    <input id="count" type="number" size="1" value="1" max="99">
+                    <input id="plus" type="button" value="+">
+                </div>
+                <a class="button promo-item__delivery product-info__order-button" href="/order/?id=<?=$arResult["ID"]?>">
+                    <div class="promo-item__delivery__text">
+                        Заказать ·
+                        <span>
+                            <?=number_format($arResult["PRICES"]["BASE"]["VALUE"], 0, '', ' ')?>
+                        </span>
+                        ₽
                     </div>
                 </a>
             </div>
-        <? endif; ?>
-        <div class="product-info__features">
-            <div class="product-info__feature">
-                <div class="product-info__feature-icon">
-                    <svg width="26px" height="22px">
-                        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-car"></use>
-                    </svg>
-                </div>
-                <h5 class="product-info__feature-title">Бесплатная доставка</h5>
-                <p class="product-info__feature-text">Бесплатно и&nbsp;быстро доставим букет&nbsp;&mdash; от&nbsp;60
-                    минут в&nbsp;пределах МКАД.*</p>
-                <p class="product-info__feature-note"><span class="product-info__feature-note-star">*</span> Доставка за&nbsp;МКАД&nbsp;&mdash;
-                    500&nbsp;руб</p>
-            </div>
-            <div class="product-info__feature">
-                <div class="product-info__feature-icon">
-                    <svg width="19px" height="26px">
-                        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-paper"></use>
-                    </svg>
-                </div>
-                <h5 class="product-info__feature-title">Открытка в&nbsp;подарок</h5>
-                <p class="product-info__feature-text">К&nbsp;каждому букету дарим открытку в&nbsp;конверте, подписанную
-                    от&nbsp;вашего имени.</p>
-            </div>
-            <div class="product-info__feature">
-                <div class="product-info__feature-icon">
-                    <svg width="26px" height="22px">
-                        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-camera"></use>
-                    </svg>
-                </div>
-                <h5 class="product-info__feature-title">Контроль на&nbsp;каждом этапе</h5>
-                <p class="product-info__feature-text">Пришлем фото всех цветов на&nbsp;базе, сфотографируем букет и&nbsp;подписанную
-                    открытку перед отправкой.</p>
-            </div>
-            <div class="product-info__feature">
-                <div class="product-info__feature-icon">
-                    <svg width="20px" height="26px">
-                        <use xlink:href="<?= SITE_TEMPLATE_PATH ?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#feature-badge"></use>
-                    </svg>
-                </div>
-                <h5 class="product-info__feature-title">Гарантия качества</h5>
-                <p class="product-info__feature-text">Возвращаем деньги, если цветы окажутся несвежими или завянут в&nbsp;день
-                    доставки.</p>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
