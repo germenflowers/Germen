@@ -1,18 +1,13 @@
 <div class="product-info__gallery">
-    <div class="product-slider" data-product-slider="">
-        <?php foreach ($arResult["IMAGES"] as $arImage): ?>
-            <div class="product-slider__item">
-                <?php /*
-                <div class="type-label">
-                    <svg width="16px" height="13px">
-                        <use xlink:href="'.SITE_TEMPLATE_PATH.'/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#aroma"></use>
-                    </svg>
-                    Ароматная роза
+    <div class="product-slider swiper-container">
+        <div class="swiper-wrapper">
+            <?php foreach ($arResult["IMAGES"] as $arImage): ?>
+                <div class="swiper-slide product-slider__item">
+                    <img data-lazy="<?=$arImage["SRC"]?>" alt="">
                 </div>
-                */ ?>
-                <img data-lazy="<?=$arImage["SRC"]?>" alt="">
-            </div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+        <div class="swiper-pagination product-slider__pagination"></div>
     </div>
 </div>
 
@@ -45,7 +40,6 @@
                     </div>
                 </div>
             </form>
-            <div class="product-info__text"></div>
         </div>
         <div class="product-info__add">
             <div class="product-info__add-slider swiper-container product-add-slider">
@@ -131,7 +125,6 @@
                 <div class="product-info__discription-show"></div>
             </div>
         </div>
-
         <div class="product-info__features">
             <div class="product-info__feature">
                 <div class="product-info__feature-icon">
@@ -156,7 +149,8 @@
                 </div>
                 <h5 class="product-info__feature-title">Открытка в&nbsp;подарок</h5>
                 <p class="product-info__feature-text">
-                    К&nbsp;каждому букету дарим открытку в&nbsp;конверте, подписанную от&nbsp;вашего имени. Просто введите текст при оформлении заказа.
+                    К&nbsp;каждому букету дарим открытку в&nbsp;конверте, подписанную от&nbsp;вашего имени. Просто
+                    введите текст при оформлении заказа.
                 </p>
             </div>
             <div class="product-info__feature">
@@ -167,7 +161,8 @@
                 </div>
                 <h5 class="product-info__feature-title">Контроль на&nbsp;каждом этапе</h5>
                 <p class="product-info__feature-text">
-                    Пришлем фото всех цветов на&nbsp;базе, сфотографируем букет и&nbsp;подписанную открытку перед отправкой.
+                    Пришлем фото всех цветов на&nbsp;базе, сфотографируем букет и&nbsp;подписанную открытку перед
+                    отправкой.
                 </p>
             </div>
             <div class="product-info__feature">
