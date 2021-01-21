@@ -22,6 +22,7 @@
     </div>
     <button class="product-info__favorite-mob white-heart" type="button"></button>
 </div>
+
 <div class="product-info__content">
     <div class="product-info__content-inner">
         <div class="product-info__header">

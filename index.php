@@ -402,9 +402,16 @@ $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
     ); ?>
 </div>
 
-<?php /*
-require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");
-*/ ?>
+<?php /* $APPLICATION->IncludeComponent(
+    'bitrix:main.include',
+    '',
+    array(
+        'AREA_FILE_SHOW' => 'file',
+        'AREA_FILE_SUFFIX' => '',
+        'EDIT_TEMPLATE' => '',
+        'PATH' => SITE_TEMPLATE_PATH.'/include/index/instagram.php',
+    )
+); */?>
 
 <div class="promo-sub promo-sub--main u-pt-0">
     <?php $APPLICATION->IncludeComponent(

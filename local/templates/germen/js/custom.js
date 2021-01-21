@@ -315,65 +315,56 @@ $(document).ready(function () {
     return s ? s[1] : false;
   }
 
-  // body.on('click', '.js-detail', function (event) {
-  //   if ($(event.target).closest(".js-quantity-control").length
-  //     || $(event.target).hasClass("js-remove-basket-item")
-  //     || $(event.target).closest(".js-order_link").length) {
-  //     return;
-  //   }
-
-  //   var id = parseInt($(this).data('id')),
-  //     order = '';
-  //   if (window.location.pathname === '/order/')
-  //     order = 'Y';
-
-
-  //   if (id > 0) {
-  //     $.ajax({
-  //       url: "/_ajax/actions.php",
-  //       method: "POST",
-  //       dataType: "json",
-  //       data: {
-  //         id: id,
-  //         order: order,
-  //         action: 'getDetail',
-  //         clear_cache: getUrlParam("clear_cache")
-  //       },
-  //       success: function (result) {
-  //         if (!result.error) {
-  //           $popupProductBody.html(result.data);
-  //           var $productSlider = $popupProduct.find('[data-product-slider]');
-
-  //           if ($productSlider.length > 0) {
-  //             $productSlider.slick({
-  //               lazyLoad: 'ondemand',
-  //               dots: true,
-  //               arrows: false
-  //             });
-  //           }
-  //           $popupProduct.modal('show');
-  //         }
-  //       }
-  //     });
-  //   }
-
-  //   return false;
-  // });
-
-  $popupProduct.on('shown.bs.modal', function () {
-    var $productSlider = $popupProduct.find('[data-product-slider]');
-
-    if ($productSlider.length > 0) {
-      $productSlider.slick('refresh');
+  body.on('click', '.js-detail', function (event) {
+    if ($(event.target).closest(".js-quantity-control").length
+      || $(event.target).hasClass("js-remove-basket-item")
+      || $(event.target).closest(".js-order_link").length) {
+      return;
     }
+
+    var id = parseInt($(this).data('id')),
+      order = '';
+    if (window.location.pathname === '/order/')
+      order = 'Y';
+
+
+    if (id > 0) {
+      $.ajax({
+        url: "/_ajax/actions.php",
+        method: "POST",
+        dataType: "json",
+        data: {
+          id: id,
+          order: order,
+          action: 'getDetail',
+          clear_cache: getUrlParam("clear_cache")
+        },
+        success: function (result) {
+          if (!result.error) {
+            $popupProductBody.html(result.data);
+            $popupProduct.modal('show');
+          }
+        }
+      });
+    }
+
+    return false;
   });
 
-  $popupProduct.on('hidden.bs.modal', function () {
-    var $productSlider = $popupProduct.find('[data-product-slider]');
+  $popupProduct.on('shown.bs.modal', function () {
 
-    if ($productSlider.length > 0) {
-      $productSlider.slick('unslick');
-    }
+    changeNumber();
+    showDiscription();
+    productMainSlider();
+    productAddSlider();
+;  });
+
+  $popupProduct.on('hidden.bs.modal', function () {
+//     var $productSlider = $popupProduct.find('[data-product-slider]');
+
+//     if ($productSlider.length > 0) {
+//       $productSlider.slick('unslick');
+//     }
   });
 
   getMap();
