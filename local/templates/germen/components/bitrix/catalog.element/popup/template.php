@@ -225,7 +225,7 @@
                     <input id="count" type="number" size="1" value="1" max="99">
                     <input id="plus" type="button" value="+">
                 </div>
-                <a class="button promo-item__delivery product-info__order-button" href="/order/?id=<?=$arResult["ID"]?>">
+                <a class="button product-info__order-button" href="/order/?id=<?=$arResult["ID"]?>">
                     <div class="promo-item__delivery__text">
                         Заказать ·
                         <span>
