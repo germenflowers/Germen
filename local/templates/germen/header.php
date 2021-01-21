@@ -16,6 +16,7 @@ $isArticlePage = Tools::isArticlePage();
 $isOrderPage = Tools::isOrderPage();
 $isSubscribePage = Tools::isSubscribePage();
 $isTextPage = Tools::isTextPage();
+$isFavoritePage = Tools::isFavoritePage();
 
 $infoLineText = '';
 $infoLineIsShow = false;
@@ -53,17 +54,17 @@ $phone = trim(
         <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl700.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="<?=SITE_TEMPLATE_PATH?>/fonts/MuseoSansCyrl900.woff2" as="font" type="font/woff2" crossorigin>
 
-        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css"/>
-        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css?v=1.13">
-        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css?v=1.1">
-        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/subscribe.min.css">
+        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css">
+        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css">
+        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
+        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/styles.min.css">
 
         <?php
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.maskedinput.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js?v=1.212');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.mask.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
@@ -215,8 +216,8 @@ $phone = trim(
                     </div>
                 </div>
                 
-                <div class="content <?=(!$isArticlePage && !$isSubscribePage) ? 'content--main' : ''?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage): ?>
+                <div class="content <?=(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) ? 'content--main' : ''?>">
+                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();
@@ -413,5 +414,9 @@ $phone = trim(
                                     ); ?>
                                     <div class="head-h2"><?php $APPLICATION->ShowTitle() ?></div>
                                 <?php endif; ?>
+                    <?php endif; ?>
+
+                    <?php if ($isFavoritePage) : ?>
+                        <div class="container-block content__container">
                     <?php endif; ?>
             <?php endif; ?>

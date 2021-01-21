@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @var bool $isOrderPage
+ * @var bool $isArticlePage
+ * @var bool $isTextPage
+ * @var bool $isFavoritePage
+ * @global CMain $APPLICATION
+ */
+
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -9,21 +17,23 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                             </div>
                         </div>
                     <?php endif; ?>
+
+                    <?php if ($isFavoritePage) : ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="footer">
                     <div class="footer__container">
                         <div class="promo-about">
                             <?php $APPLICATION->IncludeComponent(
                                 'bitrix:main.include',
-                                '.default',
+                                '',
                                 array(
-                                    'AREA_FILE_SHOW' => 'sect',
-                                    'AREA_FILE_SUFFIX' => 'about_write_inc',
+                                    'AREA_FILE_SHOW' => 'file',
+                                    'AREA_FILE_SUFFIX' => '',
                                     'EDIT_TEMPLATE' => '',
-                                    'COMPONENT_TEMPLATE' => '.default',
-                                    'AREA_FILE_RECURSIVE' => 'Y',
-                                ),
-                                false
+                                    'PATH' => SITE_TEMPLATE_PATH.'/include/footer/about.php',
+                                )
                             ); ?>
                         </div>
                     </div>
@@ -51,15 +61,13 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <p>
                                     <?php $APPLICATION->IncludeComponent(
                                         'bitrix:main.include',
-                                        '.default',
+                                        '',
                                         array(
-                                            'AREA_FILE_SHOW' => 'sect',
-                                            'AREA_FILE_SUFFIX' => 'copyright_inc',
+                                            'AREA_FILE_SHOW' => 'file',
+                                            'AREA_FILE_SUFFIX' => '',
                                             'EDIT_TEMPLATE' => '',
-                                            'COMPONENT_TEMPLATE' => '.default',
-                                            'AREA_FILE_RECURSIVE' => 'Y',
-                                        ),
-                                        false
+                                            'PATH' => SITE_TEMPLATE_PATH.'/include/footer/copyright.php',
+                                        )
                                     ); ?>
                                 </p>
                             </div>
@@ -67,15 +75,13 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <ul class="footer__social">
                                     <?php $APPLICATION->IncludeComponent(
                                         'bitrix:main.include',
-                                        '.default',
+                                        '',
                                         array(
-                                            'AREA_FILE_SHOW' => 'sect',
-                                            'AREA_FILE_SUFFIX' => 'social_inc',
+                                            'AREA_FILE_SHOW' => 'file',
+                                            'AREA_FILE_SUFFIX' => '',
                                             'EDIT_TEMPLATE' => '',
-                                            'COMPONENT_TEMPLATE' => '.default',
-                                            'AREA_FILE_RECURSIVE' => 'Y',
-                                        ),
-                                        false
+                                            'PATH' => SITE_TEMPLATE_PATH.'/include/footer/social.php',
+                                        )
                                     ); ?>
                                 </ul>
                             </div>
@@ -89,7 +95,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
         include_once 'include/modals.php';
         ?>
 
-        <script src="<?=SITE_TEMPLATE_PATH?>/js/subscribe.min.js"></script>
+        <script src="<?=SITE_TEMPLATE_PATH?>/js/scripts.min.js"></script>
 
         <script src="//mssg.me/widget/germen_flowers" async></script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120818642-1"></script>

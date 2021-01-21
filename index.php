@@ -411,9 +411,10 @@ require($_SERVER["DOCUMENT_ROOT"].SITE_TEMPLATE_PATH."/include/ig.php");
         'bitrix:main.include',
         '',
         array(
-            'AREA_FILE_SHOW' => 'page',
-            'AREA_FILE_SUFFIX' => 'subscribe_inc',
+            'AREA_FILE_SHOW' => 'file',
+            'AREA_FILE_SUFFIX' => '',
             'EDIT_TEMPLATE' => '',
+            'PATH' => SITE_TEMPLATE_PATH.'/include/index/subscribe.php',
         )
     ); ?>
 </div>

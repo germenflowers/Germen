@@ -59,6 +59,13 @@ class Tools
             $APPLICATION->GetCurPage() === SITE_DIR.'delivery/';
     }
 
+    public static function isFavoritePage(): bool
+    {
+        global $APPLICATION;
+
+        return $APPLICATION->GetCurPage() === SITE_DIR.'favorites/';
+    }
+
     /**
      * Склонение слов
      *
