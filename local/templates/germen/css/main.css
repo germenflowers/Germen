@@ -13408,7 +13408,8 @@ input, textarea, button {
   text-align: center;
   color: #70747D;
   position: relative;
-  display: flex;
+  max-width: 382px;
+  margin: 0 auto;
 }
 
 .product-info__center {
@@ -13484,7 +13485,6 @@ input, textarea, button {
   .product-add-slider,
   .product-add-slider.swiper-container {
     overflow: hidden;
-    height: 210px;
     padding: 5px 2px 30px;
   }
 
@@ -13773,7 +13773,7 @@ line-height: 16px;
 }
 
 @media screen and (min-width: 600px) {
-    .product-info__fexed-footer {
+    .product-info__fixed-footer {
         position: static;
         width: 100%;
         padding: 0;
@@ -14709,7 +14709,7 @@ line-height: 16px;
     max-width: 900px;
 }
 
-@media (max-width: 600px) {
+@media (min-width: 600px) {
     .modal-dialog {
         width: 600px;
     }

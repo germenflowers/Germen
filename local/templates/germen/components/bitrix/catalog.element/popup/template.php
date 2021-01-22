@@ -1,5 +1,5 @@
 <div class="product-info__gallery">
-    <div class="product-slider swiper-container">
+    <div class="product-slider swiper-container" aria-label="Close">
         <div class="swiper-wrapper">
             <?php foreach ($arResult["IMAGES"] as $arImage): ?>
                 <div class="swiper-slide product-slider__item">
@@ -16,6 +16,13 @@
             <h2 class="product-info__title">
                 <?=$arResult["NAME"]?>
             </h2>
+            <div class="product-info__discription">
+                <h3 class="product-info__discription-title">Описание</h3>
+                <div class="product-info__discription-text">
+                    <?=$arResult["PREVIEW_TEXT"]?>
+                    <div class="product-info__discription-show"></div>
+                </div>
+            </div>
             <form>
                 <div class="product-info__color">
                     <div class="product-info__color-inner">
@@ -107,13 +114,6 @@
                         <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#slider-arrow-next-white"></use>
                     </svg>
                 </div>
-            </div>
-        </div>
-        <div class="product-info__discription">
-            <h3 class="product-info__discription-title">Описание</h3>
-            <div class="product-info__discription-text">
-                <?=$arResult["PREVIEW_TEXT"]?>
-                <div class="product-info__discription-show"></div>
             </div>
         </div>
         <div class="product-info__features">
@@ -214,7 +214,9 @@
                     <a class="button product-info__order-button" href="/order/?id=<?=$arResult["ID"]?>">
                         <div class="promo-item__delivery__text">
                             Заказать ·
-                            <span><?=number_format($arResult["PRICES"]["BASE"]["VALUE"], 0, '', ' ')?></span>
+                            <span>
+                                <?=number_format($arResult["PRICES"]["BASE"]["VALUE"], 0, '', ' ')?>
+                            </span>
                             ₽
                         </div>
                     </a>
