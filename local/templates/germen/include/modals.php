@@ -60,7 +60,7 @@ $isHome = Tools::isHomePage();
         <div class="modal-content">
             <button class="modal-close" type="button" data-dismiss="modal" aria-label="Close">
                 <svg width="24px" height="24px">
-                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#cross"></use>
+                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#close-modal"></use>
                 </svg>
             </button>
             <div class="product-info js-body"></div>
