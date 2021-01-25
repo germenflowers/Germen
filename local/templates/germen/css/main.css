@@ -14416,6 +14416,10 @@ line-height: 16px;
         width: 100%!important;
     }
 
+    .product-slider .swiper-wrapper {
+        pointer-events: none;
+    }
+
 }
 
 .product-slider__item > img {
