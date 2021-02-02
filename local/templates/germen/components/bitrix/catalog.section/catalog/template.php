@@ -110,7 +110,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                 <div class="promo-catalog__block" id="<?=$this->GetEditAreaId($item['ID'])?>">
                     <div class="promo-item">
                         <div class="promo-item__add-to-fav">
-                            <button class="promo-item_add-to-fav-btn red-heart"></button>
+                            <button class="promo-item__add-to-fav-btn red-heart"></button>
                         </div>
 
                         <div class="promo-item__img js-detail">

@@ -1,13 +1,15 @@
 <?php
 
+/**
+ * @global CMain $APPLICATION
+ * @global CMain $USER
+ */
+
 use \Bitrix\Main\Loader;
 use \PDV\Tools;
 use \Germen\WorkTimeFilter;
 
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
-
-global $APPLICATION;
-global $USER;
 
 $APPLICATION->SetTitle('Удобный сервис доставки цветов. Подписка на цветы');
 

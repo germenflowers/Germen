@@ -59,40 +59,40 @@ $phone = trim(
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/styles.min.css">
 
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af938-2c94-4c62-9652-a7d13f30ea20" data-skip-moving="true"></script>
+
         <?php
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery-3.5.1.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery-ui.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.maskedinput.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.number.min.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/custom.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.mask.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.sidr.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap-select.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/moment-with-locales.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slick.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/swiper-bundle.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slideout.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
         ?>
 
-        <script data-skip-moving="true">
-          (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-              'gtm.start':
-                new Date().getTime(), event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-              j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-              'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-          })(window, document, 'script', 'dataLayer', 'GTM-MP6JBLB');
-        </script>
+        <?php $APPLICATION->IncludeComponent(
+            'bitrix:main.include',
+            '',
+            array(
+                'AREA_FILE_SHOW' => 'file',
+                'AREA_FILE_SUFFIX' => '',
+                'EDIT_TEMPLATE' => '',
+                'PATH' => SITE_TEMPLATE_PATH.'/include/head/counters.php',
+            )
+        ); ?>
     </head>
     <body>
         <?$APPLICATION->ShowPanel()?>
-
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MP6JBLB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
 
         <?php if (!$isOrderPage): ?>
             <nav id="menu-body" class="promo-menu">

@@ -9,8 +9,6 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 
 $this->setFrameMode(true);
 
-$APPLICATION->AddHeadScript('//api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af938-2c94-4c62-9652-a7d13f30ea20');
-
 $price = new Price();
 $userGroups = $price->getUserGroups();
 $price->setPricesIdByName(array('BASE'));
