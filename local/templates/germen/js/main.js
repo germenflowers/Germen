@@ -60,42 +60,37 @@ $(document).ready(function () {
   let panelElement = document.getElementById('panel-body');
   let menuElement = document.getElementById('menu-body');
 
-  if (!(panelElement && menuElement)) return;
+  if (panelElement && menuElement) {
+    let slideout = new Slideout({
+      'panel': document.getElementById('panel-body'),
+      'menu': document.getElementById('menu-body'),
+      'padding': 294,
+      'tolerance': 0,
+      'easing': false,
+      'side': 'right'
+    });
 
-  let slideout = new Slideout({
-    'panel': document.getElementById('panel-body'),
-    'menu': document.getElementById('menu-body'),
-    'padding': 294,
-    'tolerance': 0,
-    'easing': false,
-    'side': 'right'
-  });
+    $('.toggle-menu').click(function () {
+      slideout.open();
+    });
 
-  $('.toggle-menu').click(function () {
-    slideout.open();
-  });
+    $('.toggle-menu--inside').click(function () {
+      $('.slideout-open').removeClass('slideout-open');
+      slideout.close();
+    });
 
-  $('.toggle-menu--inside').click(function () {
-    $('.slideout-open').removeClass('slideout-open');
-    slideout.close();
-  });
-
-  function close(eve) {
-    eve.preventDefault();
-    slideout.close();
+    slideout
+    .on('beforeopen', function () {
+      this.panel.classList.add('panel-open');
+    })
+    .on('open', function () {
+      this.panel.addEventListener('click', close);
+    })
+    .on('beforeclose', function () {
+      this.panel.classList.remove('panel-open');
+      this.panel.removeEventListener('click', close);
+    });
   }
-
-  slideout
-  .on('beforeopen', function () {
-    this.panel.classList.add('panel-open');
-  })
-  .on('open', function () {
-    this.panel.addEventListener('click', close);
-  })
-  .on('beforeclose', function () {
-    this.panel.classList.remove('panel-open');
-    this.panel.removeEventListener('click', close);
-  });
 
   $('.promo-tooltip').tooltip();
 
@@ -278,7 +273,6 @@ $(document).ready(function () {
 
   let $popupProduct = $('#popup-product');
   let $popupProductBody = $popupProduct.find('.js-body');
-
 
   body.on('click', '.js-detail', function (event) {
     if ($(event.target).closest(".js-quantity-control").length
@@ -753,18 +747,23 @@ $(document).ready(function () {
     $(document).trigger("reCalcTotal");
   })
 
-  $(document).on("click", ".js-plus", function (event) {
-    event.preventDefault();
-    let $container = $(this).closest(".js-basket-item-info")
-    let id = $container.data("id")
-    let $currentSelectedProducts
-    if ($(this).closest(".js-main-basket-item").length) {
-      $currentSelectedProducts = $(".js-main-products")
+  $(document).on('click', '.js-plus', function (e) {
+    e.preventDefault();
+
+    console.log(123);
+
+    let $container = $(this).closest('.js-basket-item-info'),
+      id = $container.data('id'),
+      $currentSelectedProducts;
+
+    if ($(this).closest('.js-main-basket-item').length) {
+      $currentSelectedProducts = $('.js-main-products');
     } else {
-      $currentSelectedProducts = $(".js-upsale-products")
+      $currentSelectedProducts = $('.js-upsale-products');
     }
+
     if (!isJson($currentSelectedProducts.val())) {
-      $currentSelectedProducts.val(JSON.stringify({}))
+      $currentSelectedProducts.val(JSON.stringify({}));
     }
 
     let products = JSON.parse($currentSelectedProducts.val())
@@ -774,11 +773,11 @@ $(document).ready(function () {
     }
 
     products[id]++;
-    $container.find(".js-quantity-field").val(products[id])
+    $container.find('.js-quantity-field').val(products[id]);
+    $currentSelectedProducts.val(JSON.stringify(products));
 
-    $currentSelectedProducts.val(JSON.stringify(products))
-    $(document).trigger("reCalcTotal");
-  })
+    $(document).trigger('reCalcTotal');
+  });
 
   $(document).on("change", ".js-quantity-field", function (event) {
     event.preventDefault();
@@ -887,116 +886,6 @@ function detectTouch() {
   }
 }
 
-function getMap() {
-  let deliveryMap,
-    myCollection,
-    searchControl,
-    addressProp = $("#ORDER_PROP_2"),
-    searchWrap = $('#search-street');
-
-  if (addressProp.length) {
-    (function () {
-      let searchAdr = function (options) {
-        this.options = $.extend(this.options, options);
-      };
-      searchAdr.prototype = {
-        options: {
-          findMap: false //Нужно ли привязывать наш поиск к карте, по умолчанию не нужно. Если нужно тогда нужно и инициализацию карты делать
-        },
-        mapControl: null,//объект карты yandex
-        geoObjectsArray: [],//Сюда складываем все найденные объекты
-
-        initMap: function () {
-          deliveryMap = new ymaps.Map("delivery-map", {
-            center: [55.753215, 37.622504],
-            zoom: 12
-          });
-          deliveryMap.behaviors.disable('scrollZoom');
-          if (detectTouch())
-            deliveryMap.behaviors.disable('drag');
-          myCollection = new ymaps.GeoObjectCollection();
-          deliveryMap.geoObjects.add(myCollection);
-
-          if (addressProp.val().length > 0)
-            addressProp.trigger('keyup');
-        },
-        //Создаем объект поисковых подсказок
-        addSearchControl: function () {
-          searchControl = new ymaps.control.SearchControl({
-            options: {
-              useMapBounds: true
-            }
-          });
-          if (this.options.findMap)
-            deliveryMap.controls.add(searchControl);
-          //Активируем наш поиск
-          this.activateSearch();
-        },
-        //Активируем поиск. Привяжемся к форме (input) в котором будем искать
-        activateSearch: function () {
-          let self = this;
-          addressProp.keyup(function () {
-            let search_query = $(this).val(),
-              search_result = [];
-            if (search_query.length > 0) {
-              if (search_query.indexOf('Россия, Москва') < 0)
-                search_query = 'Россия, Москва, ' + search_query;
-              searchControl.search(search_query).then(function () {
-                self.geoObjectsArray = searchControl.getResultsArray();
-                let html;
-                if (self.geoObjectsArray.length) {
-                  searchWrap.show();
-                  for (let i = 0; i < self.geoObjectsArray.length; i++) {
-                    search_result.push({ label: self.geoObjectsArray[i].properties.get('text') });
-                  }
-                  html = '';
-                  for (let i in search_result) {
-                    html += '<li onclick="searchAdr.selectAddress(this, ' + i + ')">' + search_result[i].label + '</li>';
-                  }
-                  searchWrap.html(html);
-                }
-              });
-            } else
-              searchWrap.hide();
-          });
-        },
-        selectAddress: function (obj, i) {
-          let mt = this.geoObjectsArray[i];
-          let t = mt.properties.get('metaDataProperty').GeocoderMetaData;
-          let AddressDetails = t.AddressDetails;
-          let Country = AddressDetails.Country;
-
-          addressProp.val(Country.AddressLine);
-          searchWrap.hide();
-        }
-      };
-    })(window, document);
-    window.searchAdr = new searchAdr({ findMap: true });
-    ymaps.ready(function () {
-      searchAdr.initMap();
-      searchAdr.addSearchControl();
-
-      searchWrap.hide();
-      deliveryMap.events.add('click', function (e) {
-        addressProp.val("Определяем адрес...");
-        let coords = e.get('coords');
-
-        myCollection.removeAll();
-
-        ymaps.geocode(coords, { results: 1 }).then(function (res) {
-          let MyGeoObj = res.geoObjects.get(0);
-          addressProp.val(MyGeoObj.properties.get('text'));
-
-          let pm = new ymaps.Placemark(coords, {
-            hintContent: MyGeoObj.properties.get('text')
-          });
-          myCollection.add(pm);
-        });
-      });
-    });
-  }
-}
-
 function changeFormData(formOrder) {
   let props = [],
     val;
@@ -1095,6 +984,136 @@ function getUrlParam(name) {
   let s = window.location.search;
   s = s.match(new RegExp(name + '=([^&=]+)'));
   return s ? s[1] : false;
+}
+
+function close(e) {
+  e.preventDefault();
+  slideout.close();
+}
+
+function getMap() {
+  let deliveryMap,
+    myCollection,
+    searchControl,
+    addressProp = $("#ORDER_PROP_2"),
+    searchWrap = $('#search-street');
+
+  if (addressProp.length === 0) {
+    return;
+  }
+
+  ymaps.ready(function () {
+    let searchAdr = function (options) {
+      this.options = $.extend(this.options, options);
+    };
+
+    searchAdr.prototype = {
+      options: {
+        findMap: false,
+      },
+      mapControl: null,
+      geoObjectsArray: [],
+      initMap: function () {
+        deliveryMap = new ymaps.Map("delivery-map", {
+          center: [55.753215, 37.622504],
+          zoom: 12
+        });
+
+        deliveryMap.behaviors.disable('scrollZoom');
+
+        if (detectTouch()) {
+          deliveryMap.behaviors.disable('drag');
+        }
+
+        myCollection = new ymaps.GeoObjectCollection();
+        deliveryMap.geoObjects.add(myCollection);
+
+        if (addressProp.val().length > 0) {
+          addressProp.trigger('keyup');
+        }
+      },
+      addSearchControl: function () {
+        searchControl = new ymaps.control.SearchControl({
+          options: {
+            useMapBounds: true
+          }
+        });
+
+        if (this.options.findMap) {
+          deliveryMap.controls.add(searchControl);
+        }
+
+        this.activateSearch();
+      },
+      activateSearch: function () {
+        let self = this;
+        addressProp.keyup(function () {
+          let search_query = $(this).val(),
+            search_result = [];
+
+          if (search_query.length > 0) {
+            if (search_query.indexOf('Россия, Москва') < 0) {
+              search_query = 'Россия, Москва, ' + search_query;
+            }
+
+            searchControl.search(search_query).then(function () {
+              self.geoObjectsArray = searchControl.getResultsArray();
+
+              let html;
+
+              if (self.geoObjectsArray.length) {
+                searchWrap.show();
+
+                for (let i = 0; i < self.geoObjectsArray.length; i++) {
+                  search_result.push({ label: self.geoObjectsArray[i].properties.get('text') });
+                }
+
+                html = '';
+                for (let i in search_result) {
+                  html += '<li onclick="searchAdr.selectAddress(this, ' + i + ')">' + search_result[i].label + '</li>';
+                }
+
+                searchWrap.html(html);
+              }
+            });
+          } else {
+            searchWrap.hide();
+          }
+        });
+      },
+      selectAddress: function (obj, i) {
+        let mt = this.geoObjectsArray[i],
+          t = mt.properties.get('metaDataProperty').GeocoderMetaData,
+          AddressDetails = t.AddressDetails,
+          Country = AddressDetails.Country;
+
+        addressProp.val(Country.AddressLine);
+        searchWrap.hide();
+      }
+    };
+
+    window.searchAdr = new searchAdr({ findMap: true });
+    window.searchAdr.initMap();
+    window.searchAdr.addSearchControl();
+
+    searchWrap.hide();
+    deliveryMap.events.add('click', function (e) {
+      addressProp.val("Определяем адрес...");
+      let coords = e.get('coords');
+
+      myCollection.removeAll();
+
+      ymaps.geocode(coords, { results: 1 }).then(function (res) {
+        let MyGeoObj = res.geoObjects.get(0);
+        addressProp.val(MyGeoObj.properties.get('text'));
+
+        let pm = new ymaps.Placemark(coords, {
+          hintContent: MyGeoObj.properties.get('text')
+        });
+        myCollection.add(pm);
+      });
+    });
+  });
 }
 
 /**
