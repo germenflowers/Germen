@@ -56,7 +56,6 @@ $phone = trim(
 
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/js/air-datepicker/datepicker.min.css">
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/main.css">
-        <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/custom.css">
         <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/css/styles.min.css">
 
         <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=395af938-2c94-4c62-9652-a7d13f30ea20" data-skip-moving="true"></script>
