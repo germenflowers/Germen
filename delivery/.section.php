@@ -1,6 +1,4 @@
-<?
-$sSectionName = "Доставка";
-$arDirProperties = Array(
+<?php
 
-);
-?>
+$sSectionName = 'Доставка';
+$arDirProperties = Array();

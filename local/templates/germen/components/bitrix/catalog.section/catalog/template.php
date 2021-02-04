@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var array $arResult
+ * @var array $arParams
+ */
+
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -57,7 +62,6 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 
         <div class="promo-catalog__block__wrapper">
             <?php if ($arResult['CODE'] === 'novyy-god-2019'): ?>
-                <!-- Выводим на главной в блоке Самое популярное -->
                 <div class="promo-catalog__block promo-catalog__block--wide js-detail" data-id="221">
                     <div class="promo-main-product">
                         <div class="promo-main-product__image promo-main-product__image--free-delivery">
@@ -100,20 +104,28 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                     $item['EDIT_LINK'],
                     CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'ELEMENT_EDIT')
                 );
+
                 $this->AddDeleteAction(
                     $item['ID'],
                     $item['DELETE_LINK'],
                     CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'ELEMENT_DELETE'),
                     array('CONFIRM' => GetMessage('CT_BCS_ELEMENT_DELETE_CONFIRM'))
                 );
+
+                $style = 'background-color: #'.$item['BUTTON_PARAMS']['background'].';';
+                if (!empty($item['BUTTON_PARAMS']['textColor'])) {
+                    $style .= ' color: #'.$item['BUTTON_PARAMS']['textColor'].';';
+                }
+
+                $wishlistClass = in_array($item['ID'], $arParams['WISHLIST'], true) ? 'red-heart' : '';
                 ?>
                 <div class="promo-catalog__block" id="<?=$this->GetEditAreaId($item['ID'])?>">
                     <div class="promo-item">
                         <div class="promo-item__add-to-fav">
-                            <button class="promo-item__add-to-fav-btn red-heart"></button>
+                            <button class="promo-item__add-to-fav-btn <?=$wishlistClass?>" data-id="<?=$item['ID']?>"></button>
                         </div>
 
-                        <div class="promo-item__img js-detail">
+                        <div class="promo-item__img">
                             <a href="#" class="js-detail" data-id="<?=$item['ID']?>">
                                 <img src="<?=$item['PICTURE']?>" alt="<?=$item['NAME']?>">
                             </a>
@@ -129,12 +141,6 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <span class="rouble"></span>
                             </div>
 
-                            <?php
-                            $style = 'background-color: #'.$item['BUTTON_PARAMS']['background'].';';
-                            if (!empty($item['BUTTON_PARAMS']['textColor'])) {
-                                $style .= ' color: #'.$item['BUTTON_PARAMS']['textColor'].';';
-                            }
-                            ?>
                             <a href="/order/?id=<?=$item['ID']?>" class="promo-item__delivery" style="<?=$style?>">
                                 <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>
                                 <div class="promo-item__delivery__time">

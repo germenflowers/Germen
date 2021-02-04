@@ -1,6 +1,4 @@
-<?
-$sSectionName = "Пользовательское соглашение";
-$arDirProperties = Array(
+<?php
 
-);
-?>
+$sSectionName = 'Пользовательское соглашение';
+$arDirProperties = Array();

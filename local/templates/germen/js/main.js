@@ -238,7 +238,7 @@ $(document).ready(function () {
 
   $('.js-set_delivery').click(function () {
     $.post(
-      "/_ajax/actions.php",
+      "/ajax/actions.php",
       {
         id: $(this).data('id'),
         action: "setDelivery"
@@ -288,7 +288,7 @@ $(document).ready(function () {
 
     if (id > 0) {
       $.ajax({
-        url: "/_ajax/actions.php",
+        url: "/ajax/actions.php",
         method: "POST",
         dataType: "json",
         data: {
@@ -430,6 +430,24 @@ $(document).ready(function () {
   $(document).on('click', '.js-bouquet-type', function () {
     $('.js-bouquet-title').html($(this).data('title'));
     $('.js-bouquet-text').html($(this).data('text'));
+  });
+
+  $(document).on('click', '.promo-item__add-to-fav-btn', function (e) {
+    e.preventDefault();
+
+    processWishlist($(this), 'red-heart', false);
+  });
+
+  $(document).on('click', '.product-info__favorite-desktop', function (e) {
+    e.preventDefault();
+
+    processWishlist($(this), 'red-heart', true);
+  });
+
+  $(document).on('click', '.product-info__favorite-mob', function (e) {
+    e.preventDefault();
+
+    processWishlist($(this), 'white-heart', true);
   });
 
   /**
@@ -1114,6 +1132,92 @@ function getMap() {
       });
     });
   });
+}
+
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)',
+  ));
+
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options) {
+  options = options || {};
+
+  let expires = options.expires;
+
+  if (typeof expires == 'number' && expires) {
+    let d = new Date();
+    d.setTime(d.getTime() + expires * 1000);
+    expires = options.expires = d;
+  }
+  if (expires && expires.toUTCString) {
+    options.expires = expires.toUTCString();
+  }
+
+  value = encodeURIComponent(value);
+
+  let updatedCookie = name + '=' + value;
+
+  for (let propName in options) {
+    updatedCookie += '; ' + propName;
+    let propValue = options[propName];
+    if (propValue !== true) {
+      updatedCookie += '=' + propValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+function processWishlist(element, cssClass, editListItem) {
+  let self = element,
+    id = self.data('id').toString(),
+    deleteElement = self.data('delete') === 'Y',
+    wishlist = getCookie('wishlist');
+
+  self.toggleClass(cssClass);
+
+  if(editListItem) {
+    $('.promo-item__add-to-fav-btn[data-id='+id+']').toggleClass('red-heart');
+  }
+
+  if (deleteElement) {
+    $(self).parents('.promo-catalog__block').remove();
+
+    let container = $('.js-favorite-block');
+    if (container.find('.promo-catalog__block').length === 0) {
+      container.hide();
+      $('.js-favorite-empty-block').show();
+    }
+  }
+
+  if (typeof wishlist != 'undefined') {
+    wishlist = wishlist.split('|');
+  } else {
+    wishlist = [];
+  }
+
+  wishlist = wishlist.filter(function (el) {
+    return el !== '';
+  });
+
+  if (jQuery.inArray(id, wishlist) !== -1) {
+    wishlist = jQuery.grep(wishlist, function (value) {
+      return value !== id;
+    });
+
+    if (wishlist.length === 0) {
+
+    }
+  } else {
+    wishlist.push(id);
+  }
+
+  wishlist = wishlist.join('|');
+
+  setCookie('wishlist', wishlist, { path: '/' });
 }
 
 /**

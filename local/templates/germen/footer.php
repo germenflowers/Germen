@@ -102,7 +102,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
             )
         ); ?>
 
-        <script src="<?=SITE_TEMPLATE_PATH?>/js/scripts.min.js"></script>
+        <script src="<?=SITE_TEMPLATE_PATH?>/js/script.js"></script>
 
         <?php $APPLICATION->IncludeComponent(
             'bitrix:main.include',

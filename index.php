@@ -35,7 +35,12 @@ $popularPageSize = 4;
 $order = array('sort' => 'asc');
 $filter = array('IBLOCK_ID' => IBLOCK_ID__CATALOG, 'ACTIVE' => 'Y');
 $select = array('IBLOCK_ID', 'ID', 'NAME', 'UF_PAGE_SIZE');
-$rsSect = CIBlockSection::GetList($order, $filter, false, $select);
+$sectionResult = CIBlockSection::GetList($order, $filter, false, $select);
+
+$wishlist = array();
+if (!empty($_COOKIE['wishlist'])) {
+    $wishlist = array_map('intval', array_filter(explode('|', $_COOKIE['wishlist'])));
+}
 ?>
 <div class="content__container">
     <?php if ($USER->IsAdmin()): ?>
@@ -165,6 +170,7 @@ $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
                 'DELIVERY_TIME' => $deliveryTime,
                 'BLOCK_TITLE' => 'Самое популярное',
                 'POPULAR' => 'Y',
+                'WISHLIST' => $wishlist,
             )
         ); ?>
     </div>
@@ -213,11 +219,11 @@ $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
     </div>
 
     <div class="promo-catalog__wrapper">
-        <?php while ($arSect = $rsSect->Fetch()) : ?>
+        <?php while ($row = $sectionResult->Fetch()) : ?>
             <?php
             $pageSize = 4;
-            if ((int)$arSect['UF_PAGE_SIZE'] > 0) {
-                $pageSize = (int)$arSect['UF_PAGE_SIZE'];
+            if ((int)$row['UF_PAGE_SIZE'] > 0) {
+                $pageSize = (int)$row['UF_PAGE_SIZE'];
             }
             ?>
             <?php $APPLICATION->IncludeComponent(
@@ -296,7 +302,7 @@ $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
                     'RCM_PROD_ID' => '',
                     'RCM_TYPE' => '',
                     'SECTION_CODE' => '',
-                    'SECTION_ID' => $arSect['ID'],
+                    'SECTION_ID' => $row['ID'],
                     'SECTION_ID_VARIABLE' => '',
                     'SECTION_URL' => '',
                     'SECTION_USER_FIELDS' => array(),
@@ -324,8 +330,9 @@ $rsSect = CIBlockSection::GetList($order, $filter, false, $select);
                     'USE_PRICE_COUNT' => 'N',
                     'USE_PRODUCT_QUANTITY' => 'N',
                     'DELIVERY_TIME' => $deliveryTime,
-                    'BLOCK_TITLE' => $arSect['NAME'],
+                    'BLOCK_TITLE' => $row['NAME'],
                     'SHOW_SECTION_DESC' => 'Y',
+                    'WISHLIST' => $wishlist,
                 )
             ); ?>
         <?php endwhile; ?>

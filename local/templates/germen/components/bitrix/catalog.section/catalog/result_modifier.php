@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * @global CMain $APPLICATION
+ * @var array $arParams
+ * @var array $arResult
+ */
+
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+
 use Germen\BuyButton;
 use Germen\Content;
 

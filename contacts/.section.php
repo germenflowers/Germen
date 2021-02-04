@@ -1,6 +1,4 @@
-<?
-$sSectionName = "Контакты";
-$arDirProperties = Array(
+<?php
 
-);
-?>
+$sSectionName = 'Контакты';
+$arDirProperties = array();

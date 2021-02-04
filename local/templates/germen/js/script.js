@@ -9432,7 +9432,6 @@ var Tabs = function (options) {
   };
 })();
 
-
 'use strict';
 
 (function () {
@@ -9489,19 +9488,6 @@ window.changeNumber = () => {
   });
 
 };
-
-'use strict';
-
-(function () {
-  var favBtns = document.querySelectorAll('.promo-item__add-to-fav-btn');
-
-  for (let index = 0; index < favBtns.length; index++) {
-    const favBtn = favBtns[index];
-    favBtn.addEventListener("click", function () {
-      favBtn.classList.toggle("red-heart");
-    });
-  }
-})();
 
 'use strict';
 
@@ -9617,9 +9603,6 @@ window.productAddSlider = () => {
     speed: 400,
     spaceBetween: 8,
     slidesPerView: "auto",
-    navigation: {
-      nextEl: '.product-add-slider__next',
-    },
   });
 };
 'use strict';
