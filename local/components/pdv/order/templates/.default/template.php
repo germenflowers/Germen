@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @global CMain $APPLICATION
+ * @var array $arResult
+ * @var array $arParams
+ */
+
 use Germen\Price;
 use Germen\Content;
 
@@ -19,6 +25,15 @@ $price = (int)$prices['PRICES'][0];
 $priceFormatted = number_format($price, 0, '', ' ');
 
 $informationBanner = Content::getInformationBannerCached();
+
+$upsaleProducts = array();
+foreach ($arResult['UPSALE_PRODUCTS'] as $item) {
+    foreach ($arResult['ORDER_UPSALE_PRODUCTS'] as $id => $quantity) {
+        if((int)$item['ID'] === (int)$id) {
+            $upsaleProducts[] = $item;
+        }
+    }
+}
 ?>
 <?php if (!$arResult['CONFIRM']): ?>
     <header class="order-header">
@@ -28,18 +43,23 @@ $informationBanner = Content::getInformationBannerCached();
     </header>
     <div class="order-content">
         <form class="order-form" id="form-order" action="<?=$APPLICATION->GetCurPageParam(false)?>" method="post">
-            <input type="hidden" class="js-upsale-products" name="upsale_products" value="{}">
+            <input
+                    type="hidden"
+                    class="js-upsale-products"
+                    name="upsale_products"
+                    value='<?=json_encode($arResult['ORDER_UPSALE_PRODUCTS'])?>'
+            >
             <input
                     type="hidden"
                     class="js-main-products"
                     name="main_products"
-                    value='<?=json_encode([$arResult['PRODUCT']["ID"] => 1])?>'
+                    value='<?=json_encode([$arResult['PRODUCT']['ID'] => $arResult['PRODUCT']['QUANTITY']])?>'
             >
             <input
                     type="hidden"
                     class="js-discount-percent"
                     name="discount_percent"
-                    value="<?=(int)$arResult["COUPON"]["PERCENT"]?>"
+                    value="<?=(int)$arResult['COUPON']['PERCENT']?>"
             >
 
             <?php if (!empty($arResult['PRODUCT']['type'])): ?>
@@ -539,6 +559,7 @@ $informationBanner = Content::getInformationBannerCached();
 
                 <input type="hidden" name="order_send" value="Y">
             </div>
+
             <div class="order-form__aside">
                 <div class="order-cart">
                     <div class="order-list js-basket-item js-basket-item-base" style="display: none">
@@ -576,6 +597,7 @@ $informationBanner = Content::getInformationBannerCached();
                             </div>
                         </div>
                     </div>
+
                     <div class="order-list js-basket-item">
                         <div class="order-list__list">
                             <div
@@ -605,7 +627,7 @@ $informationBanner = Content::getInformationBannerCached();
                                             <input
                                                     name="quantity"
                                                     class="quantity-control__input js-quantity-field"
-                                                    value="1"
+                                                    value="<?=$arResult['PRODUCT']['QUANTITY']?>"
                                             />
                                             <button class="quantity-control__plus js-plus" type="button">+</button>
                                         </div>
@@ -619,6 +641,48 @@ $informationBanner = Content::getInformationBannerCached();
                             </div>
                         </div>
                     </div>
+
+                    <?php foreach($upsaleProducts as $item): ?>
+                        <div class="order-list js-basket-item">
+                            <div class="order-list__list">
+                                <div
+                                        class="order-list__item order-item js-basket-item-info"
+                                        data-id="<?=$item['ID']?>"
+                                        data-price="<?=$item['PRICE']?>"
+                                >
+                                    <div class="order-item__image js-image-block">
+                                        <img
+                                                src="<?=$item['RETINA_PICTURE']['src']?>"
+                                                alt="<?=$item['NAME']?>"
+                                        >
+                                    </div>
+                                    <div class="order-item__content">
+                                        <div class="order-item__title js-name"><?=$item['NAME']?></div>
+                                        <div class="order-item__price js-price-block">
+                                            <span class="js-price">
+                                                <?=number_format($item['PRICE'], 0, '', ' ')?>
+                                            </span>
+                                            &nbsp;
+                                            <span class="rouble"></span>
+                                        </div>
+                                        <div class="order-item__quantity js-quantity-control">
+                                            <div class="quantity-control">
+                                                <button class="quantity-control__minus js-minus" type="button">-</button>
+                                                <input name="quantity" class="quantity-control__input js-quantity-field" value="1">
+                                                <button class="quantity-control__plus js-plus" type="button">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="order-item__remove">
+                                            <button class="order-item__remove-button js-remove-basket-item" type="button">
+                                                Удалить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
                     <div class="order-summary">
                         <div class="order-summary__item">
                             <div class="order-summary__label">Товары</div>

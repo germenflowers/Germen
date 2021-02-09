@@ -450,6 +450,35 @@ $(document).ready(function () {
     processWishlist($(this), 'white-heart', true);
   });
 
+  $(document).on('change', 'input[name=cover]', function () {
+    $('.product-info__cover-text').html($(this).data('text'));
+  });
+
+  $(document).on('click', '.product-add-slider__item', function(e) {
+    e.preventDefault();
+
+    $(this).find('.product-add-slider__btn').toggleClass('product-add-slider__btn--is-chosen');
+  });
+
+  $(document).on('click', '.js-product-order-button', function (e) {
+    e.preventDefault();
+
+    let params = {
+      id: $(this).data('id'),
+      quantity: $('input[name=product-quantity]').val(),
+      cover: $('input[name=cover]:checked').val(),
+      upsale: [],
+    };
+
+    $('.js-upsale-button').each(function () {
+      if ($(this).hasClass('product-add-slider__btn--is-chosen')) {
+        params.upsale.push($(this).data('id'));
+      }
+    });
+
+    window.location.href = $(this).data('url') + '?' + $.param(params);
+  });
+
   /**
    * pdv:order
    */
@@ -767,8 +796,6 @@ $(document).ready(function () {
 
   $(document).on('click', '.js-plus', function (e) {
     e.preventDefault();
-
-    console.log(123);
 
     let $container = $(this).closest('.js-basket-item-info'),
       id = $container.data('id'),

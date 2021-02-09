@@ -54,7 +54,7 @@ try {
                 array(
                     'IBLOCK_ID' => IBLOCK_ID__CATALOG,
                     'ELEMENT_ID' => $id,
-                    'PROPERTY_CODE' => array('IMAGES', 'SOSTAV'),
+                    'PROPERTY_CODE' => array('IMAGES', 'SOSTAV', 'LABEL', 'BUTTON'),
                     'ACTION_VARIABLE' => 'action_var',
                     'CACHE_TYPE' => 'A',
                     'CACHE_TIME' => 36000000,

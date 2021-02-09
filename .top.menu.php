@@ -1,32 +1,39 @@
-<?
-$aMenuLinks = Array(
-	Array(
-		"Цветы", 
-		"/", 
-		Array(), 
-		Array(), 
-		"" 
-	),
-	Array(
-		"Подписка", 
-		"/subscribe/", 
-		Array(), 
-		Array(), 
-		"" 
-	),
-	Array(
-		"О нас", 
-		"/about/", 
-		Array(), 
-		Array(), 
-		"" 
-	),
-	Array(
-		"Доставка", 
-		"/delivery/", 
-		Array(), 
-		Array(), 
-		"" 
-	)
+<?php
+
+$aMenuLinks = array(
+    array(
+        'Цветы',
+        '/',
+        array(),
+        array(),
+        '',
+    ),
+    array(
+        'Подписка',
+        '/subscribe/',
+        array(),
+        array(),
+        '',
+    ),
+    array(
+        'О нас',
+        '/about/',
+        array(),
+        array(),
+        '',
+    ),
+    array(
+        'Доставка',
+        '/delivery/',
+        array(),
+        array(),
+        '',
+    ),
+    array(
+        'Избранное',
+        '/favorites/',
+        array(),
+        array(),
+        '',
+    ),
 );
-?>
