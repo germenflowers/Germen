@@ -29,11 +29,4 @@ $aMenuLinks = array(
         array(),
         '',
     ),
-    array(
-        'Избранное',
-        '/favorites/',
-        array(),
-        array(),
-        '',
-    ),
 );
