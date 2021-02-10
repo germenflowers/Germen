@@ -36,6 +36,11 @@ $phone = trim(
         file_get_contents($_SERVER['DOCUMENT_ROOT'].SITE_TEMPLATE_PATH.'/include/phone.php')
     )
 );
+
+$wishlist = array();
+if (!empty($_COOKIE['wishlist'])) {
+    $wishlist = array_map('intval', array_filter(explode('|', $_COOKIE['wishlist'])));
+}
 ?>
 <!doctype html>
 <html lang="ru">
@@ -135,6 +140,9 @@ $phone = trim(
                             'USE_EXT' => 'N',
                         )
                     ); ?>
+                    <a href="tel:<?=$phone?>">
+                        <?php $APPLICATION->IncludeFile(SITE_TEMPLATE_PATH.'/include/phone.php')?>
+                    </a>
                 </ul>
                 <div class="promo-menu__post">
                     <p>
@@ -170,14 +178,23 @@ $phone = trim(
             <?php if (!$isOrderPage): ?>
                 <div class="header">
                     <div class="header__container">
+                        <div class="header__burger">
+                            <span class="toggle-menu mobile-menu">
+                                <svg width="28px" height="28px" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#burger"></use>
+                                </svg>
+                            </span>
+                        </div>
                         <div class="header__logo">
                             <a href="/" class="logo" title="germen"></a>
                         </div>
+                        <?php /*
                         <a href="tel:<?=$phone?>" class="header__phone">
                             <svg width="24px" height="24px" aria-hidden="true">
                                 <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#phone"></use>
                             </svg>
                         </a>
+                        */ ?>
                         <div class="header__content">
                             <div class="header__nav" id="header-nav">
                                 <ul class="nav">
@@ -205,12 +222,27 @@ $phone = trim(
                                 </ul>
                             </div>
                         </div>
-                        <div class="header__burger">
-                            <span class="toggle-menu mobile-menu">
-                                <svg width="26px" height="22px" aria-hidden="true">
-                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#burger"></use>
-                                </svg>
-                            </span>
+                        <div class="header__account">
+                            <a class="header__favorite header__account-item" href="/favorites/">
+                                <span class="header__favorite-icon">
+                                    <svg width="28px" height="28px" aria-hidden="true">
+                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#fav"></use>
+                                    </svg>
+                                </span>
+                                <span class="header__favorite-ammount header__ammount js-favorites-counter">
+                                    <?=count($wishlist)?>
+                                </span>
+                            </a>
+                            <?php /*
+                            <a class="header__cart header__account-item" href="">
+                                <span class="header__cart-icon">
+                                    <svg width="28px" height="28px" aria-hidden="true">
+                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#shopping-cart"></use>
+                                    </svg>
+                                </span>
+                                <span class="header__cart-ammount header__ammount">2</span>
+                            </a>
+                            */ ?>
                         </div>
                     </div>
                 </div>

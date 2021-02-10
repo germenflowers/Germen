@@ -8430,7 +8430,7 @@ select.selectpicker {
     display: block !important;
     height: 100%;
     z-index: 100;
-    transition: right 0.1s;
+    transition: left 0.1s;
     /** default on the right **/
     overflow-y: hidden;
     /* makes the expanding nav scrollable */
@@ -9381,23 +9381,17 @@ input, textarea, button {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 30px 0 30px 0;
+    padding: 24px 0px;
+    border-bottom: 1px solid #D6D6D6;
 }
 
 .header__container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.header__container:before, .header__container:after {
-    content: " ";
-    display: table;
-}
-
-.header__container:after {
-    clear: both;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (min-width: 700px) {
@@ -9407,8 +9401,14 @@ input, textarea, button {
 }
 
 @media (min-width: 1030px) {
+    .header {
+        padding: 31px 0px 25px;
+    }
+
     .header__container {
         width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 
@@ -9419,7 +9419,7 @@ input, textarea, button {
 }
 
 .header__logo {
-    float: left;
+
 }
 
 .header__logo .logo {
@@ -9431,12 +9431,12 @@ input, textarea, button {
 @media (max-width: 1030px) {
     .header__logo {
         width: 100%;
-        text-align: center;
     }
 
     .header__logo .logo {
-        width: 88px;
-        height: 21px;
+        width: 100px;
+        height: 24px;
+        margin-top: 3px;
     }
 }
 
@@ -9454,8 +9454,50 @@ input, textarea, button {
     }
 }
 
+.header__account {
+    display: flex;
+}
+
+.header__account-item {
+    position: relative;
+    color: #25272E;
+    transition: opacity 0.2s;
+    display: block;
+}
+
+.header__account-item:hover {
+    opacity: 0.6;
+}
+
+.header__cart {
+    margin-left: 32px;
+}
+
+@media (max-width: 1030px) {
+    .header__cart.header__account-item {
+        display: none;
+    }
+}
+
+.header__ammount {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #FF323D;
+    border-radius: 75px;
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    top: -3px;
+    right: -6px;
+}
+
 .header__content {
-    float: right;
+    /*float: right;*/
 }
 
 @media (max-width: 1030px) {
@@ -9465,15 +9507,18 @@ input, textarea, button {
 }
 
 .header__nav {
-    margin-top: 4px;
+    margin-top: 5px;
+    padding-right: 40px;
 }
 
 .header__burger {
     display: none;
-    position: absolute;
+    /*position: absolute;*/
     top: 30px;
     right: 30px;
     fill: #1F2533;
+    width: 28px;
+    margin-right: 16px;
 }
 
 @media (max-width: 1030px) {
@@ -9493,7 +9538,8 @@ input, textarea, button {
     font-size: 15px;
     line-height: 24px;
     color: #1F2533;
-    margin-right: 36px;
+    margin-right: 32px;
+    font-weight: 600;
 }
 
 .nav > li:last-child {
@@ -13085,8 +13131,8 @@ input, textarea, button {
 .mobile-menu {
     display: inline-block;
     vertical-align: top;
-    width: 26px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     z-index: 2;
     cursor: pointer;
     font-size: 20px;

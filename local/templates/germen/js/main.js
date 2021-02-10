@@ -67,7 +67,7 @@ $(document).ready(function () {
       'padding': 294,
       'tolerance': 0,
       'easing': false,
-      'side': 'right'
+      'side': 'left'
     });
 
     $('.toggle-menu').click(function () {
@@ -1241,6 +1241,8 @@ function processWishlist(element, cssClass, editListItem) {
   } else {
     wishlist.push(id);
   }
+
+  $('.js-favorites-counter').html(wishlist.length);
 
   wishlist = wishlist.join('|');
 
