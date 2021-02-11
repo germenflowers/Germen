@@ -23,27 +23,27 @@ $APPLICATION->SetTitle('Уход за цветами');
           <div class="care__list">
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
                 </svg>Освободите цветы от транспортной упаковки</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-1@1x.jpg" srcset="img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
+              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
                 </svg>По желанию, разрежьте бичевку — чтобы цветы свободно стояли в вазе</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-2@1x.jpg" srcset="img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
+              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
                 </svg>Наполните вазу прохладной водой и подрежьте под ее рост цветы</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-3@1x.jpg" srcset="img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-4"></use>
-                </svg>Повторяйте последний пункт раз в 2–3 дня и храните цветы в комфортном месте: там не должно быть душно или сквозняк</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-4"></use>
+                </svg>Повторяйте последний пункт раз в 2–3&nbsp;дня и храните цветы в комфортном месте: там не должно быть душно или сквозняк</div>
+              <div class="care__image"><img src="img/care-4@1x.jpg" srcset="img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
             </div>
           </div>
         </div>
@@ -51,27 +51,27 @@ $APPLICATION->SetTitle('Уход за цветами');
           <div class="care__list">
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
                 </svg>Освободите цветы от транспортной упаковки</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-1@1x.jpg" srcset="img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
                 </svg>По желанию, разрежьте бичевку — чтобы цветы свободно стояли в вазе</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-2@1x.jpg" srcset="img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
                 </svg>Наполните вазу прохладной водой и подрежьте под ее рост цветы</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-3@1x.jpg" srcset="img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprite.svg#care-4"></use>
+                  <use xlink:href="img/sprite.svg#care-4"></use>
                 </svg>Повторяйте последний пункт раз в 2–3 дня и храните цветы в комфортном месте: там не должно быть душно или сквозняк</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-4@1x.jpg" srcset="img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
             </div>
           </div>
         </div>
@@ -79,27 +79,27 @@ $APPLICATION->SetTitle('Уход за цветами');
           <div class="care__list">
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-1"></use>
                 </svg>Освободите цветы от транспортной упаковки</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-1@1x.jpg" srcset="img/care-1@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-1@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-2"></use>
                 </svg>По желанию, разрежьте бичевку — чтобы цветы свободно стояли в вазе</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-2@1x.jpg" srcset="img/care-2@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-2@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
+                  <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-3"></use>
                 </svg>Наполните вазу прохладной водой и подрежьте под ее рост цветы</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-3@1x.jpg" srcset="img/care-3@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-3@2x.jpg 2x"></div>
             </div>
             <div class="care__list-item">
               <div class="care__list-title"><svg width="24" height="22" aria-hidden="true">
-              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-4"></use>
+              <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#care-4"></use>
                 </svg>Повторяйте последний пункт раз в 2–3 дня и храните цветы в комфортном месте: там не должно быть душно или сквозняк</div>
-              <div class="care__image"><img src="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg" srcset="<?=SITE_TEMPLATE_PATH?>/img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
+              <div class="care__image"><img src="img/care-4@1x.jpg" srcset="img/care-4@1x.jpg 1x, <?=SITE_TEMPLATE_PATH?>/img/care-4@2x.jpg 2x"></div>
             </div>
           </div>
         </div>
@@ -113,5 +113,4 @@ $APPLICATION->SetTitle('Уход за цветами');
   </div>
 </div>
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');
 ?>

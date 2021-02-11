@@ -15245,6 +15245,7 @@ div.order-error {
     padding-top: 0 !important;
 }
 .care {
+    font-family: "ProximaNova";
     width: 100%;
     padding: 120px 16px 20px;
     display: -webkit-box;
@@ -15279,16 +15280,16 @@ div.order-error {
 }
 
 .care__tabs {
-    margin: 0;
+    margin: 0 !important;
 }
 
 .care__tabs-header {
-    overflow: scroll;
-    -webkit-box-pack: start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-    margin: 0 -16px;
-    padding-left: 16px;
+    overflow: scroll !important;
+    -webkit-box-pack: start !important;
+        -ms-flex-pack: start !important;
+            justify-content: flex-start !important;
+    margin: 0 -16px !important;
+    padding-left: 16px !important;
     position: relative;
 }
 
@@ -15304,7 +15305,7 @@ div.order-error {
 }
 
 .care__tabs-content {
-    padding: 0;
+    padding: 0 !important;
     -webkit-transition: opacity 0.2s;
     transition: opacity 0.2s;
 }
@@ -15315,7 +15316,7 @@ div.order-error {
 }
 
 .care__list {
-    padding-top: 24px;
+    padding-top: 40px;
 }
 
 .care__list-title {
@@ -15338,7 +15339,7 @@ div.order-error {
 }
 
 .care__tabs-link {
-    margin-right: 16px;
+    margin-right: 16px !important;
 }
 
 .care__list-item {
@@ -15362,6 +15363,7 @@ div.order-error {
 }
 
 .first-order {
+    font-family: "ProximaNova";
     border-top: 1px solid #E8EBED;
     padding: 32px 16px 0;
     display: -webkit-box;
@@ -15382,9 +15384,8 @@ div.order-error {
 }
 
 .first-order__links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 16px;
+    display: flex;
+    gap: 16px;
     max-width: 500px;
     margin: 0 auto;
 }
@@ -15396,6 +15397,7 @@ div.order-error {
     display: inline-flex;
     border: 1px solid #D6D6D6;
     border-radius: 8px;
+    min-width: 47.5%;
     padding: 9px;
     font-weight: 600;
     font-size: 14px;
