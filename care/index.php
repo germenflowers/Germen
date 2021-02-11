@@ -13,7 +13,7 @@ $APPLICATION->SetTitle('Уход за цветами');
         <h1 class="care__title">Вам приехали красивые цветы</h1>
         <div class="care__note">Чтобы цветы дольше простояли, ознакомьтесь с рекомендациями по уходу.</div>
         <div class="care__tabs js-tabs" id="care-tabs">
-            <div class="care__tabs-header js-tabs__header">
+            <ul class="care__tabs-header js-tabs__header">
                 <li class="care__tabs-item">
                     <a class="care__tabs-link js-tabs__title" href="">Уход&nbsp;за&nbsp;букетом</a>
                 </li>
@@ -23,7 +23,7 @@ $APPLICATION->SetTitle('Уход за цветами');
                 <li class="care__tabs-item">
                     <a class="care__tabs-link js-tabs__title" href="">за&nbsp;набором</a>
                 </li>
-            </div>
+            </ul>
             <div class="care__tabs-content js-tabs__content">
                 <div class="care__list">
                     <div class="care__list-item">
