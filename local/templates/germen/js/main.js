@@ -500,6 +500,8 @@ $(document).ready(function () {
       upSaleSum += (price * quantity);
     }
 
+    upSaleSum = upSaleSum || 0;
+
     $(".js-upsale-sum").text(formatPrice(upSaleSum))
 
     let $selectedMainProducts = $(".js-main-products")

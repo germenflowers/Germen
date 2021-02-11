@@ -268,7 +268,7 @@ if ($orderId > 0) {
                 BX_RESIZE_IMAGE_EXACT
             );
 
-            $upSaleProduct['PRICE'] = $arPrice['DISCOUNT_PRICE'];
+            $upSaleProduct['PRICE'] = (int)$arPrice['DISCOUNT_PRICE'];
 
             if ($upSaleProduct['PROPERTY_IS_BOOKMATE_VALUE'] === 'Y') {
                 $bookMateProducts[] = $upSaleProduct;

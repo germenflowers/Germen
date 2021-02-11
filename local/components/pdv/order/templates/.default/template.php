@@ -34,6 +34,8 @@ foreach ($arResult['UPSALE_PRODUCTS'] as $item) {
         }
     }
 }
+
+$jsUpsaleProducts = empty($arResult['ORDER_UPSALE_PRODUCTS']) ? '{}' : json_encode($arResult['ORDER_UPSALE_PRODUCTS']);
 ?>
 <?php if (!$arResult['CONFIRM']): ?>
     <header class="order-header">
@@ -47,7 +49,7 @@ foreach ($arResult['UPSALE_PRODUCTS'] as $item) {
                     type="hidden"
                     class="js-upsale-products"
                     name="upsale_products"
-                    value='<?=json_encode($arResult['ORDER_UPSALE_PRODUCTS'])?>'
+                    value='<?=$jsUpsaleProducts?>'
             >
             <input
                     type="hidden"
