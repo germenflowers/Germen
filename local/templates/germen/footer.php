@@ -5,6 +5,7 @@
  * @var bool $isArticlePage
  * @var bool $isTextPage
  * @var bool $isFavoritePage
+ * @var bool $isCarePage
  * @global CMain $APPLICATION
  */
 
@@ -12,7 +13,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 ?>
-            <?php if (!$isOrderPage): ?>
+            <?php if (!$isOrderPage && !$isCarePage): ?>
                     <?php if ($isArticlePage || $isTextPage) : ?>
                             </div>
                         </div>

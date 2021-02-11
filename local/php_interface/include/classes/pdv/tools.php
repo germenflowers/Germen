@@ -37,6 +37,13 @@ class Tools
         );
     }
 
+    public static function isCarePage(): bool
+    {
+        global $APPLICATION;
+
+        return $APPLICATION->GetCurPage() === SITE_DIR.'care/';
+    }
+
     public static function isOrderPage(): bool
     {
         return \CSite::InDir(SITE_DIR.'order/');

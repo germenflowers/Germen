@@ -17,6 +17,7 @@ $isOrderPage = Tools::isOrderPage();
 $isSubscribePage = Tools::isSubscribePage();
 $isTextPage = Tools::isTextPage();
 $isFavoritePage = Tools::isFavoritePage();
+$isCarePage = Tools::isCarePage();
 
 $infoLineText = '';
 $infoLineIsShow = false;
@@ -214,9 +215,18 @@ $phone = trim(
                         </div>
                     </div>
                 </div>
-                
-                <div class="content <?=(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) ? 'content--main' : ''?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage): ?>
+
+                <?php
+                $class = 'content';
+                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) {
+                    $class .= ' content--main';
+                }
+                if($isCarePage) {
+                    $class .= ' content--yellow';
+                }
+                ?>
+                <div class="<?=$class?>">
+                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();
