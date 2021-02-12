@@ -74,7 +74,6 @@ $APPLICATION->SetTitle('Уход за цветами');
                 </div>
             </div>
             <div class="care__tabs-content js-tabs__content">
-                <span>2</span>
                 <div class="care__list">
                     <div class="care__list-item">
                         <div class="care__list-title">
@@ -124,7 +123,6 @@ $APPLICATION->SetTitle('Уход за цветами');
                 </div>
             </div>
             <div class="care__tabs-content js-tabs__content">
-                <span>3</span>
                 <div class="care__list">
                     <div class="care__list-item">
                         <div class="care__list-title">
