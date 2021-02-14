@@ -13543,6 +13543,8 @@ input, textarea, button {
 
 .product-add-slider__item img {
     width: 100%;
+    height: 174px;
+    object-fit: contain;
 }
 
 .product-add-slider__title {
