@@ -9770,7 +9770,6 @@ window.productAddSlider = () => {
     return;
   }
 
-
   var mySwiper = new Swiper('.subscribe__mono-container', {
     loop: true,
     speed: 400,
@@ -9807,16 +9806,19 @@ window.productAddSlider = () => {
     elem: "tabs",
     open: 0
   });
+
 })();
 
 (function () {
-  var care = document.querySelector('.care__tabs');
-  if (!care) {
+  var sliderAdd = document.querySelector('.cart__add-slider');
+  if (!sliderAdd) {
     return;
   }
 
-  var tabs = new Tabs({
-    elem: "care-tabs",
-    open: 0
+  var mySwiper = new Swiper('.cart__add-slider', {
+    loop: true,
+    speed: 400,
+    spaceBetween: 8,
+    slidesPerView: "auto",
   });
 })();
