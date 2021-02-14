@@ -188,26 +188,6 @@ $(document).ready(function () {
     maxTime = orderData.data('maxtime'),
     minTime = orderData.data('mintime');
 
-  let now = new Date();
-  console.log(now);
-  console.log(now.getTime());
-  console.log(now.getTime() / 1000);
-  console.log(minTime);
-
-  if((now.getTime() / 1000) <= minTime) {
-    console.log('disable');
-  }
-
-  console.log('=========================');
-
-  console.log(1613149200000);
-  console.log(1613149200000 / 1000);
-  console.log(minTime);
-
-  if((1613149200000 / 1000) <= minTime) {
-    console.log('disable');
-  }
-
   startDate.setMinutes(startDate.getMinutes() + parseInt(orderData.data('time')));
   startDate.setHours(startDate.getHours() + 1);
   startDate.setMinutes(0);
@@ -225,12 +205,6 @@ $(document).ready(function () {
     maxHours: maxHours,
     onRenderCell: function (date, cellType) {
       if (cellType === 'day') {
-
-        if(date.getDate() === 13) {
-          console.log(date);
-          console.log(date.getTime());
-        }
-
         let timestamp = date.getTime() / 1000,
           isDisabled = false,
           isDisabledMax = false,
@@ -241,6 +215,8 @@ $(document).ready(function () {
         }
 
         if (typeof minTime !== 'undefined') {
+          minTime += date.getTimezoneOffset() * 60;
+
           isDisableMin = timestamp <= minTime;
         }
 
