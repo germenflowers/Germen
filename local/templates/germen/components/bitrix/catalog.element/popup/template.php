@@ -121,10 +121,15 @@ $priceFormat = number_format($arResult['PRICES']['BASE']['VALUE'], 0, '', ' ');
                 <div class="product-info__add-slider swiper-container product-add-slider">
                     <div class="swiper-wrapper">
                         <?php foreach ($arResult['UPSALE_PRODUCTS'] as $item): ?>
+                            <?php
+                            $upsalePriceFormat = number_format($item['price'], 0, '', ' ');
+                            ?>
                             <div class="swiper-slide product-add-slider__item">
                                 <img src="<?=$item['image']?>" alt="<?=$item['name']?>">
                                 <div class="product-add-slider__header">
-                                    <h3 class="product-add-slider__title"><?=$item['name']?></h3>
+                                    <h3 class="product-add-slider__title">
+                                        <?=$item['name']?> +<?=$upsalePriceFormat?> <span class="rouble"></span>
+                                    </h3>
                                     <p class="product-add-slider__info"></p>
                                     <?=$item['text']?>
                                     <button class="product-add-slider__btn js-upsale-button" data-id="<?=$item['id']?>">
