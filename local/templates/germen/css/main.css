@@ -13538,10 +13538,13 @@ input, textarea, button {
     width: 174px;
     box-shadow: 0 0 4px rgba(6, 5, 50, 0.12);
     border-radius: 8px;
+    height: auto;
 }
 
 .product-add-slider__item img {
     width: 100%;
+    height: 174px;
+    object-fit: contain;
 }
 
 .product-add-slider__title {
