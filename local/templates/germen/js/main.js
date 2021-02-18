@@ -322,6 +322,8 @@ $(document).ready(function () {
   $popupProduct.on('hidden.bs.modal', function () {
   });
 
+  cartAddSlider();
+
   getMap();
 
   let formOrder = $('#form-order');
