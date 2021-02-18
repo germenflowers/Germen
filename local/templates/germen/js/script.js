@@ -9809,7 +9809,7 @@ window.productAddSlider = () => {
 
 })();
 
-window.productAddSlider = () => {
+window.cartAddSlider = () => {
   const sliderAdd = document.querySelector('.cart__add-slider');
   if (!sliderAdd) {
     return;
