@@ -9822,3 +9822,5 @@ window.cartAddSlider = () => {
     slidesPerView: "auto",
   });
 };
+
+cartAddSlider();
