@@ -15635,6 +15635,13 @@ align-items: center;
 text-align: right;
 }
 
+.cart__promo-used {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 22px;
+    margin-bottom: 16px;
+}
+
 .cart__total {
 font-weight: normal;
 font-size: 17px;
