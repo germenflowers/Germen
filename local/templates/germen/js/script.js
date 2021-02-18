@@ -9809,8 +9809,8 @@ window.productAddSlider = () => {
 
 })();
 
-(function () {
-  var sliderAdd = document.querySelector('.cart__add-slider');
+window.productAddSlider = () => {
+  const sliderAdd = document.querySelector('.cart__add-slider');
   if (!sliderAdd) {
     return;
   }
@@ -9821,4 +9821,4 @@ window.productAddSlider = () => {
     spaceBetween: 8,
     slidesPerView: "auto",
   });
-})();
+};
