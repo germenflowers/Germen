@@ -9,6 +9,21 @@ require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 $APPLICATION->SetTitle('Корзина');
 ?>
 <div class="cart">
+  <div class="empty js-favorite-empty-block" style="">
+      <div class="empty__block">
+        <div class="empty__title head-h2">Корзина</div>
+        <div class="empty__text">
+          Здесь пока пусто. Перейдите в каталог, чтобы добавить нужные товары.
+        </div>
+        <div class="empty__links">
+            <a class="empty__link" href="/">Перейти в каталог</a>
+            <a class="empty__link" href="/">Написать в чат</a>
+        </div>
+        <div class="empty__text empty__text--grey">
+            Не можете выбрать? Напишите нам в удобный мессенджер&nbsp;—&nbsp;поможем.
+        </div>
+    </div>
+  </div>
   <h1 class="cart__title">Корзина</h1>
   <div class="cart__list">
     <div class="cart__list-item cart-item">
@@ -125,8 +140,18 @@ $APPLICATION->SetTitle('Корзина');
   <div class="cart__bottom">
     <div class="cart__promo">
       <form class="cart__promo-form" action="post"><input type="text" placeholder="Введие промокод"><button class="cart__promo-btn" type="submit">Применить</button></form>
+      <form class="cart__promo-form" action="post"><input type="text" placeholder="Введие промокод"><button class="cart__promo-btn cart__promo-btn--loading" type="submit"><svg width="18" height="18" aria-hidden="true">
+                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#loading"></use>
+              </svg></button></form>
+      <form class="cart__promo-form" action="post"><input type="text" placeholder="Введие промокод"><button class="cart__promo-btn" type="submit">Удалить</button></form>
+      <p class="cart__promo-alert"><svg width="18" height="18" aria-hidden="true">
+                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#alert"></use>
+              </svg> <span>Купон не действителен</span></p>
     </div>
-    <div class="cart__total">Сумма заказа: <b>12 350</b> ₽</div>
+    <div class="cart__sum">
+      <div class="cart__total">Сумма заказа: <b>12 350</b> ₽</div>
+      <div class="cart__discount">Промокод:: <p>-1 200</p> ₽</div>
+    </div>
   </div>
   <div class="cart__order"><button type="submit">Оформить заказ</button></div>
 </div>

@@ -15589,16 +15589,76 @@ font-size: 14px;
 line-height: 22px;
 -webkit-transition: opacity 0.2s;
 transition: opacity 0.2s;
+min-width: 105px;
+display: flex;
+justify-content: center;
+}
+
+.cart__promo-btn--loading {
+pointer-events: none;
+}
+
+.cart__promo-btn--loading svg {
+animation: loader 0.5s linear infinite;
+}
+
+@keyframes loader {
+0% {
+    transform: rotate(0);
+}
+100% {
+    transform: rotate(360deg);
+}
 }
 
 .cart__promo-btn:hover {
 opacity: 0.6;
 }
 
+.cart__promo-alert {
+margin-top: 9px;
+font-weight: 600;
+font-size: 14px;
+line-height: 16px;
+color: #FF323D;
+display: flex;
+align-items: center;
+}
+
+.cart__promo-alert svg {
+    width: 17px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.cart__sum {
+text-align: right;
+}
+
 .cart__total {
 font-weight: normal;
 font-size: 17px;
 line-height: 22px;
+}
+
+.cart__total b {
+    margin: 0 0 0 8px;
+    display: inline-block;
+}
+
+.cart__discount {
+    font-size: 17px;
+    line-height: 22px;
+    color: #FF323D;
+    font-weight: normal;
+    margin-top: 16px;
+    font-weight: normal;
+}
+
+
+.cart__discount p {
+   margin: 0 0 0 8px;
+   display: inline-block;
 }
 
 .cart__order button {
@@ -15758,4 +15818,77 @@ background-image: url("../img/cart-plus.svg");
 background-repeat: no-repeat;
 background-position: center;
 }
+
+.empty {
+display: -webkit-box;
+display: -ms-flexbox;
+display: flex;
+margin: 0 auto;
+padding: 100px 0;
+}
+
+@media (max-width: 767px) {
+.empty {
+    max-width: 376px;
+}
+}
+
+.empty__block {
+margin: auto;
+text-align: center;
+}
+
+.empty__title.head-h2 {
+margin-bottom: 16px;
+font-size: 24px;
+line-height: 32px;
+}
+
+.empty__text {
+font-size: 14px;
+line-height: 22px;
+margin-bottom: 16px;
+max-width: 376px;
+}
+
+.empty__text--grey {
+color: #7C8182;
+}
+
+.empty__links {
+display: -webkit-box;
+display: -ms-flexbox;
+display: flex;
+width: 304px;
+-webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+margin: 0 auto 16px;
+}
+
+.empty__link {
+border: 1px solid #D6D6D6;
+border-radius: 8px;
+padding: 10px;
+display: -webkit-box;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-pack: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+-webkit-box-align: center;
+    -ms-flex-align: center;
+        align-items: center;
+font-weight: 600;
+font-size: 14px;
+line-height: 22px;
+-webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+}
+
+.empty__link:first-child {
+margin-right: 15px;
+}
+
 
