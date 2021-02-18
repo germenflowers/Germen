@@ -139,6 +139,7 @@ $APPLICATION->SetTitle('Корзина');
   </div>
   <div class="cart__bottom">
     <div class="cart__promo">
+      <p class="cart__promo-used">Промокод применен</p>
       <form class="cart__promo-form" action="post"><input type="text" placeholder="Введие промокод"><button class="cart__promo-btn" type="submit">Применить</button></form>
       <form class="cart__promo-form" action="post"><input type="text" placeholder="Введие промокод"><button class="cart__promo-btn cart__promo-btn--loading" type="submit"><svg width="18" height="18" aria-hidden="true">
                 <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#loading"></use>
