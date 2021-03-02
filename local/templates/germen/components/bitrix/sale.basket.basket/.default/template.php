@@ -55,10 +55,10 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                         <div class="cart-item__title">
                             <?=$item['name']?>
                             <?php if (!empty($item['cover'])): ?>
-                                (Упаковка: <?=$item['cover']?>)
+                                <span class="cart-item__title--extra">(Упаковка: <?=$item['cover']?>)</span>
                             <?php endif; ?>
                             <?php if (!empty($item['subscribeParams'])): ?>
-                                (<?=$item['subscribeParams']['type']?>, <?=$item['subscribeParams']['delivery']?>)
+                                <span class="cart-item__title--extra">(<?=$item['subscribeParams']['type']?>, <?=$item['subscribeParams']['delivery']?>)</span>
                             <?php endif; ?>
                         </div>
                         <?php if (empty($item['subscribeParams'])): ?>
@@ -195,7 +195,7 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
             </div>
 
             <div class="cart__order">
-                <a href="/order/">Оформить заказ</a>
+                <a class="cart__order-btn" href="/order/">Оформить заказ</a>
             </div>
         <?php else: ?>
             <?php
