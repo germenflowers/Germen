@@ -15898,4 +15898,27 @@ line-height: 22px;
 margin-right: 15px;
 }
 
+.pagenavigation-loader {
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+    width: 64px;
+    height: 64px;
+    display: none
+}
 
+.pagenavigation-overlay {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    filter: none;
+    opacity: .6;
+    background-color: #fff;
+    display: none
+}

@@ -456,29 +456,14 @@ $(document).ready(function () {
     $('.product-info__cover-text').html($(this).data('text'));
   });
 
-  $(document).on('click', '.product-add-slider__item', function(e) {
+  $(document).on('click', '.product-add-slider__item', function (e) {
     e.preventDefault();
 
-    $(this).find('.product-add-slider__btn').toggleClass('product-add-slider__btn--is-chosen');
-  });
+    let button = $(this).find('.product-add-slider__btn');
 
-  $(document).on('click', '.js-product-order-button', function (e) {
-    e.preventDefault();
-
-    let params = {
-      id: $(this).data('id'),
-      quantity: $('input[name=product-quantity]').val(),
-      cover: $('input[name=cover]:checked').val(),
-      upsale: [],
-    };
-
-    $('.js-upsale-button').each(function () {
-      if ($(this).hasClass('product-add-slider__btn--is-chosen')) {
-        params.upsale.push($(this).data('id'));
-      }
-    });
-
-    window.location.href = $(this).data('url') + '?' + $.param(params);
+    if (!button.hasClass('js-upsale-add-to-cart')) {
+      button.toggleClass('product-add-slider__btn--is-chosen');
+    }
   });
 
   /**
@@ -798,8 +783,8 @@ $(document).ready(function () {
     $(document).trigger("reCalcTotal");
   })
 
-  $(document).on('click', '.js-plus', function (e) {
-    e.preventDefault();
+  $(document).on('click', '.js-plus', function (event) {
+    event.preventDefault();
 
     let $container = $(this).closest('.js-basket-item-info'),
       id = $container.data('id'),
@@ -866,6 +851,268 @@ $(document).ready(function () {
   /**
    * End pdv:order
    */
+
+  $(document).on('click', '.js-add-to-cart', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id');
+
+    ajaxAddToCart({ action: 'add', id: id });
+  });
+
+  $(document).on('click', '.js-upsale-add-to-cart', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    ajaxAddToCart({ action: 'addUpsale', id: id, productId: productId }, true, true);
+  });
+
+  $(document).on('click', '.js-product-order-button', function (e) {
+    e.preventDefault();
+
+    let params = {
+      id: $(this).data('id'),
+      quantity: $('input[name=product-quantity]').val(),
+      cover: $('input[name=cover]:checked').val(),
+      upsale: [],
+    };
+
+    $('.js-upsale-button').each(function () {
+      if ($(this).hasClass('product-add-slider__btn--is-chosen')) {
+        params.upsale.push($(this).data('id'));
+      }
+    });
+
+    ajaxAddToCart({ action: 'add', id: params.id, params: params });
+  });
+
+  $(document).on('submit', 'form[name=subscribeForm]', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      params = self.serializeObject();
+
+    params.subscribe = 'Y';
+
+    ajaxAddToCart({ action: 'add', id: params.id, params: params });
+  });
+
+  $(document).on('click', '.js-cart-item-delete', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'delete',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderHeaderCartItemsCount(data.data.count);
+
+          $('.js-upsale-add-to-cart').each(function (index) {
+            if ($(this).data('id') === productId) {
+              $(this).removeClass('product-add-slider__btn--is-chosen');
+            }
+          });
+
+          if (data.data.count > 0) {
+            $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+            $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+          } else {
+            $('.js-cart').html($.templates('#cartEmptyTmpl').render());
+          }
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+
+  $(document).on('click', '.js-cart-item-minus', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'minus',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderHeaderCartItemsCount(data.data.count);
+
+          if (data.delete) {
+            $('.js-upsale-add-to-cart').each(function (index) {
+              if ($(this).data('id') === productId) {
+                $(this).removeClass('product-add-slider__btn--is-chosen');
+              }
+            });
+          }
+
+          if (data.data.count > 0) {
+            $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+            $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+          } else {
+            $('.js-cart').html($.templates('#cartEmptyTmpl').render());
+          }
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+
+  $(document).on('click', '.js-cart-item-plus', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'plus',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderHeaderCartItemsCount(data.data.count);
+          $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+          $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+
+  $(document).on('submit', 'form[name=promocodeForm]', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      params = self.serializeObject(),
+      promocodeStatusContainer = $('.cart__promo-status'),
+      buttonContainer = $('.js-promocode-button-container');
+
+    promocodeStatusContainer.removeClass('cart__promo-alert').html('');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'couponAdd',
+        coupon: params.coupon
+      },
+      beforeSend: function () {
+        buttonContainer.html($.templates('#promocodeButtonLoadingTmpl').render());
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+          $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+
+          if(!(data.data.coupon.status === 2 || data.data.coupon.status === 4)) {
+            promocodeStatusContainer.addClass('cart__promo-alert');
+          }
+
+          $('.js-promocode-container').html($.templates('#promocodeAddTmpl').render(data.data.coupon));
+          promocodeStatusContainer.html($.templates('#promocodeStatusTmpl').render(data.data.coupon));
+          buttonContainer.html($.templates('#promocodeButtonDeleteTmpl').render());
+        } else {
+          buttonContainer.html($.templates('#promocodeButtonAddTmpl').render());
+        }
+      },
+      error: function (error) {
+        buttonContainer.html($.templates('#promocodeButtonAddTmpl').render());
+      }
+    });
+  });
+
+  $(document).on('click', '.js-promocode-delete', function (e) {
+    e.preventDefault();
+
+    let buttonContainer = $('.js-promocode-button-container');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'couponDelete',
+
+      },
+      beforeSend: function () {
+        buttonContainer.html($.templates('#promocodeButtonLoadingTmpl').render());
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+          $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+
+          $('.js-promocode-container').html($.templates('#promocodeDeleteTmpl').render());
+          $('.cart__promo-status').removeClass('cart__promo-alert').html('');
+          buttonContainer.html($.templates('#promocodeButtonAddTmpl').render());
+        } else {
+          buttonContainer.html($.templates('#promocodeButtonDeleteTmpl').render());
+        }
+      },
+      error: function (error) {
+        buttonContainer.html($.templates('#promocodeButtonDeleteTmpl').render());
+      }
+    });
+  });
 });
 
 (function () {
@@ -1210,8 +1457,8 @@ function processWishlist(element, cssClass, editListItem) {
 
   self.toggleClass(cssClass);
 
-  if(editListItem) {
-    $('.promo-item__add-to-fav-btn[data-id='+id+']').toggleClass('red-heart');
+  if (editListItem) {
+    $('.promo-item__add-to-fav-btn[data-id=' + id + ']').toggleClass('red-heart');
   }
 
   if (deleteElement) {
@@ -1251,6 +1498,49 @@ function processWishlist(element, cssClass, editListItem) {
   wishlist = wishlist.join('|');
 
   setCookie('wishlist', wishlist, { path: '/' });
+}
+
+function ajaxAddToCart(params, updateCart, isCartUpsale) {
+  $.ajax({
+    type: 'POST',
+    url: '/ajax/cart.php',
+    data: params,
+    beforeSend: function () {
+      $('.js-pagenavigation-loader').show();
+      $('.js-pagenavigation-overlay').show();
+    },
+    success: function (data) {
+      data = jQuery.parseJSON(data);
+
+      if (data.status === 'success') {
+        renderHeaderCartItemsCount(data.data.count);
+
+        if(updateCart) {
+          $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+          $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+        }
+
+        if (isCartUpsale) {
+          $('.js-upsale-add-to-cart').each(function (index) {
+            if ($(this).data('id') === params.productId) {
+              $(this).addClass('product-add-slider__btn--is-chosen');
+            }
+          });
+        }
+      }
+
+      $('.js-pagenavigation-loader').hide();
+      $('.js-pagenavigation-overlay').hide();
+    },
+    error: function (error) {
+      $('.js-pagenavigation-loader').hide();
+      $('.js-pagenavigation-overlay').hide();
+    }
+  });
+}
+
+function renderHeaderCartItemsCount(count) {
+  $('.js-cart-counter').html(count);
 }
 
 /**

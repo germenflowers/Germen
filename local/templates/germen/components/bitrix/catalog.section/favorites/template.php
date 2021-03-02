@@ -52,7 +52,12 @@ $this->setFrameMode(true);
                                     <span class="rouble"></span>
                                 </div>
 
-                                <a href="/order/?id=<?=$item['ID']?>" class="promo-item__delivery" style="<?=$style?>">
+                                <a
+                                        href="#"
+                                        class="promo-item__delivery js-add-to-cart"
+                                        data-id="<?=$item['ID']?>"
+                                        style="<?=$style?>"
+                                >
                                     <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>
                                     <div class="promo-item__delivery__time">
                                         <?php if ($item['BUTTON_PARAMS']['showIcon']): ?>

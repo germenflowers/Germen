@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @var array $arResult
+ * @global CMain $APPLICATION
  * @var array $arParams
+ * @var array $arResult
  */
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
@@ -43,7 +44,12 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                         $style .= ' color: #'.$arResult['BANNER']['buttonParams']['textColor'].';';
                     }
                     ?>
-                    <a href="/order/?id=<?=$arResult['BANNER']['id']?>" class="promo-item__delivery" style="<?=$style?>">
+                    <a
+                            href="#"
+                            class="promo-item__delivery js-add-to-cart"
+                            data-id="<?=$arResult['BANNER']['id']?>"
+                            style="<?=$style?>"
+                    >
                         <div class="promo-item__delivery__text"><?=$arResult['BANNER']['buttonParams']['text']?></div>
                         <div class="promo-item__delivery__time">
                             <?php if ($arResult['BANNER']['buttonParams']['showIcon']): ?>
@@ -81,8 +87,11 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <span class="rouble"></span>
                             </div>
                             <div class="promo-main-product__order">
-                                <a href="/order/?id=221"
-                                   class="promo-item__delivery promo-main-product__order-button js-order_link">
+                                <a
+                                    href="#"
+                                    class="promo-item__delivery promo-main-product__order-button js-order_link js-add-to-cart"
+                                    data-id="221"
+                                >
                                     <div class="promo-item__delivery__text">Заказать</div>
                                     <div class="promo-item__delivery__time">
                                         <svg class="promo-item__delivery__icon">
@@ -141,7 +150,12 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
                                 <span class="rouble"></span>
                             </div>
 
-                            <a href="/order/?id=<?=$item['ID']?>" class="promo-item__delivery" style="<?=$style?>">
+                            <a
+                                    href="#"
+                                    class="promo-item__delivery js-add-to-cart"
+                                    data-id="<?=$item['ID']?>"
+                                    style="<?=$style?>"
+                            >
                                 <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>
                                 <div class="promo-item__delivery__time">
                                     <?php if ($item['BUTTON_PARAMS']['showIcon']): ?>

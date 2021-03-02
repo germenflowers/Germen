@@ -92,6 +92,11 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
             <?php endif; ?>
         </main>
 
+        <div class="pagenavigation-loader js-pagenavigation-loader">
+            <img src="<?=SITE_TEMPLATE_PATH?>/img/loader.gif">
+        </div>
+        <div class="pagenavigation-overlay js-pagenavigation-overlay"></div>
+
         <?php $APPLICATION->IncludeComponent(
             'bitrix:main.include',
             '',

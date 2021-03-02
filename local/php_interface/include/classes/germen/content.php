@@ -2,6 +2,11 @@
 
 namespace Germen;
 
+use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
+use Bitrix\Main\ArgumentException;
+use Bitrix\Sale\Basket;
+
 /**
  * Class Content
  * @package Germen
@@ -150,5 +155,232 @@ class Content
     public static function getInformationBannerCached(): array
     {
         return Tools::returnResultCache(60 * 60, 'getInformationBanner', array(__CLASS__, 'getInformationBanner'));
+    }
+
+    /**
+     * @return int
+     * @throws LoaderException
+     */
+    public static function getCartItemsCount(): int
+    {
+        if (!Loader::includeModule('sale')) {
+            return 0;
+        }
+
+        $count = 0;
+        $filter = array('FUSER_ID' => \CSaleBasket::GetBasketUserID(), 'ORDER_ID' => false, 'DELAY' => 'N');
+        $select = array('QUANTITY');
+        $result = \CSaleBasket::GetList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $count += (int)$row['QUANTITY'];
+        }
+
+        return $count;
+    }
+
+    /**
+     * @return array
+     * @throws ArgumentException
+     */
+    public static function getCartItems(): array
+    {
+        $cartItems = array();
+
+        $result = Basket::getList(
+            array(
+                'filter' => array(
+                    'FUSER_ID' => \CSaleBasket::GetBasketUserID(),
+                    'ORDER_ID' => false,
+                    'DELAY' => 'N',
+                ),
+                'select' => array('ID', 'PRODUCT_ID', 'QUANTITY'),
+            )
+        );
+        while ($row = $result->Fetch()) {
+            $cartItems[(int)$row['ID']] = array(
+                'id' => (int)$row['ID'],
+                'productId' => (int)$row['PRODUCT_ID'],
+                'quantity' => (int)$row['QUANTITY'],
+                'upsale' => false,
+                'subscribe' => false,
+            );
+        }
+
+        $CSaleBasket = new \CSaleBasket();
+
+        $filter = array('BASKET_ID' => array_keys($cartItems), 'CODE' => 'UPSALE', 'VALUE' => true);
+        $select = array();
+        $result = $CSaleBasket->GetPropsList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $cartItems[(int)$row['BASKET_ID']]['upsale'] = true;
+        }
+
+        $filter = array('BASKET_ID' => array_keys($cartItems), 'CODE' => 'SUBSCRIBE', 'VALUE' => true);
+        $select = array();
+        $result = $CSaleBasket->GetPropsList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $cartItems[(int)$row['BASKET_ID']]['subscribe'] = true;
+        }
+
+        return $cartItems;
+    }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    public static function getCartItemsData(array $items): array
+    {
+        $response = array();
+
+        $productsId = array();
+        foreach ($items as $item) {
+            if (!in_array((int)$item['PRODUCT_ID'], $productsId, true)) {
+                $productsId[] = (int)$item['PRODUCT_ID'];
+            }
+
+            $img = array('src' => '');
+            if (!empty($item['PREVIEW_PICTURE'])) {
+                $img = \CFile::ResizeImageGet(
+                    $item['PREVIEW_PICTURE'],
+                    array('width' => 64, 'height' => 64),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            } elseif (!empty($item['DETAIL_PICTURE'])) {
+                $img = \CFile::ResizeImageGet(
+                    $item['DETAIL_PICTURE'],
+                    array('width' => 64, 'height' => 64),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            }
+
+            $cover = '';
+            foreach ($item['PROPS'] as $property) {
+                if ($property['CODE'] === 'COVER') {
+                    $cover = $property['VALUE'];
+                }
+            }
+
+            $upsale = false;
+            foreach ($item['PROPS'] as $property) {
+                if ($property['CODE'] === 'UPSALE') {
+                    $upsale = true;
+                }
+            }
+
+            $subscribe = false;
+            foreach ($item['PROPS'] as $property) {
+                if ($property['CODE'] === 'SUBSCRIBE') {
+                    $subscribe = true;
+                }
+            }
+
+            $subscribeParams = array();
+            if ($subscribe) {
+                foreach ($item['PROPS'] as $property) {
+                    if ($property['CODE'] === 'TYPE') {
+                        $subscribeParams['type'] = $property['VALUE'];
+                    }
+
+                    if ($property['CODE'] === 'DELIVERY') {
+                        $subscribeParams['delivery'] = $property['VALUE'];
+                    }
+
+                    if ($property['CODE'] === 'SIZE') {
+                        $subscribeParams['size'] = $property['VALUE'];
+                    }
+                }
+            }
+
+            if ($subscribeParams['type'] === 'Монобукеты') {
+                $img = array('src' => SITE_TEMPLATE_PATH.'/img/bunch-mono@1x.jpg');
+            } elseif ($subscribeParams['type'] === 'Составные букеты') {
+                $img = array('src' => SITE_TEMPLATE_PATH.'/img/bunch-compose@1x.jpg');
+            }
+
+            $response[] = array(
+                'id' => (int)$item['ID'],
+                'productId' => (int)$item['PRODUCT_ID'],
+                'name' => $item['NAME'],
+                'image' => $img['src'],
+                'link' => $item['DETAIL_PAGE_URL'],
+                'price' => $item['PRICE'],
+                'priceFormat' => number_format($item['PRICE'], 0, '', '&nbsp;'),
+                'sum' => $item['SUM_VALUE'],
+                'sumFormat' => number_format($item['SUM_VALUE'], 0, '', '&nbsp;'),
+                'quantity' => (int)$item['QUANTITY'],
+                'canBuy' => $item['CAN_BUY'] === 'Y',
+                'cover' => $cover,
+                'upsale' => $upsale,
+                'subscribe' => !empty($subscribeParams),
+                'subscribeParams' => $subscribeParams,
+            );
+        }
+
+        if (!empty($productsId)) {
+            $filter = array('ID' => $productsId);
+            $select = array('IBLOCK_ID', 'ID', 'PROPERTY_CML2_ARTICLE');
+            $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
+            while ($row = $result->Fetch()) {
+                foreach ($response as $key => $item) {
+                    if ($item['productId'] === (int)$row['ID']) {
+                        $response[$key]['vendorCode'] = $row['PROPERTY_CML2_ARTICLE_VALUE'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getUpsaleBookmateProducts(): array
+    {
+        $products = array();
+
+        global $USER;
+
+        $order = array('SORT' => 'ASC');
+        $filter = array('IBLOCK_ID' => IBLOCK_ID__UPSALE, 'ACTIVE' => 'Y');
+        $select = array(
+            'IBLOCK_ID',
+            'ID',
+            'NAME',
+            'PREVIEW_TEXT',
+            'PREVIEW_PICTURE',
+            'PROPERTY_IS_BOOKMATE',
+        );
+        $result = \CIBlockElement::GetList($order, $filter, false, false, $select);
+        while ($row = $result->fetch()) {
+            $price = \CCatalogProduct::GetOptimalPrice($row['ID'], 1, $USER->GetUserGroupArray());
+
+            $image['src'] = array();
+            if (!empty($row['PREVIEW_PICTURE'])) {
+                $image = \CFile::ResizeImageGet(
+                    $row['PREVIEW_PICTURE'],
+                    array('width' => 174, 'height' => 174),
+                    BX_RESIZE_IMAGE_PROPORTIONAL
+                );
+            }
+
+            $item = array(
+                'id' => (int)$row['ID'],
+                'name' => $row['NAME'],
+                'text' => $row['PREVIEW_TEXT'],
+                'price' => (int)$price['DISCOUNT_PRICE'],
+                'image' => $image['src'],
+            );
+
+            if ($row['PROPERTY_IS_BOOKMATE_VALUE'] === 'Y') {
+                $products['bookmateProducts'][] = $item;
+            } else {
+                $products['upsaleProducts'][] = $item;
+            }
+        }
+
+        return $products;
     }
 }
