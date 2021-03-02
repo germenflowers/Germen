@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @global CMain $APPLICATION
+ * @var array $arParams
+ * @var array $arResult
+ */
+
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -58,8 +64,9 @@ if (!empty($item['PROPERTIES']['BANNER_IMG']['VALUE'])) {
                     <span class="rouble"></span>
                 </span>
                 <a
-                        href="/order/?id=<?=$item['ID']?>"
-                        class="promo-item__delivery"
+                        href="#"
+                        class="promo-item__delivery js-add-to-cart"
+                        data-id="<?=$item['ID']?>"
                         style="background-color: #<?=$item['BUTTON_PARAMS']['background']?>;"
                 >
                     <div class="promo-item__delivery__text"><?=$item['BUTTON_PARAMS']['text']?></div>

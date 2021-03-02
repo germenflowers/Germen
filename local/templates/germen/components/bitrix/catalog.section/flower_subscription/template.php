@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @global CMain $APPLICATION
+ * @var array $arParams
+ * @var array $arResult
+ */
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -20,7 +26,7 @@ foreach ($arResult['ITEMS'] as $item) {
     }
 }
 ?>
-<form action="/order/" method="get">
+<form name="subscribeForm" action="/order/" method="get">
     <fieldset class="subscribe-page__form-type">
         <legend>Выберите букеты</legend>
         <input type="radio" id="mono" name="type" value="mono" checked>
@@ -70,7 +76,7 @@ foreach ($arResult['ITEMS'] as $item) {
             <input type="radio" id="big" name="size" value="big" <?=empty($offers['standart']) ? 'checked' : ''?>>
             <label for="big">
                 <h3>Увеличенный</h3>
-                <span>Больше стандратного в 1,5 раза.</span>
+                <span>Больше стандартного в 1,5 раза.</span>
             </label>
         <?php endif; ?>
     </fieldset>

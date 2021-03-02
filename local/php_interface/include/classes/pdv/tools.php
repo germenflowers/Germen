@@ -8,6 +8,7 @@ use \Bitrix\Main\Data\Cache;
 class Tools
 {
     public const DEFAULT_TIME = 'от 60 мин.';
+    private static $_aStorage = array();
 
     public static function isHomePage(): bool
     {
@@ -42,6 +43,13 @@ class Tools
         global $APPLICATION;
 
         return $APPLICATION->GetCurPage() === SITE_DIR.'care/';
+    }
+
+    public static function isCartPage(): bool
+    {
+        global $APPLICATION;
+
+        return $APPLICATION->GetCurPage() === SITE_DIR.'cart/';
     }
 
     public static function isOrderPage(): bool
@@ -263,5 +271,29 @@ class Tools
         }
 
         return "\\PDV\\Tools::sendSmsNotPayedOrder();";
+    }
+
+    /**
+     * Метод записывает данные в хранилище
+     * @param string $sStorageKey - ключ к значению
+     * @param $mData - значение
+     */
+    public static function setStorage(string $sStorageKey, $mData): void
+    {
+        self::$_aStorage[$sStorageKey] = $mData;
+    }
+
+    /**
+     * Метод получает данные из хранилища
+     * @param string $sStorageKey - ключ к значению
+     * @return bool|mixed
+     */
+    public static function getStorage(string $sStorageKey)
+    {
+        if (!(isset(self::$_aStorage[$sStorageKey]) && self::$_aStorage[$sStorageKey])) {
+            return false;
+        }
+
+        return self::$_aStorage[$sStorageKey];
     }
 }

@@ -4,6 +4,7 @@ use \Bitrix\Main\Loader;
 use \Bitrix\Main\Page\Asset;
 use \PDV\Tools;
 use \UniPlug\Settings;
+use \Germen\Content;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -18,6 +19,7 @@ $isSubscribePage = Tools::isSubscribePage();
 $isTextPage = Tools::isTextPage();
 $isFavoritePage = Tools::isFavoritePage();
 $isCarePage = Tools::isCarePage();
+$isCartPage = Tools::isCartPage();
 
 $infoLineText = '';
 $infoLineIsShow = false;
@@ -42,6 +44,8 @@ $wishlist = array();
 if (!empty($_COOKIE['wishlist'])) {
     $wishlist = array_map('intval', array_filter(explode('|', $_COOKIE['wishlist'])));
 }
+
+$cartItemsCount = Content::getCartItemsCount();
 ?>
 <!doctype html>
 <html lang="ru">
@@ -75,6 +79,7 @@ if (!empty($_COOKIE['wishlist'])) {
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.sidr.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.serialize-object.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap-select.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
@@ -82,6 +87,7 @@ if (!empty($_COOKIE['wishlist'])) {
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slick.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/swiper-bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slideout.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
         ?>
 
@@ -234,23 +240,23 @@ if (!empty($_COOKIE['wishlist'])) {
                                     <?=count($wishlist)?>
                                 </span>
                             </a>
-                            <?php /*
-                            <a class="header__cart header__account-item" href="">
+                            <a class="header__cart header__account-item" href="/cart/">
                                 <span class="header__cart-icon">
                                     <svg width="28px" height="28px" aria-hidden="true">
                                         <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#shopping-cart"></use>
                                     </svg>
                                 </span>
-                                <span class="header__cart-ammount header__ammount">2</span>
+                                <span class="header__cart-ammount header__ammount js-cart-counter">
+                                    <?=$cartItemsCount?>
+                                </span>
                             </a>
-                            */ ?>
                         </div>
                     </div>
                 </div>
 
                 <?php
                 $class = 'content';
-                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) {
+                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCartPage) {
                     $class .= ' content--main';
                 }
                 if($isCarePage) {
@@ -258,7 +264,7 @@ if (!empty($_COOKIE['wishlist'])) {
                 }
                 ?>
                 <div class="<?=$class?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage): ?>
+                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage && !$isCartPage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();
