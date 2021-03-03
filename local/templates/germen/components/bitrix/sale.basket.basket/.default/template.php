@@ -231,8 +231,12 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
             </div>
             <div class="cart-item__title">
                 {{:name}}
-                {{if cover}}(Упаковка: {{:cover}}){{/if}}
-                {{if subscribe}}({{:subscribeParams.type}}, {{:subscribeParams.delivery}}){{/if}}
+                {{if cover}}
+                    <span class="cart-item__title--extra">(Упаковка: {{:cover}})</span>
+                {{/if}}
+                {{if subscribe}}
+                    <span class="cart-item__title--extra">({{:subscribeParams.type}}, {{:subscribeParams.delivery}})</span>
+                {{/if}}
             </div>
             {{if !subscribe}}
                 <div class="cart-item__ammount">
