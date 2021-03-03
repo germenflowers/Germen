@@ -15859,6 +15859,9 @@ display: -ms-flexbox;
 display: flex;
 margin: 0 auto;
 padding: 100px 0;
+width: auto!important;
+height: auto!important;
+overflow: initial!important;
 }
 
 @media (max-width: 767px) {
