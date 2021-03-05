@@ -8791,6 +8791,7 @@ body {
     font-family: "MuseoSansRegular", serif;
     min-width: 320px;
     color: #1F2533;
+    height: auto !important;
 }
 
 html, body {
@@ -15960,4 +15961,53 @@ margin-right: 15px;
 
 .order-item__quantity .count {
     pointer-events: none;
+}
+
+.catalog__fixed-footer {
+    position: sticky;
+    padding: 16px 16px 32px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+
+}
+
+@media (min-width: 1031px) {
+    .catalog__fixed-footer {
+        display: none;
+    }
+}
+
+.catalog__fixed-footer-inner {
+    background: #1F2533;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 22px;
+    color: #FFFFFF;
+    text-align: center;
+    letter-spacing: 0.35px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 16px;
+}
+
+.catalog__fixed-footer-time {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.catalog__fixed-footer-icon {
+    color: #8F9299;;
+    width: 22px;
+    height: 14px;
+    margin-right: 8px;
+}
+
+.catalog__fixed-footer-total {
+    text-align: right;
 }

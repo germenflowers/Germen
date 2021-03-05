@@ -438,38 +438,19 @@ if (!empty($_COOKIE['wishlist'])) {
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');
 ?>
-<div class="product-info__fixed-footer">
-<div class="product-info__row product-info__row--baseline product-info__row">
-<div class="product-info__cell product-info__time"><svg class="promo-item__delivery__icon">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg#properties-car-mini"></use>
-                                        </svg><span>60 мин.</span></div>
-<div class="product-info__cell">
-    <div class="payment-systems">
-    <div class="payment-systems__item" aria-label="Оплата по счёту">
-        <div class="payment-systems__icon payment-systems__icon--invoice"><svg width="24" height="19" aria-hidden="true">
-            <use xlink:href="img/sprite.svg#account"></use>
-        </svg></div>
-    </div>
-    <div class="payment-systems__item" aria-label="MasterCard">
-        <div class="payment-systems__icon payment-systems__icon--mastercard"><svg width="28" height="18" aria-hidden="true">
-        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#mastercard"></use>
-        </svg></div>
-    </div>
-    <div class="payment-systems__item" aria-label="Visa"><svg class="payment-systems__icon payment-systems__icon--visa" width="49" height="17" viewBox="0 0 49 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path id="Vector" d="M18.6774 0.737724L12.288 15.9773H8.13382L4.99559 3.8308C4.81497 3.08575 4.63435 2.81483 4.06992 2.49875C3.0991 1.97947 1.54127 1.48277 0.164062 1.18927L0.254371 0.737724H6.95981C7.81774 0.737724 8.58537 1.30215 8.76598 2.29555L10.4367 11.1007L14.5458 0.737724H18.6774ZM35.0007 11.0104C35.0233 6.99162 29.4467 6.76584 29.4693 4.98224C29.4919 4.44039 30.0111 3.85338 31.14 3.69534C31.7044 3.62761 33.2623 3.55988 35.0233 4.37266L35.7232 1.14411C34.7749 0.805455 33.5558 0.466797 32.0431 0.466797C28.1598 0.466797 25.4054 2.5439 25.3828 5.50152C25.3602 7.69151 27.347 8.91068 28.8371 9.65573C30.3724 10.4008 30.8917 10.8749 30.8917 11.5522C30.8691 12.5682 29.6725 13.0197 28.5436 13.0423C26.5568 13.0649 25.4054 12.5005 24.5023 12.0715L23.7798 15.4129C24.7055 15.8419 26.3988 16.2031 28.1598 16.2257C32.2915 16.2257 34.9781 14.1712 35.0007 11.0104ZM45.2959 15.9773H48.9309L45.7475 0.737724H42.3835C41.6158 0.737724 40.9837 1.16669 40.7128 1.84401L34.7975 15.9548H38.9291L39.7419 13.6745H44.7992L45.2959 15.9773ZM40.8934 10.5814L42.9705 4.86936L44.1671 10.5814H40.8934ZM24.2991 0.737724L21.048 15.9773H17.1196L20.3707 0.737724H24.2991Z" fill="url(#paint0_linear)"></path>
-        <defs>
-            <lineargradient id="paint0_linear" x1="0.164062" y1="8.34153" x2="48.9309" y2="8.34153" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#24215B"></stop>
-            <stop offset="1" stop-color="#0C509F"></stop>
-            </lineargradient>
-        </defs>
-        </svg></div>
+<div class="catalog__fixed-footer">
+    <div class="catalog__fixed-footer-inner">
+        <div class="catalog__fixed-footer-time">
+            <svg class="catalog__fixed-footer-icon">
+                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#car-delivery"></use>
+            </svg>
+            <span>60 мин.</span>
+        </div>
+        <div class="catalog__fixed-footer-text">Корзина</div>
+        <div class="catalog__fixed-footer-total">
+            <span>2 750</span> ₽
+        </div>
     </div>
 </div>
-</div>
-<div class="product-info__action">
-<div class="product-info__ammount" id="input_div"><input id="moins" type="button" value="-"><input id="count" type="number" size="1" value="1" max="99"><input id="plus" type="button" value="+"></div><a class="button product-info__order-button" href="">
-    <div class="promo-item__delivery__text">Заказать · <span>2 750</span> ₽</div>
-</a><button class="product-info__favorite-desktop red-heart" type="button"></button>
-</div>
-</div>
+
+
