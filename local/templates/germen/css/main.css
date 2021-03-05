@@ -9634,6 +9634,7 @@ input, textarea, button {
 @media (max-width: 1030px) {
     .footer__info {
         width: 100%;
+        padding-bottom: 150px;
     }
 }
 
@@ -13739,6 +13740,13 @@ input, textarea, button {
     left: 0;
     width: 100%;
     z-index: 1000;
+    background-color: #fff;
+}
+
+.product-info__fixed-footer-outer {
+    height: 154px;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .product-info__action {
@@ -13749,12 +13757,9 @@ input, textarea, button {
 
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 1030px) {
     .product-info__fixed-footer {
-        position: static;
-        width: 100%;
-        padding: 0;
-        background-color: #fff;
+        display: none;
     }
 }
 
