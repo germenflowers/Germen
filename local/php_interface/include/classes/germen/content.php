@@ -227,10 +227,13 @@ class Content
 
     /**
      * @param array $items
+     * @param array $imageParams
      * @return array
      */
-    public static function getCartItemsData(array $items): array
-    {
+    public static function getCartItemsData(
+        array $items,
+        array $imageParams = array('width' => 64, 'height' => 64)
+    ): array {
         $response = array();
 
         $productsId = array();
@@ -243,7 +246,7 @@ class Content
             if (!empty($item['PREVIEW_PICTURE'])) {
                 $img = \CFile::ResizeImageGet(
                     $item['PREVIEW_PICTURE'],
-                    array('width' => 64, 'height' => 64),
+                    array('width' => $imageParams['width'], 'height' => $imageParams['height']),
                     BX_RESIZE_IMAGE_PROPORTIONAL
                 );
             } elseif (!empty($item['DETAIL_PICTURE'])) {
@@ -293,9 +296,15 @@ class Content
             }
 
             if ($subscribeParams['type'] === 'Монобукеты') {
-                $img = array('src' => SITE_TEMPLATE_PATH.'/img/bunch-mono@1x.jpg');
+                $img = array('src' => SITE_TEMPLATE_PATH.'/img/mono.jpg');
             } elseif ($subscribeParams['type'] === 'Составные букеты') {
-                $img = array('src' => SITE_TEMPLATE_PATH.'/img/bunch-compose@1x.jpg');
+                $img = array('src' => SITE_TEMPLATE_PATH.'/img/compose.jpg');
+            }
+
+            $price = (int)$item['PRICE'];
+            $sum = (int)$item['SUM_VALUE'];
+            if (empty($sum)) {
+                $sum = (int)$item['SUM_NUM'];
             }
 
             $response[] = array(
@@ -304,10 +313,10 @@ class Content
                 'name' => $item['NAME'],
                 'image' => $img['src'],
                 'link' => $item['DETAIL_PAGE_URL'],
-                'price' => $item['PRICE'],
-                'priceFormat' => number_format($item['PRICE'], 0, '', '&nbsp;'),
-                'sum' => $item['SUM_VALUE'],
-                'sumFormat' => number_format($item['SUM_VALUE'], 0, '', '&nbsp;'),
+                'price' => $price,
+                'priceFormat' => number_format($price, 0, '', '&nbsp;'),
+                'sum' => $sum,
+                'sumFormat' => number_format($sum, 0, '', '&nbsp;'),
                 'quantity' => (int)$item['QUANTITY'],
                 'canBuy' => $item['CAN_BUY'] === 'Y',
                 'cover' => $cover,
@@ -317,6 +326,7 @@ class Content
             );
         }
 
+        /*
         if (!empty($productsId)) {
             $filter = array('ID' => $productsId);
             $select = array('IBLOCK_ID', 'ID', 'PROPERTY_CML2_ARTICLE');
@@ -330,6 +340,7 @@ class Content
                 }
             }
         }
+        */
 
         return $response;
     }

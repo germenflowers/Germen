@@ -15952,3 +15952,7 @@ margin-right: 15px;
     background-color: #fff;
     display: none
 }
+
+.order-item__quantity .count {
+    pointer-events: none;
+}

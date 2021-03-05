@@ -150,23 +150,6 @@ $(document).ready(function () {
     });
   });
 
-  $('.js-order-offers-slider').each(function () {
-    let swiperInstance = new Swiper(this, {
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      slideClass: 'order-offers__item',
-      slidesPerView: 'auto',
-      spaceBetween: 24,
-      wrapperClass: 'order-offers__list'
-    });
-
-    $(this).on('swiper:update', function () {
-      swiperInstance.update();
-    });
-  });
-
   $(document).on('click', '.js-scroll-to', function (e) {
     let offset = $(this).data('offset') || 0;
     let anchorId = $(this).attr('href');
@@ -680,19 +663,6 @@ $(document).ready(function () {
     }
   })
 
-  $(document).on('click', '.js-order-bookmate', function () {
-    event.preventDefault();
-    let $orderBookmateOffers = $('.js-order-bookmate-offers');
-
-    $orderBookmateOffers
-    .removeClass('hidden');
-
-    setTimeout(function () {
-      $orderBookmateOffers
-      .trigger('swiper:update');
-    }, 0);
-  });
-
   $(document).on("click", ".js-show-coupon-form", function (event) {
     event.preventDefault();
     $(".js-coupon-form").slideToggle();
@@ -852,6 +822,7 @@ $(document).ready(function () {
    * End pdv:order
    */
 
+  /** cart **/
   $(document).on('click', '.js-add-to-cart', function (e) {
     e.preventDefault();
 
@@ -1113,6 +1084,168 @@ $(document).ready(function () {
       }
     });
   });
+  /** end cart **/
+
+  /** checkout **/
+  $('.js-order-offers-slider').each(function () {
+    let swiperInstance = new Swiper(this, {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      slideClass: 'order-offers__item',
+      slidesPerView: 'auto',
+      spaceBetween: 24,
+      wrapperClass: 'order-offers__list'
+    });
+
+    $(this).on('swiper:update', function () {
+      swiperInstance.update();
+    });
+  });
+
+  $(document).on('click', '.js-order-bookmate', function (e) {
+    e.preventDefault();
+
+    let items = $('.js-order-bookmate-items');
+
+    items.removeClass('hidden');
+
+    setTimeout(function () {
+      items.trigger('swiper:update');
+    }, 0);
+  });
+
+  $(document).on('click', '.js-order-item-delete', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'delete',
+        page: 'order',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderOrderSummary();
+
+          // renderHeaderCartItemsCount(data.data.count);
+          //
+          // $('.js-upsale-add-to-cart').each(function (index) {
+          //   if ($(this).data('id') === productId) {
+          //     $(this).removeClass('product-add-slider__btn--is-chosen');
+          //   }
+          // });
+          //
+          // if (data.data.count > 0) {
+          //   $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
+          //   $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
+          // } else {
+          //   $('.js-cart').html($.templates('#cartEmptyTmpl').render());
+          // }
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+
+  $(document).on('click', '.js-order-item-minus', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'minus',
+        page: 'order',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          if (data.data.count > 0) {
+            renderOrderSummary(data.data);
+
+            $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
+          } else {
+
+          }
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+
+  $(document).on('click', '.js-order-item-plus', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id');
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'plus',
+        page: 'order',
+        id: id,
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderOrderSummary(data.data);
+
+          $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+    });
+  });
+  /** end checkout **/
 });
 
 (function () {
@@ -1541,6 +1674,12 @@ function ajaxAddToCart(params, updateCart, isCartUpsale) {
 
 function renderHeaderCartItemsCount(count) {
   $('.js-cart-counter').html(count);
+}
+
+function renderOrderSummary(data) {
+  $('.js-order-sum').html(data.sumFormat);
+  $('.js-goods-sum').html(data.goodsPriceFormat);
+  $('.js-upsale-sum').html(data.upsalePriceFormat);
 }
 
 /**
