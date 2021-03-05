@@ -215,9 +215,9 @@ $(document).ready(function () {
         }
 
         if (typeof minTime !== 'undefined') {
-          minTime += date.getTimezoneOffset() * 60;
+          let thisMinTime = minTime + date.getTimezoneOffset() * 60;
 
-          isDisableMin = timestamp <= minTime;
+          isDisableMin = timestamp <= thisMinTime;
         }
 
         if (isDisabledMax || isDisableMin) {
