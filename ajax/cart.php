@@ -30,9 +30,10 @@ define('SM_SAFE_MODE', true);
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
 
 /**
+ * @param bool $isOrderPage
  * @return array
  */
-function getCartData(): array
+function getCartData(bool $isOrderPage = false): array
 {
     global $APPLICATION;
 
@@ -84,6 +85,7 @@ function getCartData(): array
             'USE_PREPAYMENT' => 'N',
             'USE_PRICE_ANIMATION' => 'N',
             'DISABLE_INIT_JS_IN_COMPONENT' => 'Y',
+            'ORDER_PAGE' => $isOrderPage,
         )
     );
 
@@ -286,6 +288,8 @@ if (!empty((int)$_REQUEST['id'])) {
     }
 
     elseif ($_REQUEST['action'] === 'plus') {
+        $isOrderPage = $_REQUEST['page'] === 'order';
+
         $filter = array('ID' => (int)$_REQUEST['id']);
         $select = array('QUANTITY');
         $result = CSaleBasket::GetList(array(), $filter, false, false, $select);
@@ -300,7 +304,7 @@ if (!empty((int)$_REQUEST['id'])) {
                 'QUANTITY' => $quantity,
             );
             if ($CSaleBasket->Update((int)$_REQUEST['id'], $fields)) {
-                $response = array('status' => 'success', 'data' => getCartData());
+                $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
             }
         }
     }

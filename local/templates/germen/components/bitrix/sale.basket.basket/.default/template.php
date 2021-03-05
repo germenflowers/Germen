@@ -71,7 +71,7 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                                             data-productid="<?=$item['productId']?>"
                                     ></button>
                                     <input
-                                            class="count quantity-control__input js-quantity-field"
+                                            class="count quantity-control__input"
                                             name="quantity"
                                             value="<?=$item['quantity']?>"
                                             data-id="<?=$item['id']?>"
@@ -248,7 +248,7 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                             data-productid="{{:productId}}"
                         ></button>
                         <input
-                            class="count quantity-control__input js-quantity-field"
+                            class="count quantity-control__input"
                             name="quantity"
                             value="{{:quantity}}"
                             data-id="{{:id}}"

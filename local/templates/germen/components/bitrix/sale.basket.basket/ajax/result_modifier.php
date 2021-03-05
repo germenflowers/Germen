@@ -28,7 +28,12 @@ if (!function_exists('mb_ucfirst') && extension_loaded('mbstring')) {
     }
 }
 
-$arResult['ITEMS'] = Content::getCartItemsData($arResult['ITEMS']['AnDelCanBuy']);
+$imageParams = array('width' => 64, 'height' => 64);
+if ($arParams['ORDER_PAGE']) {
+    $imageParams = array('width' => 134, 'height' => 124);
+}
+
+$arResult['ITEMS'] = Content::getCartItemsData($arResult['ITEMS']['AnDelCanBuy'], $imageParams);
 
 $products = Content::getUpsaleBookmateProducts();
 
