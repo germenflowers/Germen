@@ -16011,3 +16011,13 @@ margin-right: 15px;
 .catalog__fixed-footer-total {
     text-align: right;
 }
+
+@media (max-width: 360px) {
+    .catalog__fixed-footer-inner {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .catalog__fixed-footer-text {
+        display: none;
+    }
+}
