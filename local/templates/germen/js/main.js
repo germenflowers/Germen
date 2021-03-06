@@ -1139,22 +1139,14 @@ $(document).ready(function () {
         data = jQuery.parseJSON(data);
 
         if (data.status === 'success') {
-          renderOrderSummary();
+          if (data.data.count > 0) {
+            renderOrderSummary(data.data);
+            renderBookmate(data.data);
 
-          // renderHeaderCartItemsCount(data.data.count);
-          //
-          // $('.js-upsale-add-to-cart').each(function (index) {
-          //   if ($(this).data('id') === productId) {
-          //     $(this).removeClass('product-add-slider__btn--is-chosen');
-          //   }
-          // });
-          //
-          // if (data.data.count > 0) {
-          //   $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
-          //   $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
-          // } else {
-          //   $('.js-cart').html($.templates('#cartEmptyTmpl').render());
-          // }
+            $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
+          } else {
+            window.location.href = '/cart/';
+          }
         }
 
         $('.js-pagenavigation-loader').hide();
@@ -1192,10 +1184,11 @@ $(document).ready(function () {
         if (data.status === 'success') {
           if (data.data.count > 0) {
             renderOrderSummary(data.data);
+            renderBookmate(data.data);
 
             $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
           } else {
-
+            window.location.href = '/cart/';
           }
         }
 
@@ -1244,6 +1237,26 @@ $(document).ready(function () {
         $('.js-pagenavigation-overlay').hide();
       },
     });
+  });
+
+  $(document).on('click', '.js-order-add-upsale', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    ajaxAddToOrder({ action: 'addUpsale', page: 'order', id: id, productId: productId });
+  });
+
+  $(document).on('click', '.js-order-add-bookmate', function (e) {
+    e.preventDefault();
+
+    let self = $(this),
+      id = self.data('id'),
+      productId = self.data('productid');
+
+    ajaxAddToOrder({ action: 'addBookmate', page: 'order', id: id, productId: productId });
   });
   /** end checkout **/
 });
@@ -1647,6 +1660,7 @@ function ajaxAddToCart(params, updateCart, isCartUpsale) {
 
       if (data.status === 'success') {
         renderHeaderCartItemsCount(data.data.count);
+        renderMobileCart(data.data);
 
         if(updateCart) {
           $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
@@ -1672,14 +1686,64 @@ function ajaxAddToCart(params, updateCart, isCartUpsale) {
   });
 }
 
+function ajaxAddToOrder(params) {
+  $.ajax({
+    type: 'POST',
+    url: '/ajax/cart.php',
+    data: params,
+    beforeSend: function () {
+      $('.js-pagenavigation-loader').show();
+      $('.js-pagenavigation-overlay').show();
+    },
+    success: function (data) {
+      data = jQuery.parseJSON(data);
+
+      if (data.status === 'success') {
+        renderOrderSummary(data.data);
+        renderBookmate(data.data);
+
+        $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
+      }
+
+      $('.js-pagenavigation-loader').hide();
+      $('.js-pagenavigation-overlay').hide();
+    },
+    error: function (error) {
+      $('.js-pagenavigation-loader').hide();
+      $('.js-pagenavigation-overlay').hide();
+    }
+  });
+}
+
 function renderHeaderCartItemsCount(count) {
   $('.js-cart-counter').html(count);
+}
+
+function renderMobileCart(data) {
+  let container = $('.js-mobile-cart'),
+    priceContainer = $('.js-mobile-cart-sum');
+
+  priceContainer.html(data.sumFormat);
+
+  if (data.sum > 0) {
+    container.show();
+  } else {
+    container.hide();
+  }
 }
 
 function renderOrderSummary(data) {
   $('.js-order-sum').html(data.sumFormat);
   $('.js-goods-sum').html(data.goodsPriceFormat);
   $('.js-upsale-sum').html(data.upsalePriceFormat);
+}
+
+function renderBookmate(data) {
+  if (data.hasBookmate) {
+    $('.js-order-add-bookmate').hide();
+  } else {
+    $('.js-order-add-bookmate').show();
+  }
 }
 
 /**

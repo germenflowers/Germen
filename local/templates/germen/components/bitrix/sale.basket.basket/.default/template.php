@@ -61,7 +61,7 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                                 <span class="cart-item__title--extra">(<?=$item['subscribeParams']['type']?>, <?=$item['subscribeParams']['delivery']?>)</span>
                             <?php endif; ?>
                         </div>
-                        <?php if (empty($item['subscribeParams'])): ?>
+                        <?php if (empty($item['subscribeParams']) && !$item['bookmate']): ?>
                             <div class="cart-item__ammount">
                                 <div class="quantity-control">
                                     <button
@@ -87,10 +87,12 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <div class="cart-item__price">
-                            <?=$item['sumFormat']?>
-                            <span>₽</span>
-                        </div>
+                        <?php if ($item['sum'] > 0): ?>
+                            <div class="cart-item__price">
+                                <?=$item['sumFormat']?>
+                                <span>₽</span>
+                            </div>
+                        <?php endif; ?>
                         <div class="cart-item__delete">
                             <button
                                     class="js-cart-item-delete"
@@ -238,7 +240,7 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                     <span class="cart-item__title--extra">({{:subscribeParams.type}}, {{:subscribeParams.delivery}})</span>
                 {{/if}}
             </div>
-            {{if !subscribe}}
+            {{if !subscribe && !bookmate}}
                 <div class="cart-item__ammount">
                     <div class="quantity-control">
                         <button
@@ -264,7 +266,9 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                     </div>
                 </div>
             {{/if}}
-            <div class="cart-item__price">{{:sumFormat}} <span>₽</span></div>
+            {{if sum > 0}}
+                <div class="cart-item__price">{{:sumFormat}} <span>₽</span></div>
+            {{/if}}
             <div class="cart-item__delete">
                 <button class="js-cart-item-delete" type="button" data-id="{{:id}}" data-productid="{{:productId}}">
                     <svg width="16" height="16" aria-hidden="true">

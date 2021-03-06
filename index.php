@@ -438,19 +438,3 @@ if (!empty($_COOKIE['wishlist'])) {
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');
 ?>
-<div class="catalog__fixed-footer">
-    <div class="catalog__fixed-footer-inner">
-        <div class="catalog__fixed-footer-time">
-            <svg class="catalog__fixed-footer-icon">
-                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#car-delivery"></use>
-            </svg>
-            <span>60 мин.</span>
-        </div>
-        <div class="catalog__fixed-footer-text">Корзина</div>
-        <div class="catalog__fixed-footer-total">
-            <span>2 750</span> ₽
-        </div>
-    </div>
-</div>
-
-
