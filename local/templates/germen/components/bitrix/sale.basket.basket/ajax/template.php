@@ -21,13 +21,22 @@ foreach ($arResult['ITEMS'] as $item) {
     $items[] = $item;
 }
 
+$hasUpsale = false;
+$hasBookmate = false;
+
 $goodsPrice = 0;
 $upsalePrice = 0;
 foreach ($items as $item) {
     if ($item['upsale']) {
+        $hasUpsale = true;
+
         $upsalePrice += $item['sum'];
     } else {
         $goodsPrice += $item['sum'];
+    }
+
+    if ($item['bookmate']) {
+        $hasBookmate = true;
     }
 }
 
@@ -51,5 +60,7 @@ Tools::setStorage(
         'upsalePrice' => $upsalePrice,
         'upsalePriceFormat' => $upsalePriceFormat,
         'coupon' => $arResult['coupon'],
+        'hasUpsale' => $hasUpsale,
+        'hasBookmate' => $hasBookmate,
     )
 );

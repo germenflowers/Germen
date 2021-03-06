@@ -101,15 +101,15 @@ function getCartData(bool $isOrderPage = false): array
  */
 function addUpsale(int $id, array $cartItems): bool
 {
-    $upsaleMaxQuantity = false;
+    $maxQuantity = false;
     foreach ($cartItems as $cartItem) {
         if ($cartItem['productId'] === $id && $cartItem['quantity'] >= 5) {
-            $upsaleMaxQuantity = true;
+            $maxQuantity = true;
             break;
         }
     }
 
-    if ($upsaleMaxQuantity) {
+    if ($maxQuantity) {
         return false;
     }
 
@@ -120,6 +120,44 @@ function addUpsale(int $id, array $cartItems): bool
             array(
                 'NAME' => 'Upsale',
                 'CODE' => 'UPSALE',
+                'VALUE' => true,
+            ),
+        ),
+    );
+    $result = Basket::addProduct($fields);
+
+    return (bool)$result->isSuccess();
+}
+
+function addBookmate(int $id, array $cartItems): bool
+{
+    $hasBookmate = false;
+    foreach ($cartItems as $cartItem) {
+        if ($cartItem['bookmate']) {
+            $hasBookmate = true;
+            break;
+        }
+    }
+
+    $maxQuantity = false;
+    foreach ($cartItems as $cartItem) {
+        if ($cartItem['productId'] === $id && $cartItem['quantity'] >= 1) {
+            $maxQuantity = true;
+            break;
+        }
+    }
+
+    if ($hasBookmate || $maxQuantity) {
+        return false;
+    }
+
+    $fields = array(
+        'PRODUCT_ID' => $id,
+        'QUANTITY' => 1,
+        'PROPS' => array(
+            array(
+                'NAME' => 'Bookmate',
+                'CODE' => 'BOOKMATE',
                 'VALUE' => true,
             ),
         ),
@@ -145,6 +183,8 @@ if (!Loader::includeModule('sale')) {
 }
 
 $response = array('status' => 'error');
+
+$isOrderPage = $_REQUEST['page'] === 'order';
 
 if (!empty((int)$_REQUEST['id'])) {
     if ($_REQUEST['action'] === 'add') {
@@ -220,7 +260,7 @@ if (!empty((int)$_REQUEST['id'])) {
                     }
                 }
 
-                $response = array('status' => 'success', 'data' => getCartData());
+                $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
             }
         }
     }
@@ -231,7 +271,17 @@ if (!empty((int)$_REQUEST['id'])) {
         $productId = (int)$_REQUEST['id'];
 
         if (addUpsale($productId, $cartItems)) {
-            $response = array('status' => 'success', 'data' => getCartData());
+            $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
+        }
+    }
+
+    elseif ($_REQUEST['action'] === 'addBookmate') {
+        $cartItems = Content::getCartItems();
+
+        $productId = (int)$_REQUEST['id'];
+
+        if (addBookmate($productId, $cartItems)) {
+            $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
         }
     }
 
@@ -241,20 +291,29 @@ if (!empty((int)$_REQUEST['id'])) {
             $cartItems = Content::getCartItems();
 
             $onlyUpsale = true;
+            $onlyBookmate = true;
+            $onlyPromotion = true;
             foreach ($cartItems as $item) {
                 if (!$item['upsale']) {
                     $onlyUpsale = false;
-                    break;
+                }
+
+                if (!$item['bookmate']) {
+                    $onlyBookmate = false;
+                }
+
+                if (!$item['upsale'] && !$item['bookmate']) {
+                    $onlyPromotion = false;
                 }
             }
 
-            if($onlyUpsale) {
+            if ($onlyUpsale || $onlyBookmate || $onlyPromotion) {
                 foreach ($cartItems as $item) {
                     $CSaleBasket->Delete((int)$item['id']);
                 }
             }
 
-            $response = array('status' => 'success', 'data' => getCartData());
+            $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
         }
     }
 
@@ -283,12 +342,12 @@ if (!empty((int)$_REQUEST['id'])) {
         }
 
         if ($success) {
-            $response = array('status' => 'success', 'delete' => $delete, 'data' => getCartData());
+            $response = array('status' => 'success', 'delete' => $delete, 'data' => getCartData($isOrderPage));
         }
     }
 
     elseif ($_REQUEST['action'] === 'plus') {
-        $isOrderPage = $_REQUEST['page'] === 'order';
+        $CSaleBasket = new CSaleBasket();
 
         $filter = array('ID' => (int)$_REQUEST['id']);
         $select = array('QUANTITY');
@@ -297,14 +356,24 @@ if (!empty((int)$_REQUEST['id'])) {
             $quantity = (int)$row['QUANTITY'] + 1;
         }
 
-        if (!empty($quantity) && $quantity > 0) {
-            $CSaleBasket = new CSaleBasket();
+        $isUpsale = false;
+        $filter = array('BASKET_ID' => (int)$_REQUEST['id'], 'CODE' => 'UPSALE', 'VALUE' => true);
+        $select = array();
+        $result = $CSaleBasket->GetPropsList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $isUpsale = true;
+        }
 
-            $fields = array(
-                'QUANTITY' => $quantity,
-            );
-            if ($CSaleBasket->Update((int)$_REQUEST['id'], $fields)) {
-                $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
+        if (!empty($quantity)) {
+            if ($isUpsale && $quantity >= 6) {
+
+            } elseif ($quantity > 0) {
+                $fields = array(
+                    'QUANTITY' => $quantity,
+                );
+                if ($CSaleBasket->Update((int)$_REQUEST['id'], $fields)) {
+                    $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
+                }
             }
         }
     }
@@ -320,7 +389,7 @@ if (!empty((int)$_REQUEST['id'])) {
             'QUANTITY' => (int)$_REQUEST['quantity'],
         );
         if ($CSaleBasket->Update((int)$_REQUEST['id'], $fields)) {
-            $response = array('status' => 'success', 'data' => getCartData());
+            $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
         }
     }
 }
@@ -329,13 +398,13 @@ elseif ($_REQUEST['action'] === 'couponAdd' && !empty($_REQUEST['coupon'])) {
     DiscountCouponsManager::init();
     DiscountCouponsManager::clear(true);
     DiscountCouponsManager::add($_REQUEST['coupon']);
-    $response = array('status' => 'success', 'data' => getCartData());
+    $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
 }
 
 elseif ($_REQUEST['action'] === 'couponDelete') {
     DiscountCouponsManager::init();
     DiscountCouponsManager::clear(true);
-    $response = array('status' => 'success', 'data' => getCartData());
+    $response = array('status' => 'success', 'data' => getCartData($isOrderPage));
 }
 
 die(json_encode($response));

@@ -202,6 +202,7 @@ class Content
                 'productId' => (int)$row['PRODUCT_ID'],
                 'quantity' => (int)$row['QUANTITY'],
                 'upsale' => false,
+                'bookmate' => false,
                 'subscribe' => false,
             );
         }
@@ -213,6 +214,13 @@ class Content
         $result = $CSaleBasket->GetPropsList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {
             $cartItems[(int)$row['BASKET_ID']]['upsale'] = true;
+        }
+
+        $filter = array('BASKET_ID' => array_keys($cartItems), 'CODE' => 'BOOKMATE', 'VALUE' => true);
+        $select = array();
+        $result = $CSaleBasket->GetPropsList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $cartItems[(int)$row['BASKET_ID']]['bookmate'] = true;
         }
 
         $filter = array('BASKET_ID' => array_keys($cartItems), 'CODE' => 'SUBSCRIBE', 'VALUE' => true);
@@ -271,6 +279,13 @@ class Content
                 }
             }
 
+            $bookmate = false;
+            foreach ($item['PROPS'] as $property) {
+                if ($property['CODE'] === 'BOOKMATE') {
+                    $bookmate = true;
+                }
+            }
+
             $subscribe = false;
             foreach ($item['PROPS'] as $property) {
                 if ($property['CODE'] === 'SUBSCRIBE') {
@@ -321,6 +336,7 @@ class Content
                 'canBuy' => $item['CAN_BUY'] === 'Y',
                 'cover' => $cover,
                 'upsale' => $upsale,
+                'bookmate' => $bookmate,
                 'subscribe' => !empty($subscribeParams),
                 'subscribeParams' => $subscribeParams,
             );

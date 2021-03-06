@@ -22,15 +22,24 @@ if ($arParams['SET_TITLE'] === 'Y' && strlen($request->get('ORDER_ID'))) {
     $APPLICATION->SetTitle('Заказ оформлен');
 }
 
+$hasUpsale = false;
+$hasBookmate = false;
+
 $orderPrice = (int)$arResult['ORDER_PRICE'] + (int)$arResult['DELIVERY_PRICE'];
 
 $goodsPrice = 0;
 $upsalePrice = 0;
 foreach ($arResult['BASKET_ITEMS'] as $item) {
     if ($item['upsale']) {
+        $hasUpsale = true;
+
         $upsalePrice += $item['sum'];
     } else {
         $goodsPrice += $item['sum'];
+    }
+
+    if ($item['bookmate']) {
+        $hasBookmate = true;
     }
 }
 
@@ -68,7 +77,13 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                     ?>
                                     <div class="order-offers__item">
                                         <div class="order-offer">
-                                            <button class="order-offer__add" type="button" aria-label="Добавить к заказу">
+                                            <button
+                                                    class="order-offer__add js-order-add-upsale"
+                                                    type="button"
+                                                    aria-label="Добавить к заказу"
+                                                    data-id="<?=$item['id']?>"
+                                                    data-productid="<?=$item['id']?>"
+                                            >
                                                 +
                                             </button>
                                             <div class="order-offer__image">
@@ -108,7 +123,14 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                 <?php foreach ($arResult['BOOKMATE_PRODUCTS'] as $item): ?>
                                     <div class="order-offers__item">
                                         <div class="order-offer">
-                                            <button class="order-offer__add" type="button" aria-label="Добавить к заказу">
+                                            <button
+                                                    class="order-offer__add js-order-add-bookmate"
+                                                    type="button"
+                                                    aria-label="Добавить к заказу"
+                                                    data-id="<?=$item['id']?>"
+                                                    data-productid="<?=$item['id']?>"
+                                                    style="<?=$hasBookmate ? 'display:none;' : ''?>"
+                                            >
                                                 +
                                             </button>
                                             <div class="order-offer__image">
@@ -422,11 +444,13 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                                     </span>
                                                 <?php endif; ?>
                                             </div>
-                                            <div class="order-item__price">
-                                                <span><?=$item['sumFormat']?></span>
-                                                <span class="rouble"></span>
-                                            </div>
-                                            <?php if (empty($item['subscribeParams'])): ?>
+                                            <?php if ($item['sum'] > 0): ?>
+                                                <div class="order-item__price">
+                                                    <span><?=$item['sumFormat']?></span>
+                                                    <span class="rouble"></span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if (empty($item['subscribeParams']) && !$item['bookmate']): ?>
                                                 <div class="order-item__quantity">
                                                     <div class="quantity-control">
                                                         <button
@@ -580,10 +604,12 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                 </span>
                             {{/if}}
                         </div>
-                        <div class="order-item__price">
-                            <span>{{:sumFormat}}</span> <span class="rouble"></span>
-                        </div>
-                        {{if !subscribe}}
+                        {{if sum > 0}}
+                            <div class="order-item__price">
+                                <span>{{:sumFormat}}</span> <span class="rouble"></span>
+                            </div>
+                        {{/if}}
+                        {{if !subscribe && !bookmate}}
                             <div class="order-item__quantity">
                                 <div class="quantity-control">
                                     <button
