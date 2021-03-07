@@ -58,6 +58,8 @@ $arResult['informationBanner'] = Content::getInformationBannerCached();
 
 $deliveriesTimes = Tools::getDeliveryTime();
 $arResult['deliveryTime'] = $deliveriesTimes[DELIVERY_ID__DEFAULT]['TIME_NUMBER'];
+$arResult['deliveryId'] = DELIVERY_ID__DEFAULT;
+$arResult['paySystemId'] = $arResult['PAY_SYSTEM'][0]['ID'];
 
 $arResult['activeEndTime'] = 0;
 $arResult['countDateDelivery'] = 1;
@@ -109,3 +111,27 @@ if (!empty($productsId)) {
         }
     }
 }
+
+$arResult['properties'] = array();
+foreach ($arResult['JS_DATA']['ORDER_PROP']['properties'] as $item) {
+    $arResult['properties'][$item['CODE']] = array(
+        'id' => (int)$item['ID'],
+        'code' => $item['CODE'],
+        'name' => $item['NAME'],
+        'value' => '',
+        'required' => $item['REQUIRED'] === 'Y',
+    );
+}
+
+$arResult['deliveryDateProperties'] = array();
+foreach ($arResult['properties'] as $item) {
+    if ($item['code'] === 'DELIVERY_DATE_TO') {
+        continue;
+    }
+
+    if (stripos($item['code'], 'DELIVERY_DATE') !== false) {
+        $arResult['deliveryDateProperties'][$item['id']] = $item;
+    }
+}
+
+ksort($arResult['deliveryDateProperties']);

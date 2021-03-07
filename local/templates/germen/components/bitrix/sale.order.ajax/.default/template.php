@@ -73,8 +73,17 @@ $oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
     </header>
     <div class="order-content">
         <form class="order-form" name="orderForm" action="" method="post">
+            <input type="hidden" name="soa-action" value="saveOrderAjax">
+            <input type="hidden" name="save" value="Y">
+            <input type="hidden" name="PERSON_TYPE" value="1">
+            <input type="hidden" name="PAY_SYSTEM_ID" value="<?=$arResult['paySystemId']?>">
+            <input type="hidden" name="DELIVERY_ID" value="<?=$arResult['deliveryId']?>">
             <input type="hidden" name="countDateDelivery" value="<?=$arResult['countDateDelivery']?>">
-            <input class="input" type="hidden" name="ORDER_PROP_1" value="1">
+            <input type="hidden" name="ORDER_PROP_1" value="1">
+
+            <?php foreach ($arResult['deliveryDateProperties'] as $item):?>
+                <input type="hidden" name="ORDER_PROP_<?=$item['id']?>" value="" class="js-delivery-date">
+            <?php endforeach;?>
 
             <div class="order-form__main">
                 <div class="order-form__title">Оформление заказа</div>
@@ -372,7 +381,7 @@ $oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
                         <div class="promo-order__block promo-order__block--full">
                             <div class="promo-order__comment">
                                 <textarea
-                                        name="COMMENT"
+                                        name="ORDER_DESCRIPTION"
                                         class="textarea"
                                         placeholder="Комментарий к заказу"
                                         maxlength="400"

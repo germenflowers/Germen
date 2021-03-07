@@ -2,16 +2,39 @@
 
 /**
  * @global CMain $APPLICATION
- * @global CMain $USER
  */
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php';
+use \Bitrix\Main\Context;
+use \Bitrix\Main\Loader;
 
-$APPLICATION->SetTitle('Оформление заказа');
-?>
-<?php $APPLICATION->IncludeComponent(
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+    die('No direct script access allowed');
+}
+
+define('NO_AGENT_CHECK', true);
+define('DisableEventsCheck', true);
+define('NO_KEEP_STATISTIC', true);
+define('NO_AGENT_STATISTIC', true);
+define('NOT_CHECK_PERMISSIONS', true);
+define('STOP_STATISTICS', true);
+define('PERFMON_STOP', true);
+define('SM_SAFE_MODE', true);
+
+require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
+
+$request = Context::getCurrent()->getRequest();
+
+if (!$request->isAjaxRequest()) {
+    die(json_encode(array('status' => 'error', 'message' => 'No direct script access allowed')));
+}
+
+if (!Loader::includeModule('sale')) {
+    die(json_encode(array('status' => 'error', 'message' => 'Server Error')));
+}
+
+$APPLICATION->IncludeComponent(
     'bitrix:sale.order.ajax',
-    '',
+    'ajax',
     array(
         'ACTION_VARIABLE' => '',
         'ADDITIONAL_PICT_PROP_2' => '',
@@ -80,7 +103,4 @@ $APPLICATION->SetTitle('Оформление заказа');
         'USE_PREPAYMENT' => 'N',
         'USE_YM_GOALS' => 'N',
     )
-); ?>
-<?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php';
-?>
+);
