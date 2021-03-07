@@ -138,6 +138,7 @@ class Tools
             $arr = $cache->getVars();
         } elseif ($cache->startDataCache()) {
             Loader::includeModule('sale');
+
             $arr = [];
             $res = \Bitrix\Sale\Delivery\Services\Table::getList(
                 array(

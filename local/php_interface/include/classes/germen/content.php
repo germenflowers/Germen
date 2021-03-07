@@ -317,9 +317,12 @@ class Content
             }
 
             $price = (int)$item['PRICE'];
+            $oldPrice = (int)$item['BASE_PRICE'];
             $sum = (int)$item['SUM_VALUE'];
+            $oldSum = (int)$item['SUM_FULL_PRICE'];
             if (empty($sum)) {
                 $sum = (int)$item['SUM_NUM'];
+                $oldSum = (int)$item['SUM_BASE'];
             }
 
             $response[] = array(
@@ -330,8 +333,12 @@ class Content
                 'link' => $item['DETAIL_PAGE_URL'],
                 'price' => $price,
                 'priceFormat' => number_format($price, 0, '', '&nbsp;'),
+                'oldPrice' => $oldPrice,
+                'oldPriceFormat' => number_format($oldPrice, 0, '', '&nbsp;'),
                 'sum' => $sum,
                 'sumFormat' => number_format($sum, 0, '', '&nbsp;'),
+                'oldSum' => $oldSum,
+                'oldSumFormat' => number_format($oldSum, 0, '', '&nbsp;'),
                 'quantity' => (int)$item['QUANTITY'],
                 'canBuy' => $item['CAN_BUY'] === 'Y',
                 'cover' => $cover,
