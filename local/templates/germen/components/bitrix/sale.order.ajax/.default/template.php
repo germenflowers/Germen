@@ -26,16 +26,22 @@ $hasUpsale = false;
 $hasBookmate = false;
 
 $orderPrice = (int)$arResult['ORDER_PRICE'] + (int)$arResult['DELIVERY_PRICE'];
+$oldOrderPrice = (int)$arResult['PRICE_WITHOUT_DISCOUNT_VALUE'];
+$discount = $oldOrderPrice - (int)$arResult['DISCOUNT_PRICE'];
 
 $goodsPrice = 0;
+$oldGoodsPrice = 0;
 $upsalePrice = 0;
+$oldUpsalePrice = 0;
 foreach ($arResult['BASKET_ITEMS'] as $item) {
     if ($item['upsale']) {
         $hasUpsale = true;
 
         $upsalePrice += $item['sum'];
+        $oldUpsalePrice += $item['oldSum'];
     } else {
         $goodsPrice += $item['sum'];
+        $oldGoodsPrice += $item['oldSum'];
     }
 
     if ($item['bookmate']) {
@@ -44,8 +50,12 @@ foreach ($arResult['BASKET_ITEMS'] as $item) {
 }
 
 $orderPriceFormat = number_format($orderPrice, 0, '', ' ');
+$oldOrderPriceFormat = number_format($oldOrderPrice, 0, '', ' ');
+$discountFormat = number_format($discount, 0, '', ' ');
 $goodsPriceFormat = number_format($goodsPrice, 0, '', ' ');
+$oldGoodsPriceFormat = number_format($oldGoodsPrice, 0, '', ' ');
 $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
+$oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
 ?>
 <?php if (strlen($request->get('ORDER_ID')) > 0): ?>
     <?php
@@ -62,7 +72,10 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
         </div>
     </header>
     <div class="order-content">
-        <form class="order-form" id="form-order" name="orderForm" action="" method="post">
+        <form class="order-form" name="orderForm" action="" method="post">
+            <input type="hidden" name="countDateDelivery" value="<?=$arResult['countDateDelivery']?>">
+            <input class="input" type="hidden" name="ORDER_PROP_1" value="1">
+
             <div class="order-form__main">
                 <div class="order-form__title">Оформление заказа</div>
 
@@ -153,25 +166,23 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                 </div>
 
                 <div class="order-form__section">
-                    <input class="input" type="hidden" name="ORDER_PROP_1" value="1">
-
                     <div class="order-form__subtitle">Адрес доставки</div>
                     <div class="promo-order__row">
-                        <div class="promo-order__block">
+                        <div class="promo-order__block js-address-block">
                             <div class="input__wrapper input__wrapper--mark">
                                 <input
-                                        class="input"
+                                        class="input js-address-property"
                                         type="text"
                                         name="ORDER_PROP_2"
                                         value=""
                                         placeholder="Улица и дом"
                                 >
                                 <div class="list_street">
-                                    <ul id="search-street"></ul>
+                                    <ul class="js-search-street"></ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="promo-order__block">
+                        <div class="promo-order__block js-address-block">
                             <div class="input__wrapper">
                                 <input
                                         class="input"
@@ -190,10 +201,8 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         name="ORDER_PROP_15"
                                         type="checkbox"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_15">Я не знаю адрес доставки</label>
-
                                 <span
                                         class="promo-tooltip promo-tooltip--question"
                                         title="Мы уточним удобное время и место доставки у получателя, не раскрывая сюрприз"
@@ -206,8 +215,7 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                 </span>
                             </div>
                         </div>
-
-                        <div class="promo-order__block promo-order__block--full" style="width: 100%;">
+                        <div class="promo-order__block promo-order__block--full js-address-block" style="width: 100%;">
                             <div class="order-form__map" id="delivery-map"></div>
                         </div>
                     </div>
@@ -216,20 +224,25 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                 <div class="order-form__section">
                     <div class="order-form__subtitle">Когда доставить</div>
                     <div class="promo-order__row">
-                        <div class="promo-order__block promo-order__block--full">
-                            <input
-                                    class="input order-datetime"
-                                    id="ORDER_PROP_1_1"
-                                    type="text"
-                                    name="ORDER_PROP_1[1]"
-                                    value=""
-                                    placeholder="Когда доставить"
-                                    autocomplete="off"
-                                    data-time=""
-                                    data-maxtime=""
-                                    data-mintime=""
-                            >
-                        </div>
+                        <?php for ($i = 1; $i <= $arResult['countDateDelivery']; $i++): ?>
+                            <div class="promo-order__block promo-order__block--full js-order-delivery-time">
+                                <input
+                                        class="input js-order-datetime"
+                                        type="text"
+                                        name="ORDER_PROP_4[<?=$i - 1?>]"
+                                        value=""
+                                        placeholder="Когда доставить"
+                                        autocomplete="off"
+                                        data-time="<?=$arResult['deliveryTime']?>"
+                                    <?php if (!empty($arResult['activeEndTime'])): ?>
+                                        data-maxtime="<?=$arResult['activeEndTime']?>"
+                                    <?php endif; ?>
+                                    <?php if (!empty($arResult['informationBanner'])): ?>
+                                        data-mintime="<?=strtotime(date('d.m.Y').' 23:59')?>"
+                                    <?php endif; ?>
+                                >
+                            </div>
+                        <?php endfor; ?>
                     </div>
                 </div>
 
@@ -240,7 +253,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                             <div class="input__wrapper input__wrapper--mark">
                                 <input
                                         class="input js-phone-1"
-                                        id="ORDER_PROP_5"
                                         type="text"
                                         name="ORDER_PROP_5"
                                         value=""
@@ -256,7 +268,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_6"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_6">Не звонить для подтверждения</label>
                             </div>
@@ -267,7 +278,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_7"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_7">Отправить фотографии букета перед доставкой</label>
                             </div>
@@ -278,7 +288,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_18"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_18">Анонимный заказ</label>
                                 <span
@@ -303,7 +312,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                             <div class="input__wrapper input__wrapper--mark">
                                 <input
                                         class="input"
-                                        id="ORDER_PROP_19"
                                         type="email"
                                         name="ORDER_PROP_19"
                                         value=""
@@ -321,7 +329,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                             <div class="input__wrapper input__wrapper--mark">
                                 <input
                                         class="input js-phone-2"
-                                        id="ORDER_PROP_8"
                                         type="text"
                                         name="ORDER_PROP_8"
                                         value=""
@@ -333,7 +340,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                             <div class="input__wrapper input__wrapper--mark">
                                 <input
                                         class="input"
-                                        id="ORDER_PROP_9"
                                         type="text"
                                         name="ORDER_PROP_9"
                                         value=""
@@ -349,12 +355,11 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_14"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_14">Придумайте вместо меня!</label>
                             </div>
                         </div>
-                        <div class="promo-order__block promo-order__block--full">
+                        <div class="promo-order__block promo-order__block--full js-note-block">
                             <div class="promo-order__comment">
                                 <textarea
                                         name="ORDER_PROP_13"
@@ -382,7 +387,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_10"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_10">Это сюрприз</label>
                                 <span
@@ -403,7 +407,6 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                         type="checkbox"
                                         name="ORDER_PROP_12"
                                         value="Y"
-                                        checked
                                 >
                                 <label for="ORDER_PROP_12">Добавить записку</label>
                             </div>
@@ -412,8 +415,14 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                 </div>
 
                 <div class="order-form__cta">
-                    <button class="btn order-form__submit">
+                    <button class="btn order-form__submit js-order-button">
                         Оплатить
+                        <?php if ($orderPrice !== $oldOrderPrice): ?>
+                            <span class="promo-order__submit__old-price">
+                                <span><?=$oldOrderPriceFormat?></span>
+                                <span class="rouble"></span>
+                            </span>
+                        <?php endif; ?>
                         <span class="js-order-sum"><?=$orderPriceFormat?></span>
                         <span class="rouble"></span>
                     </button>
@@ -446,6 +455,12 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                                             </div>
                                             <?php if ($item['sum'] > 0): ?>
                                                 <div class="order-item__price">
+                                                    <?php if ($item['sum'] !== $item['oldSum']): ?>
+                                                        <span class="promo-order__submit__old-price">
+                                                            <span><?=$item['oldSumFormat']?></span>
+                                                            <span class="rouble"></span>
+                                                        </span>
+                                                    <?php endif; ?>
                                                     <span><?=$item['sumFormat']?></span>
                                                     <span class="rouble"></span>
                                                 </div>
@@ -502,8 +517,14 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                         <div class="order-summary__item">
                             <div class="order-summary__label">Товары</div>
                             <div class="order-summary__value">
-                                <b>
-                                    <span class="js-goods-sum"><?=$goodsPriceFormat?></span>
+                                <b class="js-goods-sum">
+                                    <?php if ($goodsPrice !== $oldGoodsPrice): ?>
+                                        <span class="promo-order__submit__old-price">
+                                            <span><?=$oldGoodsPriceFormat?></span>
+                                            <span class="rouble"></span>
+                                        </span>
+                                    <?php endif; ?>
+                                    <span><?=$goodsPriceFormat?></span>
                                     <span class="rouble"></span>
                                 </b>
                             </div>
@@ -517,63 +538,56 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                         <div class="order-summary__item">
                             <div class="order-summary__label">Комплимент</div>
                             <div class="order-summary__value">
-                                <b>
-                                    <span class="js-upsale-sum"><?=$upsalePriceFormat?></span>
+                                <b class="js-upsale-sum">
+                                    <?php if ($upsalePrice !== $oldUpsalePrice): ?>
+                                        <span class="promo-order__submit__old-price">
+                                            <span><?=$oldUpsalePriceFormat?></span>
+                                            <span class="rouble"></span>
+                                        </span>
+                                    <?php endif; ?>
+                                    <span><?=$upsalePriceFormat?></span>
                                     <span class="rouble"></span>
                                 </b>
                             </div>
                         </div>
-
                         <div class="order-summary__item">
                             <div class="order-summary__label">Промокод</div>
-                            <div class="order-summary__value">
-                                <button class="order-summary__coupon-link">
-                                    Применить
-                                </button>
-                                <div>
-                                    <div class="promo-order__coupon__discount">
-                                        <span>coupon-name</span>
-                                        (
-                                        <strong>coupon-value</strong>
-                                        )
-                                        <div class="promo-order__coupon__discount__cancel">Отменить</div>
-                                    </div>
-                                    <div class="promo-order__coupon__sum">
-                                        -
-                                        <span></span>
-                                        <span class="rouble"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="promo-order__coupon">
-                            <div class="promo-order__coupon__group">
-                                <div class="promo-order__coupon__cell promo-order__coupon__cell--input">
-                                    <div class="input__wrapper">
-                                        <input type="text" class="input" placeholder="Введите промокод">
-                                    </div>
-                                    <p class="promo-order__error">Промо-код не найден :(</p>
-                                </div>
-                                <div class="promo-order__coupon__cell promo-order__coupon__cell--button">
-                                    <button class="btn btn__main promo-order__coupon__button">
-                                        <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--desktop">
-                                            Применить
-                                        </span>
-                                        <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--mobile">
-                                            &#10003;
-                                        </span>
-                                        <span class="btn__loader">
-                                            <span class="spinner"></span>
-                                        </span>
+                            <div class="order-summary__value js-promocode">
+                                <?php if (empty($arResult['coupon'])): ?>
+                                    <button class="order-summary__coupon-link js-order-promocode-apply">
+                                        Применить
                                     </button>
-                                </div>
+                                <?php else: ?>
+                                    <div>
+                                        <div class="promo-order__coupon__discount">
+                                            <span><?=$arResult['coupon']['coupon']?></span>
+                                            (
+                                            <strong><?=$arResult['coupon']['coupon']?></strong>
+                                            )
+                                            <div class="promo-order__coupon__discount__cancel js-order-promocode-cancel">
+                                                Отменить
+                                            </div>
+                                        </div>
+                                        <div class="promo-order__coupon__sum">
+                                            -
+                                            <span><?=$discountFormat?></span>
+                                            <span class="rouble"></span>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
-
+                        <div class="promo-order__coupon js-order-promocode-form"></div>
                         <div class="order-summary__item order-summary__item--total">
                             <div class="order-summary__label">Итого</div>
-                            <div class="order-summary__value">
-                                <span class="js-order-sum"><?=$orderPriceFormat?></span>
+                            <div class="order-summary__value js-order-sum">
+                                <?php if ($orderPrice !== $oldOrderPrice): ?>
+                                    <span class="promo-order__submit__old-price">
+                                        <span><?=$oldOrderPriceFormat?></span>
+                                        <span class="rouble"></span>
+                                    </span>
+                                <?php endif; ?>
+                                <span><?=$orderPriceFormat?></span>
                                 <span class="rouble"></span>
                             </div>
                         </div>
@@ -606,6 +620,12 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
                         </div>
                         {{if sum > 0}}
                             <div class="order-item__price">
+                                {{if sum !== oldSum}}
+                                    <span class="promo-order__submit__old-price">
+                                        <span>{{:oldSumFormat}}</span>
+                                        <span class="rouble"></span>
+                                    </span>
+                                {{/if}}
                                 <span>{{:sumFormat}}</span> <span class="rouble"></span>
                             </div>
                         {{/if}}
@@ -655,4 +675,89 @@ $upsalePriceFormat = number_format($upsalePrice, 0, '', ' ');
             </div>
         </div>
     {{/for}}
+</script>
+
+<script id="goodsPriceTmpl" type="text/x-jsrender">
+    {{if goodsPrice !== oldGoodsPrice}}
+        <span class="promo-order__submit__old-price">
+            <span>{{:oldGoodsPriceFormat}}</span>
+            <span class="rouble"></span>
+        </span>
+    {{/if}}
+    <span>{{:goodsPriceFormat}}</span>
+    <span class="rouble"></span>
+</script>
+
+<script id="upsalePriceTmpl" type="text/x-jsrender">
+    {{if upsalePrice !== oldUpsalePrice}}
+        <span class="promo-order__submit__old-price">
+            <span>{{:oldUpsalePriceFormat}}</span>
+            <span class="rouble"></span>
+        </span>
+    {{/if}}
+    <span>{{:upsalePriceFormat}}</span>
+    <span class="rouble"></span>
+</script>
+
+<script id="orderPriceTmpl" type="text/x-jsrender">
+    {{if sum !== oldSum}}
+        <span class="promo-order__submit__old-price">
+            <span>{{:oldSumFormat}}</span>
+            <span class="rouble"></span>
+        </span>
+    {{/if}}
+    <span>{{:sumFormat}}</span>
+    <span class="rouble"></span>
+</script>
+
+<script id="orderButtonTmpl" type="text/x-jsrender">
+    Оплатить
+    {{if sum !== oldSum}}
+        <span class="promo-order__submit__old-price">
+            <span>{{:oldSumFormat}}</span>
+            <span class="rouble"></span>
+        </span>
+    {{/if}}
+    <span>{{:sumFormat}}</span>
+    <span class="rouble"></span>
+</script>
+
+<script id="orderPromocodeApplyTmpl" type="text/x-jsrender">
+    <button class="order-summary__coupon-link js-order-promocode-apply">Применить</button>
+</script>
+
+<script id="orderPromocodeTmpl" type="text/x-jsrender">
+    <div>
+        <div class="promo-order__coupon__discount">
+            <span>{{:coupon.coupon}}</span> (<strong>{{:coupon.coupon}}</strong>)
+            <div class="promo-order__coupon__discount__cancel js-order-promocode-cancel">Отменить</div>
+        </div>
+        <div class="promo-order__coupon__sum">
+            -<span>{{:discountFormat}}</span> <span class="rouble"></span>
+        </div>
+    </div>
+</script>
+
+<script id="orderPromocodeFormTmpl" type="text/x-jsrender">
+    <div class="promo-order__coupon__group">
+        <div class="promo-order__coupon__cell promo-order__coupon__cell--input">
+            <div class="input__wrapper">
+                <input type="text" name="coupon" class="input" placeholder="Введите промокод">
+            </div>
+            <p class="promo-order__error js-order-promocode-error" style="display: none;"></p>
+        </div>
+        <div class="promo-order__coupon__cell promo-order__coupon__cell--button">
+            <button class="btn btn__main promo-order__coupon__button js-order-promocode-add">
+                <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--desktop">
+                    Применить
+                </span>
+                <span class="btn__text promo-order__coupon__button__text promo-order__coupon__button__text--mobile">
+                    &#10003;
+                </span>
+                <span class="btn__loader">
+                    <span class="spinner"></span>
+                </span>
+            </button>
+        </div>
+    </div>
 </script>

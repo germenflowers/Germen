@@ -162,58 +162,6 @@ $(document).ready(function () {
   initPhoneMask('1');
   initPhoneMask('2');
 
-  let body = $('body');
-
-  let startDate = new Date(),
-    orderData = $('.order-datetime'),
-    minHours = 8,
-    maxHours = 21,
-    maxTime = orderData.data('maxtime'),
-    minTime = orderData.data('mintime');
-
-  startDate.setMinutes(startDate.getMinutes() + parseInt(orderData.data('time')));
-  startDate.setHours(startDate.getHours() + 1);
-  startDate.setMinutes(0);
-
-  if (startDate.getHours() > maxHours) {
-    startDate.setDate(startDate.getDate() + 1);
-    startDate.setHours(minHours);
-  }
-
-  orderData.datepicker({
-    timepicker: true,
-    startDate: startDate,
-    minDate: startDate,
-    minHours: minHours,
-    maxHours: maxHours,
-    onRenderCell: function (date, cellType) {
-      if (cellType === 'day') {
-        let timestamp = date.getTime() / 1000,
-          isDisabled = false,
-          isDisabledMax = false,
-          isDisableMin = false;
-
-        if (typeof maxTime !== 'undefined') {
-          isDisabledMax = timestamp >= maxTime;
-        }
-
-        if (typeof minTime !== 'undefined') {
-          minTime += date.getTimezoneOffset() * 60;
-
-          isDisableMin = timestamp <= minTime;
-        }
-
-        if (isDisabledMax || isDisableMin) {
-          isDisabled = true;
-        }
-
-        return {
-          disabled: isDisabled
-        }
-      }
-    }
-  });
-
   $('.phomemask').mask("+7 (999) 999-99-99");
 
   let popupLogin = $('#popup-login');
@@ -239,6 +187,8 @@ $(document).ready(function () {
 
     return false;
   });
+
+  let body = $('body');
 
   body.on('click', '.js-pagin', function () {
     let link = $(this),
@@ -305,88 +255,6 @@ $(document).ready(function () {
   $popupProduct.on('hidden.bs.modal', function () {
   });
 
-  getMap();
-
-  let formOrder = $('#form-order');
-  if (formOrder.length) {
-    changeFormData(formOrder);
-
-    formOrder.find('input').on('change', function () {
-      changeFormData(formOrder);
-    });
-  }
-
-  formOrder.submit(function () {
-    let props = [],
-      val = '',
-      firstErrorInput = '';
-
-    formOrder.find('input').each(function () {
-      $(this).removeClass('error');
-      if ($(this).attr('type') === 'checkbox') {
-        val = $(this).val();
-        if (!$(this).is(':checked')) {
-          val = '';
-        }
-        props[$(this).attr('name')] = val;
-      } else {
-        props[$(this).attr('name')] = $.trim($(this).val());
-      }
-    });
-
-    if (props['ORDER_PROP_15'].length === 0 && props['ORDER_PROP_2'].length === 0) {
-      $('#ORDER_PROP_2').addClass('error');
-      if (firstErrorInput.length === 0)
-        firstErrorInput = $('#ORDER_PROP_2');
-    }
-
-    if (props['ORDER_PROP_5'].length === 0) {
-      $('#ORDER_PROP_5').addClass('error');
-      if (firstErrorInput.length === 0)
-        firstErrorInput = $('#ORDER_PROP_5');
-    }
-
-    for (let i = 0; i < 24; i++) {
-      if (props['ORDER_PROP_4[' + i + ']'] !== undefined) {
-        if (
-          props['ORDER_PROP_4[' + i + ']'].length === 0 ||
-          !moment(props['ORDER_PROP_4[' + i + ']'], 'DD.MM.YYYY HH:mm', true).isValid()
-        ) {
-          $('#ORDER_PROP_4_' + i).addClass('error');
-
-          if (firstErrorInput.length === 0) {
-            firstErrorInput = $('#ORDER_PROP_4_' + i);
-          }
-        }
-      }
-    }
-
-    if (props['ORDER_PROP_8'].length === 0) {
-      $('#ORDER_PROP_8').addClass('error');
-      if (firstErrorInput.length === 0)
-        firstErrorInput = $('#ORDER_PROP_8');
-    }
-
-    if (props['ORDER_PROP_9'].length === 0) {
-      $('#ORDER_PROP_9').addClass('error');
-      if (firstErrorInput.length === 0)
-        firstErrorInput = $('#ORDER_PROP_9');
-    }
-
-    if (firstErrorInput.length > 0)
-      $("html,body").animate({ scrollTop: firstErrorInput.offset().top - 40 }, 1000);
-    else {
-      $('.promo-order').addClass('loader');
-      formOrder.find('[type="submit"]').prop('disabled', true);
-      $.post(window.location.href, formOrder.serialize(), function (orderId) {
-        if (orderId > 0)
-          window.location.href = '/order/?ORDER_ID=' + orderId;
-      });
-    }
-
-    return false;
-  });
-
   let popupFlowers = $('#popup-flowers');
   if (popupFlowers.length) {
     popupFlowers.modal('show');
@@ -448,379 +316,6 @@ $(document).ready(function () {
       button.toggleClass('product-add-slider__btn--is-chosen');
     }
   });
-
-  /**
-   * pdv:order
-   */
-  $(document).on("reCalcTotal", function () {
-    let discountPercent = Number($(".js-discount-percent").val());
-
-    let $selectedUpSaleProducts = $(".js-upsale-products")
-    if (!isJson($selectedUpSaleProducts.val())) {
-      return false;
-    }
-
-    let products = JSON.parse($selectedUpSaleProducts.val())
-
-    let upSaleSum = 0;
-
-    for (let id in products) {
-      let quantity = products[id]
-      let price = Number($("[data-id=" + id + "]").data("price"))
-      upSaleSum += (price * quantity);
-    }
-
-    upSaleSum = upSaleSum || 0;
-
-    $(".js-upsale-sum").text(formatPrice(upSaleSum))
-
-    let $selectedMainProducts = $(".js-main-products")
-    if (!isJson($selectedMainProducts.val())) {
-      return false;
-    }
-
-    let mainProducts = JSON.parse($selectedMainProducts.val())
-    let mainBlock = $(".js-main-basket-item.js-basket-item-info");
-
-    let mainPrice = mainBlock.data("price")
-    let mainId = mainBlock.data("id")
-
-    if (!mainProducts.hasOwnProperty(mainId)) {
-      return false;
-    }
-
-    let mainSum = mainPrice * mainProducts[mainId];
-    let mainSumElement = $(".js-main-sum");
-    mainSumElement.text(formatPrice(discountPrice(mainSum, discountPercent)));
-    showOldPrice(mainSumElement, mainSum)
-    let totalSum = Number(mainSum) + Number(upSaleSum)
-    let discountTotalSum = discountPrice(Number(mainSum), discountPercent) + Number(upSaleSum)
-
-    let totalSumElement = $(".js-total-sum");
-    totalSumElement.text(formatPrice(discountTotalSum))
-
-    showOldPrice(totalSumElement, totalSum)
-
-    $(".js-discount-diff").text(formatPrice(totalSum - discountTotalSum))
-
-    $(".js-basket-item").not(".js-basket-item-base").each(function (idx, elem) {
-      if (!$(elem).find(".js-main-basket-item").length) {
-        return true
-      }
-
-      let price = $(elem).find(".js-basket-item-info").data("price")
-      $(elem).find(".js-price").text(formatPrice(discountPrice(price, discountPercent)))
-      if (discountPercent > 0) {
-        showOldPrice($(elem).find(".js-price"), price)
-      }
-    })
-
-    if (discountPercent <= 0) {
-      $(".js-old-price").remove()
-    }
-
-  })
-
-  $(document).on("click", ".js-add-basket", function (event) {
-    event.preventDefault();
-
-    let productType, $container, $block
-    if (($block = $(this).closest(".js-upsale-block")).length) {
-      productType = "upsale"
-      $container = $block
-    }
-
-    if (($block = $(this).closest(".js-bookmate-block")).length) {
-      productType = "bookmate"
-      $container = $block
-    }
-
-    if (!productType) {
-      return;
-    }
-
-    let newBasketItem = {}
-
-    newBasketItem.name = $container.find(".js-name").text()
-    newBasketItem.id = $container.data("id")
-
-    if ($container.find(".js-image-block img").length) {
-      newBasketItem.imageUrl = $container.find(".js-image-block img").attr("src")
-    }
-
-
-    newBasketItem.price = Number($container.find(".js-price").text())
-
-
-    if (Number(newBasketItem.id) <= 0) {
-      return;
-    }
-
-    let $selectedUpSaleProducts = $(".js-upsale-products")
-    if (!isJson($selectedUpSaleProducts.val())) {
-      $selectedUpSaleProducts.val(JSON.stringify({}))
-    }
-
-    let products = JSON.parse($selectedUpSaleProducts.val())
-
-    if (products.hasOwnProperty(newBasketItem.id)) {
-      if (newBasketItem.price <= 0) {
-        return;
-      }
-      products[newBasketItem.id]++;
-      $selectedUpSaleProducts.val(JSON.stringify(products))
-
-      let $basketItems = $(".js-basket-item [data-id]")
-      $basketItems.each(function (idx, elem) {
-        if (Number($(elem).data("id")) === Number(newBasketItem.id)) {
-          $(elem).find(".js-quantity-field").val(products[newBasketItem.id])
-          return false;
-        }
-      });
-
-      $(document).trigger("reCalcTotal");
-
-      return;
-    }
-
-    products[newBasketItem.id] = 1;
-    if (newBasketItem.price <= 0) {
-      $(".js-upsale-products-block").find("[data-id=" + newBasketItem.id + "]").find(
-        ".js-add-basket").hide();
-    }
-
-    if (productType === "bookmate") {
-      $(".js-bookmate-block").find(".js-add-basket").hide();
-    }
-
-    $selectedUpSaleProducts.val(JSON.stringify(products))
-    $(document).trigger("reCalcTotal");
-
-    let $basketItemBase = $(".js-basket-item-base");
-
-    let $newBasketItem = $basketItemBase.clone()
-
-    $newBasketItem.removeClass("js-basket-item-base")
-    $newBasketItem.show()
-
-    $newBasketItem.find(".js-name").text(newBasketItem.name)
-    if (productType === "bookmate" || Number(newBasketItem.price) <= 0) {
-      $newBasketItem.find(".js-price-block").remove()
-      $newBasketItem.find(".js-quantity-control").remove()
-    } else {
-      $newBasketItem.find(".js-price").text(formatPrice(newBasketItem.price))
-      $newBasketItem.find(".js-detail").data("price", newBasketItem.price)
-    }
-
-    if (!newBasketItem.imageUrl || newBasketItem.imageUrl.length <= 0) {
-      $newBasketItem.find(".js-image-block").remove()
-    } else {
-      $newBasketItem.find(".js-image-block img").attr("src", newBasketItem.imageUrl)
-      $newBasketItem.find(".js-image-block img").attr("alt", newBasketItem.name)
-    }
-
-    $newBasketItem.find(".js-basket-item-info").data("id", newBasketItem.id)
-    $newBasketItem.find(".js-basket-item-info").data("price", Number(newBasketItem.price))
-
-    $newBasketItem.find(".js-basket-item-info").removeClass("js-detail")
-    $(".js-basket-item").last().after($newBasketItem)
-    $(document).trigger("reCalcTotal");
-
-  })
-
-  $(document).on("click", ".js-remove-basket-item", function (event) {
-    event.preventDefault();
-
-    if ($(this).closest(".js-main-basket-item").length) {
-      window.location.href = "/"
-    } else {
-      let $upSaleProductBlock = $(".js-upsale-products-block")
-      let $container = $(this).closest(".js-basket-item")
-      let $info = $container.find(".js-basket-item-info")
-      let id = Number($info.data("id"))
-      if (Number($info.data("price")) <= 0 && id > 0) {
-        $upSaleProductBlock.find("[data-id=" + id + "]").find(".js-add-basket").show();
-      }
-
-      if ($upSaleProductBlock.find("[data-id=" + id + "]").hasClass("js-bookmate-block")) {
-        $(".js-bookmate-block").find(".js-add-basket").show();
-      }
-
-      $(this).closest(".js-basket-item").remove()
-
-      let $selectedUpSaleProducts = $(".js-upsale-products")
-      if (!isJson($selectedUpSaleProducts.val())) {
-        $selectedUpSaleProducts.val(JSON.stringify({}))
-      }
-
-      let products = JSON.parse($selectedUpSaleProducts.val())
-
-      if (products.hasOwnProperty(id)) {
-        delete products[id];
-        $selectedUpSaleProducts.val(JSON.stringify(products))
-        $(document).trigger("reCalcTotal");
-      }
-    }
-  })
-
-  $(document).on("click", ".js-show-coupon-form", function (event) {
-    event.preventDefault();
-    $(".js-coupon-form").slideToggle();
-  })
-
-  $(document).on('click', '.js-coupon-apply', function (event) {
-    event.preventDefault();
-    let btn = $(this);
-    let field = $(".js-coupon-field");
-    let loadingClass = 'btn--loading';
-
-    btn.removeClass('error');
-
-    if (field.val().length <= 0) {
-      field.addClass('error');
-      return;
-    }
-
-    field.removeClass('error');
-
-    btn.prop('disabled', true);
-    btn.addClass(loadingClass);
-
-    $.ajax(
-      window.location.href,
-      {
-        dataType: "json",
-        data: {
-          coupon: field.val()
-        },
-        success: function (result) {
-          afterEnterCouponOrder(result);
-          btn.prop('disabled', false);
-          btn.removeClass(loadingClass);
-
-        },
-        type: "POST",
-      }
-    )
-  });
-
-  $(document).on('click', '.js-coupon-cancel', function (event) {
-    event.preventDefault()
-    $.post(window.location.href, { coupon: '' }, function (result) {
-      afterEnterCouponOrder(result);
-    }, 'json');
-
-    return false;
-  });
-
-  $(document).on("click", ".js-minus", function (event) {
-    event.preventDefault();
-    let $container = $(this).closest(".js-basket-item-info")
-    let id = $container.data("id")
-    let currentQuantity = $container.find(".js-quantity-field").val();
-
-    let $currentSelectedProducts
-    if ($(this).closest(".js-main-basket-item").length) {
-      $currentSelectedProducts = $(".js-main-products")
-    } else {
-      $currentSelectedProducts = $(".js-upsale-products")
-    }
-
-    if (!isJson($currentSelectedProducts.val())) {
-      $currentSelectedProducts.val(JSON.stringify({}))
-    }
-
-    let products = JSON.parse($currentSelectedProducts.val())
-
-    if (!products.hasOwnProperty(id)) {
-      return false;
-    }
-
-
-    if (currentQuantity <= 1) {
-      if ($(this).closest(".js-main-basket-item").length) {
-        window.location.href = "/"
-      } else {
-        delete products[id];
-        $(this).closest(".js-basket-item").remove()
-      }
-    } else {
-      products[id]--;
-      $container.find(".js-quantity-field").val(products[id])
-    }
-
-    $currentSelectedProducts.val(JSON.stringify(products))
-    $(document).trigger("reCalcTotal");
-  })
-
-  $(document).on('click', '.js-plus', function (event) {
-    event.preventDefault();
-
-    let $container = $(this).closest('.js-basket-item-info'),
-      id = $container.data('id'),
-      $currentSelectedProducts;
-
-    if ($(this).closest('.js-main-basket-item').length) {
-      $currentSelectedProducts = $('.js-main-products');
-    } else {
-      $currentSelectedProducts = $('.js-upsale-products');
-    }
-
-    if (!isJson($currentSelectedProducts.val())) {
-      $currentSelectedProducts.val(JSON.stringify({}));
-    }
-
-    let products = JSON.parse($currentSelectedProducts.val())
-
-    if (!products.hasOwnProperty(id)) {
-      return false;
-    }
-
-    products[id]++;
-    $container.find('.js-quantity-field').val(products[id]);
-    $currentSelectedProducts.val(JSON.stringify(products));
-
-    $(document).trigger('reCalcTotal');
-  });
-
-  $(document).on("change", ".js-quantity-field", function (event) {
-    event.preventDefault();
-    let $container = $(this).closest(".js-basket-item-info")
-    let id = $container.data("id")
-    let $currentSelectedProducts
-    if ($(this).closest(".js-main-basket-item").length) {
-      $currentSelectedProducts = $(".js-main-products")
-    } else {
-      $currentSelectedProducts = $(".js-upsale-products")
-    }
-
-    if (!isJson($currentSelectedProducts.val())) {
-      $currentSelectedProducts.val(JSON.stringify({}))
-    }
-
-    let products = JSON.parse($currentSelectedProducts.val())
-
-    if (!products.hasOwnProperty(id)) {
-      return false;
-    }
-
-    let newQuantity = $(this).val()
-
-    if (isNaN(Number(newQuantity)) || Number(newQuantity) <= 0) {
-      newQuantity = 1
-      $(this).val(newQuantity)
-    }
-
-    products[id] = newQuantity
-
-    $currentSelectedProducts.val(JSON.stringify(products))
-    $(document).trigger("reCalcTotal");
-  })
-
-  $(document).trigger("reCalcTotal");
-  /**
-   * End pdv:order
-   */
 
   /** cart **/
   $(document).on('click', '.js-add-to-cart', function (e) {
@@ -1033,12 +528,14 @@ $(document).ready(function () {
           $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
           $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
 
-          if(!(data.data.coupon.status === 2 || data.data.coupon.status === 4)) {
+          if (!(data.data.coupon.status === 2 || data.data.coupon.status === 4)) {
             promocodeStatusContainer.addClass('cart__promo-alert');
           }
 
-          $('.js-promocode-container').html($.templates('#promocodeAddTmpl').render(data.data.coupon));
-          promocodeStatusContainer.html($.templates('#promocodeStatusTmpl').render(data.data.coupon));
+          $('.js-promocode-container').html($.templates('#promocodeAddTmpl')
+          .render(data.data.coupon));
+          promocodeStatusContainer.html($.templates('#promocodeStatusTmpl')
+          .render(data.data.coupon));
           buttonContainer.html($.templates('#promocodeButtonDeleteTmpl').render());
         } else {
           buttonContainer.html($.templates('#promocodeButtonAddTmpl').render());
@@ -1060,7 +557,6 @@ $(document).ready(function () {
       url: '/ajax/cart.php',
       data: {
         action: 'couponDelete',
-
       },
       beforeSend: function () {
         buttonContainer.html($.templates('#promocodeButtonLoadingTmpl').render());
@@ -1087,6 +583,67 @@ $(document).ready(function () {
   /** end cart **/
 
   /** checkout **/
+  let formOrder = $('form[name=orderForm]'),
+    startDate = new Date(),
+    orderData = $('.js-order-datetime'),
+    minHours = 8,
+    maxHours = 21,
+    maxTime = orderData.data('maxtime'),
+    minTime = orderData.data('mintime');
+
+  if (formOrder.length) {
+    changeFormData(formOrder);
+
+    formOrder.find('input').on('change', function () {
+      changeFormData(formOrder);
+    });
+  }
+
+  startDate.setMinutes(startDate.getMinutes() + parseInt(orderData.data('time')));
+  startDate.setHours(startDate.getHours() + 1);
+  startDate.setMinutes(0);
+
+  if (startDate.getHours() > maxHours) {
+    startDate.setDate(startDate.getDate() + 1);
+    startDate.setHours(minHours);
+  }
+
+  orderData.datepicker({
+    timepicker: true,
+    startDate: startDate,
+    minDate: startDate,
+    minHours: minHours,
+    maxHours: maxHours,
+    onRenderCell: function (date, cellType) {
+      if (cellType === 'day') {
+        let timestamp = date.getTime() / 1000,
+          isDisabled = false,
+          isDisabledMax = false,
+          isDisableMin = false;
+
+        if (typeof maxTime !== 'undefined') {
+          isDisabledMax = timestamp >= maxTime;
+        }
+
+        if (typeof minTime !== 'undefined') {
+          minTime += date.getTimezoneOffset() * 60;
+
+          isDisableMin = timestamp <= minTime;
+        }
+
+        if (isDisabledMax || isDisableMin) {
+          isDisabled = true;
+        }
+
+        return {
+          disabled: isDisabled
+        }
+      }
+    }
+  });
+
+  getMap();
+
   $('.js-order-offers-slider').each(function () {
     let swiperInstance = new Swiper(this, {
       navigation: {
@@ -1142,6 +699,7 @@ $(document).ready(function () {
           if (data.data.count > 0) {
             renderOrderSummary(data.data);
             renderBookmate(data.data);
+            renderOrderDeliveryTimes(data.data);
 
             $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
           } else {
@@ -1185,6 +743,7 @@ $(document).ready(function () {
           if (data.data.count > 0) {
             renderOrderSummary(data.data);
             renderBookmate(data.data);
+            renderOrderDeliveryTimes(data.data);
 
             $('.js-order-cart').html($.templates('#orderCartTmpl').render(data.data));
           } else {
@@ -1258,7 +817,495 @@ $(document).ready(function () {
 
     ajaxAddToOrder({ action: 'addBookmate', page: 'order', id: id, productId: productId });
   });
+
+  $(document).on('click', '.js-order-promocode-apply', function (e) {
+    e.preventDefault();
+
+    $(this).hide();
+
+    $('.js-order-promocode-form').html($.templates('#orderPromocodeFormTmpl').render());
+  });
+
+  $(document).on('click', '.js-order-promocode-add', function (e) {
+    e.preventDefault();
+
+    let button = $(this),
+      input = $('input[name=coupon]'),
+      coupon = input.val(),
+      errorContainer = $('.js-order-promocode-error');
+
+    input.removeClass('error');
+    errorContainer.html('').hide();
+
+    if (coupon === '') {
+      input.addClass('error');
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: '/ajax/cart.php',
+        data: {
+          action: 'couponAdd',
+          coupon: coupon,
+        },
+        beforeSend: function () {
+          button.prop('disabled', true).addClass('btn--loading');
+        },
+        success: function (data) {
+          data = jQuery.parseJSON(data);
+
+          if (data.status === 'success') {
+            if (!(data.data.coupon.status === 2 || data.data.coupon.status === 4)) {
+              errorContainer.html(data.data.coupon.statusText).show();
+            } else {
+              renderOrderSummary(data.data);
+              $('.js-promocode').html($.templates('#orderPromocodeTmpl').render(data.data));
+              $('.js-order-promocode-form').html('');
+            }
+          }
+
+          button.prop('disabled', false).removeClass('btn--loading');
+        },
+        error: function (error) {
+          button.prop('disabled', false).removeClass('btn--loading');
+        },
+      });
+    }
+  });
+
+  $(document).on('click', '.js-order-promocode-cancel', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/cart.php',
+      data: {
+        action: 'couponDelete',
+      },
+      beforeSend: function () {
+        $('.js-pagenavigation-loader').show();
+        $('.js-pagenavigation-overlay').show();
+      },
+      success: function (data) {
+        data = jQuery.parseJSON(data);
+
+        if (data.status === 'success') {
+          renderOrderSummary(data.data);
+          $('.js-promocode').html($.templates('#orderPromocodeApplyTmpl').render());
+        }
+
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      },
+      error: function (error) {
+        $('.js-pagenavigation-loader').hide();
+        $('.js-pagenavigation-overlay').hide();
+      }
+    });
+  });
+
+  $(document).on('submit', formOrder, function (e) {
+    e.preventDefault();
+
+    let props = [],
+      val = '',
+      firstErrorInput = '';
+
+    formOrder.find('input').each(function () {
+      $(this).removeClass('error');
+
+      if ($(this).attr('type') === 'checkbox') {
+        val = $(this).val();
+        if (!$(this).is(':checked')) {
+          val = '';
+        }
+        props[$(this).attr('name')] = val;
+      } else {
+        props[$(this).attr('name')] = $.trim($(this).val());
+      }
+    });
+
+    if (props['ORDER_PROP_15'].length === 0 && props['ORDER_PROP_2'].length === 0) {
+      $('input[name=ORDER_PROP_2]').addClass('error');
+
+      if (firstErrorInput.length === 0) {
+        firstErrorInput = $('input[name=ORDER_PROP_2]');
+      }
+    }
+
+    if (props['ORDER_PROP_5'].length === 0) {
+      $('input[name=ORDER_PROP_5]').addClass('error');
+
+      if (firstErrorInput.length === 0) {
+        firstErrorInput = $('input[name=ORDER_PROP_5]');
+      }
+    }
+
+    for (let i = 0; i < 24; i++) {
+      if (
+        props['ORDER_PROP_4[' + i + ']'] !== undefined &&
+        (
+          props['ORDER_PROP_4[' + i + ']'].length === 0 ||
+          !moment(props['ORDER_PROP_4[' + i + ']'], 'DD.MM.YYYY HH:mm', true).isValid()
+        )
+      ) {
+        $('input[name="ORDER_PROP_4[' + i + ']"]').addClass('error');
+
+        if (firstErrorInput.length === 0) {
+          firstErrorInput = $('input[name="ORDER_PROP_4[' + i + ']"]');
+        }
+      }
+    }
+
+    if (props['ORDER_PROP_8'].length === 0) {
+      $('input[name=ORDER_PROP_8]').addClass('error');
+
+      if (firstErrorInput.length === 0) {
+        firstErrorInput = $('input[name=ORDER_PROP_8]');
+      }
+    }
+
+    if (props['ORDER_PROP_9'].length === 0) {
+      $('input[name=ORDER_PROP_9]').addClass('error');
+
+      if (firstErrorInput.length === 0) {
+        firstErrorInput = $('input[name=ORDER_PROP_9]');
+      }
+    }
+
+    if (firstErrorInput.length > 0) {
+      $("html,body").animate({ scrollTop: firstErrorInput.offset().top - 40 }, 1000);
+    }
+    else {
+
+    }
+  });
   /** end checkout **/
+
+  /**
+   * pdv:order
+   */
+
+  /*
+  $(document).on("reCalcTotal", function () {
+    let discountPercent = Number($(".js-discount-percent").val());
+
+    let $selectedUpSaleProducts = $(".js-upsale-products")
+    if (!isJson($selectedUpSaleProducts.val())) {
+      return false;
+    }
+
+    let products = JSON.parse($selectedUpSaleProducts.val())
+
+    let upSaleSum = 0;
+
+    for (let id in products) {
+      let quantity = products[id]
+      let price = Number($("[data-id=" + id + "]").data("price"))
+      upSaleSum += (price * quantity);
+    }
+
+    upSaleSum = upSaleSum || 0;
+
+    $(".js-upsale-sum").text(formatPrice(upSaleSum))
+
+    let $selectedMainProducts = $(".js-main-products")
+    if (!isJson($selectedMainProducts.val())) {
+      return false;
+    }
+
+    let mainProducts = JSON.parse($selectedMainProducts.val())
+    let mainBlock = $(".js-main-basket-item.js-basket-item-info");
+
+    let mainPrice = mainBlock.data("price")
+    let mainId = mainBlock.data("id")
+
+    if (!mainProducts.hasOwnProperty(mainId)) {
+      return false;
+    }
+
+    let mainSum = mainPrice * mainProducts[mainId];
+    let mainSumElement = $(".js-main-sum");
+    mainSumElement.text(formatPrice(discountPrice(mainSum, discountPercent)));
+    showOldPrice(mainSumElement, mainSum)
+    let totalSum = Number(mainSum) + Number(upSaleSum)
+    let discountTotalSum = discountPrice(Number(mainSum), discountPercent) + Number(upSaleSum)
+
+    let totalSumElement = $(".js-total-sum");
+    totalSumElement.text(formatPrice(discountTotalSum))
+
+    showOldPrice(totalSumElement, totalSum)
+
+    $(".js-discount-diff").text(formatPrice(totalSum - discountTotalSum))
+
+    $(".js-basket-item").not(".js-basket-item-base").each(function (idx, elem) {
+      if (!$(elem).find(".js-main-basket-item").length) {
+        return true
+      }
+
+      let price = $(elem).find(".js-basket-item-info").data("price")
+      $(elem).find(".js-price").text(formatPrice(discountPrice(price, discountPercent)))
+      if (discountPercent > 0) {
+        showOldPrice($(elem).find(".js-price"), price)
+      }
+    })
+
+    if (discountPercent <= 0) {
+      $(".js-old-price").remove()
+    }
+
+  })
+  */
+
+  $(document).on("click", ".js-add-basket", function (event) {
+    event.preventDefault();
+
+    let productType, $container, $block
+    if (($block = $(this).closest(".js-upsale-block")).length) {
+      productType = "upsale"
+      $container = $block
+    }
+
+    if (($block = $(this).closest(".js-bookmate-block")).length) {
+      productType = "bookmate"
+      $container = $block
+    }
+
+    if (!productType) {
+      return;
+    }
+
+    let newBasketItem = {}
+
+    newBasketItem.name = $container.find(".js-name").text()
+    newBasketItem.id = $container.data("id")
+
+    if ($container.find(".js-image-block img").length) {
+      newBasketItem.imageUrl = $container.find(".js-image-block img").attr("src")
+    }
+
+
+    newBasketItem.price = Number($container.find(".js-price").text())
+
+
+    if (Number(newBasketItem.id) <= 0) {
+      return;
+    }
+
+    let $selectedUpSaleProducts = $(".js-upsale-products")
+    if (!isJson($selectedUpSaleProducts.val())) {
+      $selectedUpSaleProducts.val(JSON.stringify({}))
+    }
+
+    let products = JSON.parse($selectedUpSaleProducts.val())
+
+    if (products.hasOwnProperty(newBasketItem.id)) {
+      if (newBasketItem.price <= 0) {
+        return;
+      }
+      products[newBasketItem.id]++;
+      $selectedUpSaleProducts.val(JSON.stringify(products))
+
+      let $basketItems = $(".js-basket-item [data-id]")
+      $basketItems.each(function (idx, elem) {
+        if (Number($(elem).data("id")) === Number(newBasketItem.id)) {
+          $(elem).find(".js-quantity-field").val(products[newBasketItem.id])
+          return false;
+        }
+      });
+
+      $(document).trigger("reCalcTotal");
+
+      return;
+    }
+
+    products[newBasketItem.id] = 1;
+    if (newBasketItem.price <= 0) {
+      $(".js-upsale-products-block").find("[data-id=" + newBasketItem.id + "]").find(
+        ".js-add-basket").hide();
+    }
+
+    if (productType === "bookmate") {
+      $(".js-bookmate-block").find(".js-add-basket").hide();
+    }
+
+    $selectedUpSaleProducts.val(JSON.stringify(products))
+    $(document).trigger("reCalcTotal");
+
+    let $basketItemBase = $(".js-basket-item-base");
+
+    let $newBasketItem = $basketItemBase.clone()
+
+    $newBasketItem.removeClass("js-basket-item-base")
+    $newBasketItem.show()
+
+    $newBasketItem.find(".js-name").text(newBasketItem.name)
+    if (productType === "bookmate" || Number(newBasketItem.price) <= 0) {
+      $newBasketItem.find(".js-price-block").remove()
+      $newBasketItem.find(".js-quantity-control").remove()
+    } else {
+      $newBasketItem.find(".js-price").text(formatPrice(newBasketItem.price))
+      $newBasketItem.find(".js-detail").data("price", newBasketItem.price)
+    }
+
+    if (!newBasketItem.imageUrl || newBasketItem.imageUrl.length <= 0) {
+      $newBasketItem.find(".js-image-block").remove()
+    } else {
+      $newBasketItem.find(".js-image-block img").attr("src", newBasketItem.imageUrl)
+      $newBasketItem.find(".js-image-block img").attr("alt", newBasketItem.name)
+    }
+
+    $newBasketItem.find(".js-basket-item-info").data("id", newBasketItem.id)
+    $newBasketItem.find(".js-basket-item-info").data("price", Number(newBasketItem.price))
+
+    $newBasketItem.find(".js-basket-item-info").removeClass("js-detail")
+    $(".js-basket-item").last().after($newBasketItem)
+    $(document).trigger("reCalcTotal");
+
+  })
+
+  $(document).on("click", ".js-remove-basket-item", function (event) {
+    event.preventDefault();
+
+    if ($(this).closest(".js-main-basket-item").length) {
+      window.location.href = "/"
+    } else {
+      let $upSaleProductBlock = $(".js-upsale-products-block")
+      let $container = $(this).closest(".js-basket-item")
+      let $info = $container.find(".js-basket-item-info")
+      let id = Number($info.data("id"))
+      if (Number($info.data("price")) <= 0 && id > 0) {
+        $upSaleProductBlock.find("[data-id=" + id + "]").find(".js-add-basket").show();
+      }
+
+      if ($upSaleProductBlock.find("[data-id=" + id + "]").hasClass("js-bookmate-block")) {
+        $(".js-bookmate-block").find(".js-add-basket").show();
+      }
+
+      $(this).closest(".js-basket-item").remove()
+
+      let $selectedUpSaleProducts = $(".js-upsale-products")
+      if (!isJson($selectedUpSaleProducts.val())) {
+        $selectedUpSaleProducts.val(JSON.stringify({}))
+      }
+
+      let products = JSON.parse($selectedUpSaleProducts.val())
+
+      if (products.hasOwnProperty(id)) {
+        delete products[id];
+        $selectedUpSaleProducts.val(JSON.stringify(products))
+        $(document).trigger("reCalcTotal");
+      }
+    }
+  })
+
+  $(document).on("click", ".js-minus", function (event) {
+    event.preventDefault();
+    let $container = $(this).closest(".js-basket-item-info")
+    let id = $container.data("id")
+    let currentQuantity = $container.find(".js-quantity-field").val();
+
+    let $currentSelectedProducts
+    if ($(this).closest(".js-main-basket-item").length) {
+      $currentSelectedProducts = $(".js-main-products")
+    } else {
+      $currentSelectedProducts = $(".js-upsale-products")
+    }
+
+    if (!isJson($currentSelectedProducts.val())) {
+      $currentSelectedProducts.val(JSON.stringify({}))
+    }
+
+    let products = JSON.parse($currentSelectedProducts.val())
+
+    if (!products.hasOwnProperty(id)) {
+      return false;
+    }
+
+
+    if (currentQuantity <= 1) {
+      if ($(this).closest(".js-main-basket-item").length) {
+        window.location.href = "/"
+      } else {
+        delete products[id];
+        $(this).closest(".js-basket-item").remove()
+      }
+    } else {
+      products[id]--;
+      $container.find(".js-quantity-field").val(products[id])
+    }
+
+    $currentSelectedProducts.val(JSON.stringify(products))
+    $(document).trigger("reCalcTotal");
+  })
+
+  $(document).on('click', '.js-plus', function (event) {
+    event.preventDefault();
+
+    let $container = $(this).closest('.js-basket-item-info'),
+      id = $container.data('id'),
+      $currentSelectedProducts;
+
+    if ($(this).closest('.js-main-basket-item').length) {
+      $currentSelectedProducts = $('.js-main-products');
+    } else {
+      $currentSelectedProducts = $('.js-upsale-products');
+    }
+
+    if (!isJson($currentSelectedProducts.val())) {
+      $currentSelectedProducts.val(JSON.stringify({}));
+    }
+
+    let products = JSON.parse($currentSelectedProducts.val())
+
+    if (!products.hasOwnProperty(id)) {
+      return false;
+    }
+
+    products[id]++;
+    $container.find('.js-quantity-field').val(products[id]);
+    $currentSelectedProducts.val(JSON.stringify(products));
+
+    $(document).trigger('reCalcTotal');
+  });
+
+  $(document).on("change", ".js-quantity-field", function (event) {
+    event.preventDefault();
+    let $container = $(this).closest(".js-basket-item-info")
+    let id = $container.data("id")
+    let $currentSelectedProducts
+    if ($(this).closest(".js-main-basket-item").length) {
+      $currentSelectedProducts = $(".js-main-products")
+    } else {
+      $currentSelectedProducts = $(".js-upsale-products")
+    }
+
+    if (!isJson($currentSelectedProducts.val())) {
+      $currentSelectedProducts.val(JSON.stringify({}))
+    }
+
+    let products = JSON.parse($currentSelectedProducts.val())
+
+    if (!products.hasOwnProperty(id)) {
+      return false;
+    }
+
+    let newQuantity = $(this).val()
+
+    if (isNaN(Number(newQuantity)) || Number(newQuantity) <= 0) {
+      newQuantity = 1
+      $(this).val(newQuantity)
+    }
+
+    products[id] = newQuantity
+
+    $currentSelectedProducts.val(JSON.stringify(products))
+    $(document).trigger("reCalcTotal");
+  })
+
+  // $(document).trigger("reCalcTotal");
+  /**
+   * End pdv:order
+   */
 });
 
 (function () {
@@ -1328,100 +1375,6 @@ function detectTouch() {
   }
 }
 
-function changeFormData(formOrder) {
-  let props = [],
-    val;
-
-  formOrder.find('input').each(function () {
-    if ($(this).attr('type') === 'checkbox') {
-      val = $(this).val();
-      if (!$(this).is(':checked')) {
-        val = '';
-      }
-      props[$(this).attr('name')] = val;
-    } else {
-      props[$(this).attr('name')] = $.trim($(this).val());
-    }
-  });
-
-  if (props['ORDER_PROP_15'].length === 0)
-    $('.js-address-block').show();
-  else
-    $('.js-address-block').hide();
-
-  if (props['ORDER_PROP_7'].length === 0)
-    $('#social-wrap').hide();
-  else
-    $('#social-wrap').show();
-
-  if (props['ORDER_PROP_12'].length === 0)
-    $('#note-wrap').hide();
-  else
-    $('#note-wrap').show();
-
-  let price = 0;
-  price += parseInt($('.promo-order__item').data('price'));
-
-  $('.js-orderprice').text($.number(price, 0, '', ' '));
-}
-
-function afterEnterCoupon(result) {
-  let couponWrap = $('#coupon_wrap');
-
-  couponWrap.find('.promo-order__error').hide();
-  if (result.STATUS_ENTER === 'BAD')
-    couponWrap.find('.promo-order__error').show();
-  else {
-    couponWrap.find('.input__wrapper input').val('');
-    couponWrap.find('.input__wrapper').show();
-    couponWrap.find('.promo-order__coupon__discount').hide();
-    couponWrap.find('button').show();
-    couponWrap.find('.promo-order__coupon__sum').hide();
-
-    if (result.COUPON) {
-      couponWrap.find('.input__wrapper').hide();
-
-      couponWrap.find('.promo-order__coupon__discount')
-      .html(result.DISCOUNT_NAME + ' (<strong>' + result.COUPON + '</strong>)<span class="promo-order__coupon__discount__cancel">Отменить</span>');
-      couponWrap.find('.promo-order__coupon__discount').show();
-
-      couponWrap.find('button').hide();
-      if (result.OLD_PRICE > 0) {
-        couponWrap.find('.promo-order__coupon__sum')
-        .html('-' + (result.OLD_PRICE - result.PRICE) + ' <span class="rouble"></span>');
-        couponWrap.find('.promo-order__coupon__sum').show();
-      }
-    }
-  }
-
-  let priceProd = '';
-  if (result.OLD_PRICE > 0)
-    priceProd += '<span class="promo-order__item__price__old">' + $.number(result.OLD_PRICE,
-      0,
-      '',
-      ' ') + ' <span class="rouble"></span></span> ';
-  priceProd += $.number(result.PRICE, 0, '', ' ') + ' <span class="rouble"></span>';
-  $('.js-prod_price').html(priceProd);
-
-  let vaseInput = $('#ORDER_PROP_11');
-
-  let priceTotal = '',
-    priceVase = 0;
-  if (vaseInput.is(':checked'))
-    priceVase = parseInt(vaseInput.data('price'));
-  if (result.OLD_PRICE > 0)
-    priceTotal += '<span class="promo-order__submit__old-price" data-price="' + result.OLD_PRICE + '">' + $.number(
-      (result.OLD_PRICE + priceVase),
-      0,
-      '',
-      ' ') + ' <span class="rouble"></span></span>';
-  priceTotal += '<span class="js-orderprice">' + $.number((result.PRICE + priceVase),
-    0,
-    '',
-    ' ') + '</span> <span class="rouble"></span>';
-  $('.js-order_total').html(priceTotal);
-}
-
 function getUrlParam(name) {
   let s = window.location.search;
   s = s.match(new RegExp(name + '=([^&=]+)'));
@@ -1431,131 +1384,6 @@ function getUrlParam(name) {
 function close(e) {
   e.preventDefault();
   slideout.close();
-}
-
-function getMap() {
-  let deliveryMap,
-    myCollection,
-    searchControl,
-    addressProp = $("#ORDER_PROP_2"),
-    searchWrap = $('#search-street');
-
-  if (addressProp.length === 0) {
-    return;
-  }
-
-  ymaps.ready(function () {
-    let searchAdr = function (options) {
-      this.options = $.extend(this.options, options);
-    };
-
-    searchAdr.prototype = {
-      options: {
-        findMap: false,
-      },
-      mapControl: null,
-      geoObjectsArray: [],
-      initMap: function () {
-        deliveryMap = new ymaps.Map("delivery-map", {
-          center: [55.753215, 37.622504],
-          zoom: 12
-        });
-
-        deliveryMap.behaviors.disable('scrollZoom');
-
-        if (detectTouch()) {
-          deliveryMap.behaviors.disable('drag');
-        }
-
-        myCollection = new ymaps.GeoObjectCollection();
-        deliveryMap.geoObjects.add(myCollection);
-
-        if (addressProp.val().length > 0) {
-          addressProp.trigger('keyup');
-        }
-      },
-      addSearchControl: function () {
-        searchControl = new ymaps.control.SearchControl({
-          options: {
-            useMapBounds: true
-          }
-        });
-
-        if (this.options.findMap) {
-          deliveryMap.controls.add(searchControl);
-        }
-
-        this.activateSearch();
-      },
-      activateSearch: function () {
-        let self = this;
-        addressProp.keyup(function () {
-          let search_query = $(this).val(),
-            search_result = [];
-
-          if (search_query.length > 0) {
-            if (search_query.indexOf('Россия, Москва') < 0) {
-              search_query = 'Россия, Москва, ' + search_query;
-            }
-
-            searchControl.search(search_query).then(function () {
-              self.geoObjectsArray = searchControl.getResultsArray();
-
-              let html;
-
-              if (self.geoObjectsArray.length) {
-                searchWrap.show();
-
-                for (let i = 0; i < self.geoObjectsArray.length; i++) {
-                  search_result.push({ label: self.geoObjectsArray[i].properties.get('text') });
-                }
-
-                html = '';
-                for (let i in search_result) {
-                  html += '<li onclick="searchAdr.selectAddress(this, ' + i + ')">' + search_result[i].label + '</li>';
-                }
-
-                searchWrap.html(html);
-              }
-            });
-          } else {
-            searchWrap.hide();
-          }
-        });
-      },
-      selectAddress: function (obj, i) {
-        let mt = this.geoObjectsArray[i],
-          t = mt.properties.get('metaDataProperty').GeocoderMetaData,
-          AddressDetails = t.AddressDetails,
-          Country = AddressDetails.Country;
-
-        addressProp.val(Country.AddressLine);
-        searchWrap.hide();
-      }
-    };
-
-    window.searchAdr = new searchAdr({ findMap: true });
-    window.searchAdr.initMap();
-    window.searchAdr.addSearchControl();
-
-    searchWrap.hide();
-    deliveryMap.events.add('click', function (e) {
-      addressProp.val("Определяем адрес...");
-      let coords = e.get('coords');
-
-      myCollection.removeAll();
-
-      ymaps.geocode(coords, { results: 1 }).then(function (res) {
-        let MyGeoObj = res.geoObjects.get(0);
-        addressProp.val(MyGeoObj.properties.get('text'));
-
-        let pm = new ymaps.Placemark(coords, {
-          hintContent: MyGeoObj.properties.get('text')
-        });
-        myCollection.add(pm);
-      });
-    });
-  });
 }
 
 function getCookie(name) {
@@ -1662,7 +1490,7 @@ function ajaxAddToCart(params, updateCart, isCartUpsale) {
         renderHeaderCartItemsCount(data.data.count);
         renderMobileCart(data.data);
 
-        if(updateCart) {
+        if (updateCart) {
           $('.js-cart-list').html($.templates('#cartTmpl').render(data.data));
           $('.js-cart-sum').html($.templates('#cartSumTmpl').render(data.data));
         }
@@ -1685,6 +1513,7 @@ function ajaxAddToCart(params, updateCart, isCartUpsale) {
     }
   });
 }
+
 
 function ajaxAddToOrder(params) {
   $.ajax({
@@ -1733,9 +1562,10 @@ function renderMobileCart(data) {
 }
 
 function renderOrderSummary(data) {
-  $('.js-order-sum').html(data.sumFormat);
-  $('.js-goods-sum').html(data.goodsPriceFormat);
-  $('.js-upsale-sum').html(data.upsalePriceFormat);
+  $('.js-goods-sum').html($.templates('#goodsPriceTmpl').render(data));
+  $('.js-upsale-sum').html($.templates('#upsalePriceTmpl').render(data));
+  $('.js-order-sum').html($.templates('#orderPriceTmpl').render(data));
+  $('.js-order-button').html($.templates('#orderButtonTmpl').render(data));
 }
 
 function renderBookmate(data) {
@@ -1746,33 +1576,181 @@ function renderBookmate(data) {
   }
 }
 
+function renderOrderDeliveryTimes(data) {
+  let input = $('input[name=countDateDelivery]'),
+    countDateDelivery = parseInt(input.val(), 10);
+
+  if (countDateDelivery > data.countDateDelivery) {
+    input.val(data.countDateDelivery);
+
+    $('.js-order-delivery-time').each(function (index) {
+      if (index > data.countDateDelivery - 1) {
+        $(this).remove();
+      }
+    });
+  }
+}
+
+function getMap() {
+  let deliveryMap,
+    myCollection,
+    searchControl,
+    addressProp = $('.js-address-property'),
+    searchWrap = $('.js-search-street');
+
+  if (addressProp.length === 0) {
+    return;
+  }
+
+  ymaps.ready(function () {
+    let searchAdr = function (options) {
+      this.options = $.extend(this.options, options);
+    };
+
+    searchAdr.prototype = {
+      options: {
+        findMap: false,
+      },
+      mapControl: null,
+      geoObjectsArray: [],
+      initMap: function () {
+        deliveryMap = new ymaps.Map("delivery-map", {
+          center: [55.753215, 37.622504],
+          zoom: 12
+        });
+
+        deliveryMap.behaviors.disable('scrollZoom');
+
+        if (detectTouch()) {
+          deliveryMap.behaviors.disable('drag');
+        }
+
+        myCollection = new ymaps.GeoObjectCollection();
+        deliveryMap.geoObjects.add(myCollection);
+
+        if (addressProp.val().length > 0) {
+          addressProp.trigger('keyup');
+        }
+      },
+      addSearchControl: function () {
+        searchControl = new ymaps.control.SearchControl({
+          options: {
+            useMapBounds: true
+          }
+        });
+
+        if (this.options.findMap) {
+          deliveryMap.controls.add(searchControl);
+        }
+
+        this.activateSearch();
+      },
+      activateSearch: function () {
+        let self = this;
+        addressProp.keyup(function () {
+          let search_query = $(this).val(),
+            search_result = [];
+
+          if (search_query.length > 0) {
+            if (search_query.indexOf('Россия, Москва') < 0) {
+              search_query = 'Россия, Москва, ' + search_query;
+            }
+
+            searchControl.search(search_query).then(function () {
+              self.geoObjectsArray = searchControl.getResultsArray();
+
+              let html;
+
+              if (self.geoObjectsArray.length) {
+                searchWrap.show();
+
+                for (let i = 0; i < self.geoObjectsArray.length; i++) {
+                  search_result.push({ label: self.geoObjectsArray[i].properties.get('text') });
+                }
+
+                html = '';
+                for (let i in search_result) {
+                  html += '<li onclick="searchAdr.selectAddress(this, ' + i + ')">' + search_result[i].label + '</li>';
+                }
+
+                searchWrap.html(html);
+              }
+            });
+          } else {
+            searchWrap.hide();
+          }
+        });
+      },
+      selectAddress: function (obj, i) {
+        let mt = this.geoObjectsArray[i],
+          t = mt.properties.get('metaDataProperty').GeocoderMetaData,
+          AddressDetails = t.AddressDetails,
+          Country = AddressDetails.Country;
+
+        addressProp.val(Country.AddressLine);
+        searchWrap.hide();
+      }
+    };
+
+    window.searchAdr = new searchAdr({ findMap: true });
+    window.searchAdr.initMap();
+    window.searchAdr.addSearchControl();
+
+    searchWrap.hide();
+
+    deliveryMap.events.add('click', function (e) {
+      addressProp.val("Определяем адрес...");
+      let coords = e.get('coords');
+
+      myCollection.removeAll();
+
+      ymaps.geocode(coords, { results: 1 }).then(function (res) {
+        let MyGeoObj = res.geoObjects.get(0);
+        addressProp.val(MyGeoObj.properties.get('text'));
+
+        let pm = new ymaps.Placemark(coords, {
+          hintContent: MyGeoObj.properties.get('text')
+        });
+        myCollection.add(pm);
+      });
+    });
+  });
+}
+
+function changeFormData(formOrder) {
+  let props = [],
+    val;
+
+  formOrder.find('input').each(function () {
+    if ($(this).attr('type') === 'checkbox') {
+      val = $(this).val();
+
+      if (!$(this).is(':checked')) {
+        val = '';
+      }
+
+      props[$(this).attr('name')] = val;
+    } else {
+      props[$(this).attr('name')] = $.trim($(this).val());
+    }
+  });
+
+  if (props['ORDER_PROP_15'].length === 0) {
+    $('.js-address-block').show();
+  } else {
+    $('.js-address-block').hide();
+  }
+
+  if (props['ORDER_PROP_12'].length === 0) {
+    $('.js-note-block').hide();
+  } else {
+    $('.js-note-block').show();
+  }
+}
+
 /**
  * pdv:order
  */
-
-function afterEnterCouponOrder(result) {
-  if (result.STATUS_ENTER === 'BAD') {
-    $('.js-coupon-error').show();
-    $(".js-discount-percent").val(0)
-  } else {
-    if (result.COUPON) {
-      $(".js-coupon-name").text(result.DISCOUNT_NAME)
-      $(".js-coupon-value").text(result.COUPON)
-      $(".js-coupon-form").hide();
-      $(".js-show-coupon-form").hide();
-      $(".js-coupon-applied").show();
-      $(".js-coupon-field").val("")
-      $(".js-coupon-error").hide()
-      $(".js-discount-percent").val(result.PERCENT)
-    } else {
-      $(".js-show-coupon-form").show();
-      $(".js-coupon-applied").hide();
-      $(".js-discount-percent").val(0)
-    }
-  }
-
-  $(document).trigger("reCalcTotal");
-}
 
 function isJson(string) {
   try {
