@@ -12989,8 +12989,8 @@ input, textarea, button {
 }
 
 .order-item__content {
-    -ms-flex: 1 0 auto;
-    flex: 1 0 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
 }
 
 .order-item__title {
@@ -13000,8 +13000,8 @@ input, textarea, button {
 
 .order-item__title--extra {
     font-weight: 400;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .order-item__price {
