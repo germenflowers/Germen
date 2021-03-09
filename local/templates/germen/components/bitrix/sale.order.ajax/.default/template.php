@@ -452,7 +452,7 @@ $oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
                                             <div class="order-item__title">
                                                 <?=$item['name']?>
                                                 <?php if (!empty($item['cover'])): ?>
-                                                    <span class="order-item__title--extra">(Упаковка: <?=$item['cover']?>)&ensp;</span>
+                                                    <span class="order-item__title--extra">&ensp;(Упаковка: <?=$item['cover']?>)&ensp;</span>
                                                 <?php endif; ?>
                                                 <?php if (!empty($item['subscribeParams'])): ?>
                                                     <span class="order-item__title--extra">
