@@ -456,9 +456,7 @@ $oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
                                                 <?php endif; ?>
                                                 <?php if (!empty($item['subscribeParams'])): ?>
                                                     <span class="order-item__title--extra">
-                                                        (<?=$item['subscribeParams']['type']?>
-                                                        ,&ensp;
-                                                        <?=$item['subscribeParams']['delivery']?>)
+                                                        (<?=$item['subscribeParams']['type']?>,&ensp;<?=$item['subscribeParams']['delivery']?>)
                                                     </span>
                                                 <?php endif; ?>
                                             </div>
@@ -619,11 +617,11 @@ $oldUpsalePriceFormat = number_format($oldUpsalePrice, 0, '', ' ');
                         <div class="order-item__title">
                             {{:name}}
                             {{if cover}}
-                                <span class="">(Упаковка: {{:cover}})</span>
+                                <span class="order-item__title--extra">&ensp;(Упаковка: {{:cover}})&ensp;</span>
                             {{/if}}
                             {{if subscribe}}
-                                <span class="">
-                                    ({{:subscribeParams.type}}, {{:subscribeParams.delivery}})
+                                <span class="order-item__title--extra">
+                                    ({{:subscribeParams.type}},&ensp;{{:subscribeParams.delivery}})
                                 </span>
                             {{/if}}
                         </div>
