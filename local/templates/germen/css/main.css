@@ -12998,6 +12998,12 @@ input, textarea, button {
     line-height: 24px;
 }
 
+.order-item__title--extra {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+}
+
 .order-item__price {
     margin-bottom: 15px;
     font-size: 16px;
@@ -13541,6 +13547,7 @@ input, textarea, button {
     width: 174px;
     box-shadow: 0 0 4px rgba(6, 5, 50, 0.12);
     border-radius: 8px;
+    height: auto;
 }
 
 .product-add-slider__item img {
@@ -13760,7 +13767,10 @@ input, textarea, button {
 
 @media screen and (min-width: 1030px) {
     .product-info__fixed-footer {
-        display: none;
+        position: static;
+        width: 100%;
+        padding: 0;
+        background-color: #fff;
     }
 }
 
