@@ -89,6 +89,7 @@ $cartItemsCount = Content::getCartItemsCount();
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slideout.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/stickyfill.js');
 
         if($isOrderPage) {
             Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/checkout.js');
