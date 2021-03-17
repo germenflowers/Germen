@@ -15974,6 +15974,7 @@ margin-right: 15px;
 }
 
 .catalog__fixed-footer {
+    position: -webkit-sticky;
     position: sticky;
     padding: 16px 16px 32px;
     background: rgba(255, 255, 255, 0.92);
