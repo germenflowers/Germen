@@ -15978,12 +15978,12 @@ margin-right: 15px;
     position: sticky;
     padding: 16px 16px 32px;
     background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 10;
-
 }
 
 @media (min-width: 1031px) {
