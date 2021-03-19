@@ -16078,3 +16078,7 @@ margin-right: 15px;
         display: none;
     }
 }
+
+#widget_circle {
+    bottom: 100px!important;
+}
