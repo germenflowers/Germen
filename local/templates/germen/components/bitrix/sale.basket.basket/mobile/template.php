@@ -14,11 +14,10 @@ $this->setFrameMode(true);
 
 $sumFormat = number_format((int)$arResult['allSum'], 0, '', ' ');
 ?>
-<div class="catalog__fixed-footer">
+<div class="catalog__fixed-footer js-mobile-cart <?=(int)$arResult['allSum'] === 0 ? '' : 'is-shown'?>">
     <a
         href="<?=$arParams['PATH_TO_ORDER']?>"
-        class="js-mobile-cart"
-        style="<?=(int)$arResult['allSum'] === 0 ? 'display: none;' : ''?>"
+        class=""
     >
         <div class="catalog__fixed-footer-inner">
             <div class="catalog__fixed-footer-time">
