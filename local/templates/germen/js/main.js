@@ -24,6 +24,8 @@ $(document).ready(function () {
     });
   }
 
+  animateMobileCart();
+
   let $productSlider = $('[data-product-slider]');
   if ($productSlider.length > 0) {
     $productSlider.slick({
@@ -354,6 +356,8 @@ $(document).ready(function () {
     });
 
     ajaxAddToCart({ action: 'add', id: params.id, params: params });
+
+
   });
 
   $(document).on('submit', 'form[name=subscribeForm]', function (e) {
@@ -794,14 +798,40 @@ function renderHeaderCartItemsCount(count) {
 }
 
 function renderMobileCart(data) {
-  let container = $('.js-mobile-cart'),
-    priceContainer = $('.js-mobile-cart-sum');
+  let container = $('.js-mobile-cart');
+  let priceContainer = $('.js-mobile-cart-sum');
 
   priceContainer.html(data.sumFormat);
 
   if (data.sum > 0) {
-    container.show();
+    container.addClass("is-shown");
   } else {
-    container.hide();
+    container.removeClass("is-shown");
   }
 }
+
+function animateMobileCart() {
+  let container = $('.js-mobile-cart');
+  let priceContainerString = $('.js-mobile-cart-sum').html();
+  let price = parseFloat(priceContainerString);
+
+  $( ".js-detail" ).on( "click", function() {
+    if($('.js-mobile-cart.is-shown')) {
+      container.removeClass("is-shown");
+    }
+  });
+
+  $('.modal-content .modal-close').on( "click", function() {
+    if (price > 0) {
+      setTimeout(function(){
+        container.addClass("is-shown");
+      }, 400);
+    }
+  });
+
+  $('.js-product-order-button').on( "click", function() {
+    setTimeout(function(){
+      container.addClass("is-shown");
+    }, 400);
+  });
+};

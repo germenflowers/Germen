@@ -109,39 +109,6 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
                 <?php endforeach; ?>
             </div>
 
-            <div class="cart__add">
-                <h2 class="cart__add-title">Добавить к заказу</h2>
-                <div class="cart__add-slider swiper-container product-add-slider">
-                    <div class="swiper-wrapper">
-                        <?php foreach ($arResult['UPSALE_PRODUCTS'] as $item): ?>
-                            <?php
-                            $upsalePriceFormat = number_format($item['price'], 0, '', ' ');
-
-                            $class = 'product-add-slider__btn js-upsale-add-to-cart';
-                            if ($item['inCart']) {
-                                $class .= ' product-add-slider__btn--is-chosen';
-                            }
-                            ?>
-                            <div class="swiper-slide product-add-slider__item">
-                                <img src="<?=$item['image']?>" alt="">
-                                <div class="product-add-slider__header">
-                                    <h3 class="product-add-slider__title"><?=$item['name']?> +<?=$upsalePriceFormat?>
-                                        ₽
-                                    </h3>
-                                    <p class="product-add-slider__info"></p>
-                                    <?=$item['text']?>
-                                    <button class="<?=$class?>" data-id="<?=$item['id']?>" data-productid="<?=$item['id']?>">
-                                        <svg width="20" height="20" aria-hidden="true">
-                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#round-tick"></use>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-
             <div class="cart__bottom">
                 <div class="cart__promo">
                     <p class="cart__promo-used">Промокод</p>
@@ -199,6 +166,41 @@ $discountFormat = number_format($arResult['DISCOUNT_PRICE_ALL'], 0, '', ' ');
             <div class="cart__order">
                 <a class="cart__order-btn" href="/order/">Оформить заказ</a>
             </div>
+
+            <div class="cart__add">
+                <h2 class="cart__add-title">Добавить к заказу</h2>
+                <div class="cart__add-slider swiper-container product-add-slider">
+                    <div class="swiper-wrapper">
+                        <?php foreach ($arResult['UPSALE_PRODUCTS'] as $item): ?>
+                            <?php
+                            $upsalePriceFormat = number_format($item['price'], 0, '', ' ');
+
+                            $class = 'product-add-slider__btn js-upsale-add-to-cart';
+                            if ($item['inCart']) {
+                                $class .= ' product-add-slider__btn--is-chosen';
+                            }
+                            ?>
+                            <div class="swiper-slide product-add-slider__item">
+                                <img src="<?=$item['image']?>" alt="">
+                                <div class="product-add-slider__header">
+                                    <h3 class="product-add-slider__title"><?=$item['name']?> +<?=$upsalePriceFormat?>
+                                        ₽
+                                    </h3>
+                                    <p class="product-add-slider__info"></p>
+                                    <?=$item['text']?>
+                                    <button class="<?=$class?>" data-id="<?=$item['id']?>" data-productid="<?=$item['id']?>">
+                                        <svg width="20" height="20" aria-hidden="true">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#round-tick"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
+
         <?php else: ?>
             <?php
             ShowError($arResult['ERROR_MESSAGE']);

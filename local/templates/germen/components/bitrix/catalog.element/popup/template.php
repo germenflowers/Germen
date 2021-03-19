@@ -257,9 +257,9 @@ $priceFormat = number_format($arResult['PRICES']['BASE']['VALUE'], 0, '', ' ');
                             ₽
                         </div>
                     </button>
-                    <button 
-                            class="product-info__favorite-desktop <?=$wishlistClass?>" 
-                            type="button" 
+                    <button
+                            class="product-info__favorite-desktop <?=$wishlistClass?>"
+                            type="button"
                             data-id="<?=$arResult['ID']?>"
                     ></button>
                 </div>

@@ -6937,6 +6937,19 @@ button.close {
     outline: 0;
 }
 
+@media (max-width: 599px) {
+    .product-modal {
+        top: 100vh;
+        bottom: unset;
+        transition: all 0.3s;
+    }
+
+    .product-modal.in {
+        top: 0;
+        bottom: 0;
+    }
+}
+
 @media (min-width: 600px) {
     .modal.fade .modal-dialog {
         transform: translate(0, -25%);
@@ -13744,11 +13757,18 @@ input, textarea, button {
 
 .product-info__fixed-footer {
     position: fixed;
-    bottom: 0;
+    bottom: -100%;
     left: 0;
     width: 100%;
     z-index: 1000;
     background-color: #fff;
+    transition: bottom 0.3s;
+}
+
+@media screen and (max-width: 599px) {
+    .product-modal.in .product-info__fixed-footer {
+        bottom: 0;
+    }
 }
 
 .product-info__fixed-footer-outer {
@@ -15494,7 +15514,7 @@ div.order-error {
 
 .cart {
 max-width: 700px;
-margin: 0 auto 48px;
+margin: 0 auto;
 padding: 48px 9px 0px;
 }
 
@@ -15512,7 +15532,7 @@ margin: 0 0 48px;
 }
 
 .cart__add {
-margin: 0 0 48px;
+margin: 0;
 }
 
 .cart__add-title {
@@ -15524,7 +15544,8 @@ margin: 0 0 16px;
 
 .cart__add-slider.product-add-slider {
 overflow: hidden;
-padding: 3px 0 3px 1px;
+padding: 3px 0 3px 48px;
+margin-left: -48px;
 }
 
 .cart__add-slider.product-add-slider::after {
@@ -15540,6 +15561,19 @@ z-index: 10;
 pointer-events: none;
 }
 
+.cart__add-slider.product-add-slider::before {
+    position: absolute;
+    content: "";
+    width: 48px;
+    height: 100%;
+    background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(#FFFFFF));
+    background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+    top: 0;
+    left: 0;
+    z-index: 10;
+    pointer-events: none;
+    }
+
 .cart__add-slider.product-add-slider .swiper-slide {
 height: auto;
 }
@@ -15554,7 +15588,7 @@ display: flex;
 -webkit-box-align: top;
     -ms-flex-align: top;
         align-items: top;
-margin: 0 0 48px;
+margin: 0 0 16px;
 }
 
 .cart__promo-form {
@@ -15700,6 +15734,11 @@ line-height: 22px;
 .cart__discount p {
    margin: 0 0 0 8px;
    display: inline-block;
+}
+
+.cart__order {
+    display: flex;
+    margin-bottom: 48px;
 }
 
 .cart__order-btn {
@@ -15974,8 +16013,8 @@ margin-right: 15px;
 }
 
 .catalog__fixed-footer {
-    position: -webkit-sticky;
-    position: sticky;
+    /* position: -webkit-sticky; */
+    position: fixed;
     padding: 16px 16px 32px;
     background: rgba(255, 255, 255, 0.92);
     -webkit-backdrop-filter: blur(12px);
@@ -15984,6 +16023,13 @@ margin-right: 15px;
     left: 0;
     right: 0;
     z-index: 10;
+    transition: transform 0.2s ease-out;
+    overflow: hidden;
+    transform: translate3d(0, 100%, 0);
+}
+
+.catalog__fixed-footer.is-shown {
+    transform: translate3d(0px, 0%, 0px);
 }
 
 @media (min-width: 1031px) {
