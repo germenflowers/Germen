@@ -239,6 +239,7 @@ $(document).ready(function () {
             $popupProductBody.html(result.data);
             $popupProduct.modal('show');
           }
+          animateMobileCart();
         }
       });
     }
@@ -822,6 +823,14 @@ function animateMobileCart() {
   });
 
   $('.modal-content .modal-close').on( "click", function() {
+    if (price > 0) {
+      setTimeout(function(){
+        container.addClass("is-shown");
+      }, 400);
+    }
+  });
+
+  $('.modal-content .product-slider .swiper-wrapper').on( "click", function() {
     if (price > 0) {
       setTimeout(function(){
         container.addClass("is-shown");
