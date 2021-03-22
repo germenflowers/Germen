@@ -246,13 +246,15 @@ $priceFormat = number_format($arResult['PRICES']['BASE']['VALUE'], 0, '', ' ');
                         <input id="plus" type="button" value="+">
                     </div>
                     <button
+                            type="button"
+                            data-dismiss="modal"
                             class="button product-info__order-button js-product-order-button"
-                            href=""
                             data-url="/order/"
                             data-id="<?=$arResult['ID']?>"
+
                     >
                         <div class="promo-item__delivery__text">
-                            Заказать ·
+                            Заказат ·
                             <span><?=$priceFormat?></span>
                             ₽
                         </div>
