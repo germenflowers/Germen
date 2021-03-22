@@ -254,7 +254,7 @@ $priceFormat = number_format($arResult['PRICES']['BASE']['VALUE'], 0, '', ' ');
 
                     >
                         <span class="promo-item__delivery__text">
-                            Заказат ·
+                            Добавить ·
                             <span><?=$priceFormat?></span>
                             ₽
                         </span>
