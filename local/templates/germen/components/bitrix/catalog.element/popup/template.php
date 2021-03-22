@@ -253,11 +253,11 @@ $priceFormat = number_format($arResult['PRICES']['BASE']['VALUE'], 0, '', ' ');
                             data-id="<?=$arResult['ID']?>"
 
                     >
-                        <div class="promo-item__delivery__text">
+                        <span class="promo-item__delivery__text">
                             Заказат ·
                             <span><?=$priceFormat?></span>
                             ₽
-                        </div>
+                        </span>
                     </button>
                     <button
                             class="product-info__favorite-desktop <?=$wishlistClass?>"
