@@ -13756,7 +13756,7 @@ input, textarea, button {
 }
 
 .product-info__fixed-footer {
-    position: fixed;
+    position: static;
     bottom: -100%;
     left: 0;
     width: 100%;
@@ -13768,6 +13768,7 @@ input, textarea, button {
 @media screen and (max-width: 599px) {
     .product-modal.in .product-info__fixed-footer {
         bottom: 0;
+        position: fixed;
     }
 }
 
@@ -13785,7 +13786,7 @@ input, textarea, button {
 
 }
 
-@media screen and (min-width: 1030px) {
+@media screen and (min-width: 599px) {
     .product-info__fixed-footer {
         position: static;
         width: 100%;
@@ -16012,6 +16013,7 @@ margin-right: 15px;
     pointer-events: none;
 }
 
+
 .catalog__fixed-footer {
     /* position: -webkit-sticky; */
     position: fixed;
@@ -16023,13 +16025,19 @@ margin-right: 15px;
     left: 0;
     right: 0;
     z-index: 10;
+    -webkit-transition: -webkit-transform 0.2s ease-out;
+    transition: -webkit-transform 0.2s ease-out;
+    -o-transition: transform 0.2s ease-out;
     transition: transform 0.2s ease-out;
+    transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
     overflow: hidden;
-    transform: translate3d(0, 100%, 0);
+    -webkit-transform: translate3d(0, 100%, 0);
+            transform: translate3d(0, 100%, 0);
 }
 
 .catalog__fixed-footer.is-shown {
-    transform: translate3d(0px, 0%, 0px);
+    -webkit-transform: translate3d(0px, 0%, 0px);
+            transform: translate3d(0px, 0%, 0px);
 }
 
 @media (min-width: 1031px) {
@@ -16047,15 +16055,22 @@ margin-right: 15px;
     text-align: center;
     letter-spacing: 0.35px;
     width: 100%;
+    display: -ms-grid;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 16px;
 }
 
 .catalog__fixed-footer-time {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
 }
 
 .catalog__fixed-footer-icon {
