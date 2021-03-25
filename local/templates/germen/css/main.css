@@ -9431,6 +9431,7 @@ input, textarea, button {
         top: 0;
         left: 0;
         right: 0;
+        will-change: padding;
     }
 
     .header__container {
