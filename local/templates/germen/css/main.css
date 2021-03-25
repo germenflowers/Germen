@@ -9426,6 +9426,11 @@ input, textarea, button {
         padding: 20px 0px 20px;
         background-color: #ffffff;
         border-color: transparent;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        left: 0;
+        right: 0;
     }
 
     .header__container {

@@ -9882,7 +9882,7 @@ $('.js-add-to-cart').click(function(e){
 window.addEventListener('scroll', function () {
   var windowScroll = window.pageYOffset;
   var header = document.querySelector('.header');
-  if (windowScroll >= 5) {
+  if (windowScroll >= 1) {
     header.classList.add("header--fixed")
   } else {
     header.classList.remove("header--fixed")
