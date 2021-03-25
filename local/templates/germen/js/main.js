@@ -1312,3 +1312,35 @@ function showOldPrice($priceElem, price) {
 /**
  * End pdv:order
  */
+
+
+
+$('.promo-item__add-to-fav-btn').click(function(e){
+  var added = $(this).hasClass('red-heart');
+  if(added) {
+    return;
+  }
+  var butWrap = $(this).parents('.content');
+  butWrap.append('<div class="animtocart"></div>');
+  $('.animtocart').css({
+    'position' : 'absolute',
+    // 'background' : '#FF323D',
+    'width' :  '15px',
+    'height' : '15px',
+    'border-radius' : '100px',
+    'z-index' : '9999999999',
+    'left' : e.pageX-10,
+    'top' : e.pageY-70,
+    'opacity' : '0.6',
+    'background-image' : 'url(local/templates/germen/img/to-fav.svg)',
+    'background-repeat': 'no-repeat',
+    'background-size': '100%'
+
+  });
+  var fav = $('.header__favorite').offset();
+  console.log(fav.top)
+  $('.animtocart').animate({ top: fav.top + 'px', left: fav.left + 'px', width: 0, height: 0 }, 800, function(){
+    console.log($('.animtocart').offset())
+    $(this).remove();
+  });
+});
