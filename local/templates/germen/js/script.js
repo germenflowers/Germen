@@ -9868,7 +9868,7 @@ $('.js-add-to-cart').click(function(e){
     'left' : e.pageX-10,
     'top' : e.pageY-70,
     'opacity' : '0.6',
-    'background-image' : 'url(/local/templates/germen/img/sprites/sprite.svg#shopping-cart)',
+    'background-image' : 'url(local/templates/germen/img/to-fav.svg)',
     'background-repeat': 'no-repeat',
     'background-size': '100%'
 
