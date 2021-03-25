@@ -9399,6 +9399,8 @@ input, textarea, button {
     border-bottom: 1px solid #D6D6D6;
 }
 
+
+
 .header__container {
     margin-right: auto;
     margin-left: auto;
@@ -9417,6 +9419,13 @@ input, textarea, button {
 @media (min-width: 1030px) {
     .header {
         padding: 31px 0px 25px;
+        transition: all 0.2s;
+    }
+
+    .header--fixed {
+        padding: 20px 0px 20px;
+        background-color: #ffffff;
+        border-color: transparent;
     }
 
     .header__container {
