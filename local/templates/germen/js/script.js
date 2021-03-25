@@ -9856,9 +9856,8 @@ $('.promo-item__add-to-fav-btn').click(function(e){
 });
 
 $('.js-add-to-cart').click(function(e){
-  alert(1)
   var butWrap = $(this).parents('.content');
-  alert(butWrap)
+  console.log(butWrap)
   butWrap.append('<div class="animtobasket"></div>');
   $('.animtobasket').css({
     'position' : 'absolute',
