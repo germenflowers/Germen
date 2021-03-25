@@ -9882,9 +9882,12 @@ $('.js-add-to-cart').click(function(e){
 window.addEventListener('scroll', function () {
   var windowScroll = window.pageYOffset;
   var header = document.querySelector('.header');
-  if (windowScroll >= 1) {
-    header.classList.add("header--fixed")
+  var content = document.querySelector('.content');
+  if (windowScroll >= 60) {
+    header.classList.add("header--fixed");
+    content.classList.add("content--scroll");
   } else {
-    header.classList.remove("header--fixed")
+    header.classList.remove("header--fixed");
+    content.classList.remove("content--scroll");
   }
 });
