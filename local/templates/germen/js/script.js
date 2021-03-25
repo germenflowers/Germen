@@ -9880,11 +9880,11 @@ $('.js-add-to-cart').click(function(e){
 });
 
 window.addEventListener('scroll', function () {
-  alert(1)
   var windowScroll = window.pageYOffset;
   var header = document.querySelector('.header');
   if (windowScroll >= 5) {
-    alert(2)
-    header.classList.add(".header--fixed")
+    header.classList.add("header--fixed")
+  } else {
+    header.classList.remove("header--fixed")
   }
 });
