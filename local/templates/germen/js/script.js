@@ -9861,14 +9861,14 @@ $('.js-add-to-cart').click(function(e){
   butWrap.append('<div class="animtobasket"></div>');
   $('.animtobasket').css({
     'position' : 'absolute',
-    'width' :  '15px',
-    'height' : '15px',
+    'width' :  '28px',
+    'height' : '28px',
     'border-radius' : '100px',
     'z-index' : '9999999999',
     'left' : e.pageX-10,
     'top' : e.pageY-70,
     'opacity' : '0.6',
-    'background-image' : 'url(local/templates/germen/img/to-fav.svg)',
+    'background-image' : 'url(local/templates/germen/img/shopping-bag.svg)',
     'background-repeat': 'no-repeat',
     'background-size': '100%'
 
