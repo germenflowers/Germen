@@ -9874,7 +9874,7 @@ $('.js-add-to-cart').click(function(e){
 
   });
   var fav = $('.header__cart').offset();
-  $('.animtobasket').animate({ top: fav.top + 'px', left: fav.left + 'px', width: 0, height: 0 }, 800, function(){
+  $('.animtobasket').animate({ top: fav.top + 'px', left: fav.left + 'px', width: 0, height: 0 }, 80000, function(){
     $(this).remove();
   });
 });
