@@ -9855,7 +9855,14 @@ $('.promo-item__add-to-fav-btn').click(function(e){
   });
 });
 
+window.isDesktop = function () {
+  return window.matchMedia('(min-width: 1031px)').matches;
+};
+
 $('.js-add-to-cart').click(function(e){
+  if (!window.isDesktop()) {
+    return;
+  }
   var butWrap = $(this).parents('.content');
   console.log(butWrap)
   butWrap.append('<div class="animtobasket"></div>');
@@ -9879,14 +9886,9 @@ $('.js-add-to-cart').click(function(e){
   });
 });
 
-window.isDesktop = function () {
-  return window.matchMedia('(min-width: 1031px)').matches;
-};
+
 
 window.addEventListener('scroll', function () {
-  if (!window.isDesktop()) {
-    return;
-  }
   var windowScroll = window.pageYOffset;
   var header = document.querySelector('.header__container');
   if (windowScroll >= 60) {
