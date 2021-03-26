@@ -9400,10 +9400,13 @@ input, textarea, button {
 
 
 .header__container {
-    display: flex;
-    justify-content: space-between;
     padding: 24px 16px;
     border-bottom: 1px solid #D6D6D6;
+}
+
+.header__container-inner {
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (min-width: 700px) {
@@ -9447,8 +9450,9 @@ input, textarea, button {
 @media (min-width: 1250px) {
     .header__container-inner {
         width: 1230px;
-        left: 50%;
-        margin-left: -615px;
+        margin: 0 auto;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 
