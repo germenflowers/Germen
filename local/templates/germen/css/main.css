@@ -9394,6 +9394,7 @@ input, textarea, button {
     top: 0;
     left: 0;
     width: 100%;
+    border-bottom: 1px solid #D6D6D6;
 }
 
 
@@ -9419,11 +9420,15 @@ input, textarea, button {
     }
 
     .header__container {
+        position: absolute;
+        top: 0%;
         padding: 31px 0px 25px;
         transition: all 0.2s;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
-    .headerr__container--fixed {
+    .header__container--fixed {
         padding: 20px 0px 20px;
         background-color: #ffffff;
         border-color: transparent;
@@ -9437,8 +9442,7 @@ input, textarea, button {
 
     .header__container {
         width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+
     }
 }
 
