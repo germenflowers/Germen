@@ -9424,18 +9424,16 @@ input, textarea, button {
         top: 0%;
         padding: 31px 15px 25px;
         transition: all 0.2s;
+        background-color: transparent;
     }
 
     .header__container--fixed {
         padding: 20px 15px 20px;
         background-color: #ffffff;
         border-color: transparent;
-        position: sticky;
-
         top: 0;
         left: 0;
         right: 0;
-        will-change: padding;
     }
 
     .header__container {
