@@ -9395,40 +9395,64 @@ input, textarea, button {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 24px 0px;
+
+}
+
+
+.header__container {
+    padding: 24px 16px;
     border-bottom: 1px solid #D6D6D6;
 }
 
-.header__container {
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 16px;
-    padding-right: 16px;
+.header__container-inner {
     display: flex;
     justify-content: space-between;
 }
 
 @media (min-width: 700px) {
-    .header__container {
+    .header {
         width: 100%;
     }
 }
 
 @media (min-width: 1030px) {
     .header {
-        padding: 31px 0px 25px;
+        position: sticky;
+        position: -webkit-sticky;
+        z-index: 1000;
+    }
+
+    .header__container {
+        position: absolute;
+        top: 0%;
+        padding: 31px 15px 25px;
+        transition: all 0.2s;
+        background-color: transparent;
+    }
+
+
+
+    .header__container--fixed {
+        padding: 20px 15px 20px;
+        background-color: #ffffff;
+        border-color: transparent;
+        top: 0;
+        left: 0;
+        right: 0;
     }
 
     .header__container {
         width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+
     }
 }
 
 @media (min-width: 1250px) {
-    .header__container {
+    .header__container-inner {
         width: 1230px;
+        margin: 0 auto;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 

@@ -4,7 +4,6 @@ use \Bitrix\Main\Loader;
 use \Bitrix\Main\Page\Asset;
 use \PDV\Tools;
 use \UniPlug\Settings;
-use \Germen\Content;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -19,7 +18,6 @@ $isSubscribePage = Tools::isSubscribePage();
 $isTextPage = Tools::isTextPage();
 $isFavoritePage = Tools::isFavoritePage();
 $isCarePage = Tools::isCarePage();
-$isCartPage = Tools::isCartPage();
 
 $infoLineText = '';
 $infoLineIsShow = false;
@@ -44,8 +42,6 @@ $wishlist = array();
 if (!empty($_COOKIE['wishlist'])) {
     $wishlist = array_map('intval', array_filter(explode('|', $_COOKIE['wishlist'])));
 }
-
-$cartItemsCount = Content::getCartItemsCount();
 ?>
 <!doctype html>
 <html lang="ru">
@@ -79,7 +75,6 @@ $cartItemsCount = Content::getCartItemsCount();
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.sidr.min.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.serialize-object.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap-select.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
@@ -87,13 +82,7 @@ $cartItemsCount = Content::getCartItemsCount();
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slick.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/swiper-bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slideout.min.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/stickyfill.js');
-
-        if($isOrderPage) {
-            Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/checkout.js');
-        }
         ?>
 
         <?php $APPLICATION->IncludeComponent(
@@ -245,23 +234,23 @@ $cartItemsCount = Content::getCartItemsCount();
                                     <?=count($wishlist)?>
                                 </span>
                             </a>
-                            <a class="header__cart header__account-item" href="/cart/">
+                            <?php /*
+                            <a class="header__cart header__account-item" href="">
                                 <span class="header__cart-icon">
                                     <svg width="28px" height="28px" aria-hidden="true">
                                         <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#shopping-cart"></use>
                                     </svg>
                                 </span>
-                                <span class="header__cart-ammount header__ammount js-cart-counter">
-                                    <?=$cartItemsCount?>
-                                </span>
+                                <span class="header__cart-ammount header__ammount">2</span>
                             </a>
+                            */ ?>
                         </div>
                     </div>
                 </div>
 
                 <?php
                 $class = 'content';
-                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCartPage) {
+                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) {
                     $class .= ' content--main';
                 }
                 if($isCarePage) {
@@ -269,7 +258,7 @@ $cartItemsCount = Content::getCartItemsCount();
                 }
                 ?>
                 <div class="<?=$class?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage && !$isCartPage): ?>
+                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();
