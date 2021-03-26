@@ -9390,20 +9390,21 @@ input, textarea, button {
 }
 
 .header {
+    position: absolute;
     z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
-    border-bottom: 1px solid #D6D6D6;
+
 }
 
 
 .header__container {
-    padding-left: 16px;
-    padding-right: 16px;
     display: flex;
     justify-content: space-between;
-    padding: 24px 0px;
+    padding: 24px 16px;
+    border-bottom: 1px solid #D6D6D6;
+    will-change: padding;
 }
 
 @media (min-width: 700px) {
