@@ -9881,10 +9881,10 @@ $('.js-add-to-cart').click(function(e){
 
 window.addEventListener('scroll', function () {
   var windowScroll = window.pageYOffset;
-  var header = document.querySelector('.header');
+  var header = document.querySelector('.header__container');
   if (windowScroll >= 60) {
-    header.classList.add("header--fixed");
+    header.classList.add("header__container--fixed");
   } else {
-    header.classList.remove("header--fixed");
+    header.classList.remove("header__container--fixed");
   }
 });

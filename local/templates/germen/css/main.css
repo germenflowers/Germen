@@ -9390,44 +9390,45 @@ input, textarea, button {
 }
 
 .header {
-    position: absolute;
     z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 24px 0px;
-    border-bottom: 1px solid #D6D6D6;
 }
 
 
-
 .header__container {
-    margin-right: auto;
-    margin-left: auto;
     padding-left: 16px;
     padding-right: 16px;
     display: flex;
     justify-content: space-between;
+    padding: 24px 0px;
+    border-bottom: 1px solid #D6D6D6;
 }
 
 @media (min-width: 700px) {
-    .header__container {
+    .header {
         width: 100%;
     }
 }
 
 @media (min-width: 1030px) {
     .header {
+        position: sticky;
+        position: -webkit-sticky;
+    }
+
+    .header__container {
         padding: 31px 0px 25px;
         transition: all 0.2s;
     }
 
-    .header--fixed {
+    .headerr__container--fixed {
         padding: 20px 0px 20px;
         background-color: #ffffff;
         border-color: transparent;
         position: sticky;
-        position: -webkit-sticky;
+
         top: 0;
         left: 0;
         right: 0;
@@ -9444,6 +9445,8 @@ input, textarea, button {
 @media (min-width: 1250px) {
     .header__container {
         width: 1230px;
+        left: 50%;
+        margin-left: -615px;
     }
 }
 
@@ -13100,11 +13103,6 @@ input, textarea, button {
 .content {
     padding-top: 126px;
     padding-bottom: 100px;
-    transition: margin-top 0.2s;
-}
-
-.content--scroll {
-    margin-top: -60px;
 }
 
 @media (max-width: 700px) {
