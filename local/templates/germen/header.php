@@ -4,6 +4,7 @@ use \Bitrix\Main\Loader;
 use \Bitrix\Main\Page\Asset;
 use \PDV\Tools;
 use \UniPlug\Settings;
+use \Germen\Content;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -18,6 +19,7 @@ $isSubscribePage = Tools::isSubscribePage();
 $isTextPage = Tools::isTextPage();
 $isFavoritePage = Tools::isFavoritePage();
 $isCarePage = Tools::isCarePage();
+$isCartPage = Tools::isCartPage();
 
 $infoLineText = '';
 $infoLineIsShow = false;
@@ -42,6 +44,8 @@ $wishlist = array();
 if (!empty($_COOKIE['wishlist'])) {
     $wishlist = array_map('intval', array_filter(explode('|', $_COOKIE['wishlist'])));
 }
+
+$cartItemsCount = Content::getCartItemsCount();
 ?>
 <!doctype html>
 <html lang="ru">
@@ -75,6 +79,7 @@ if (!empty($_COOKIE['wishlist'])) {
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask.bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.inputmask-multi.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.sidr.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.serialize-object.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/bootstrap-select.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/air-datepicker/datepicker.min.js');
@@ -82,7 +87,13 @@ if (!empty($_COOKIE['wishlist'])) {
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slick.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/swiper-bundle.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/slideout.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/main.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/stickyfill.js');
+
+        if($isOrderPage) {
+            Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/checkout.js');
+        }
         ?>
 
         <?php $APPLICATION->IncludeComponent(
@@ -179,78 +190,80 @@ if (!empty($_COOKIE['wishlist'])) {
             <?php if (!$isOrderPage): ?>
                 <div class="header">
                     <div class="header__container">
-                        <div class="header__burger">
-                            <span class="toggle-menu mobile-menu">
-                                <svg width="28px" height="28px" aria-hidden="true">
-                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#burger"></use>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="header__logo">
-                            <a href="/" class="logo" title="germen"></a>
-                        </div>
-                        <?php /*
-                        <a href="tel:<?=$phone?>" class="header__phone">
-                            <svg width="24px" height="24px" aria-hidden="true">
-                                <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#phone"></use>
-                            </svg>
-                        </a>
-                        */ ?>
-                        <div class="header__content">
-                            <div class="header__nav" id="header-nav">
-                                <ul class="nav">
-                                    <?php $APPLICATION->IncludeComponent(
-                                        'bitrix:menu',
-                                        'simple',
-                                        array(
-                                            'ALLOW_MULTI_SELECT' => 'N',
-                                            'CHILD_MENU_TYPE' => '',
-                                            'DELAY' => 'N',
-                                            'MAX_LEVEL' => 1,
-                                            'MENU_CACHE_GET_VARS' => array(),
-                                            'MENU_CACHE_TIME' => 3600,
-                                            'MENU_CACHE_TYPE' => 'A',
-                                            'MENU_CACHE_USE_GROUPS' => 'Y',
-                                            'ROOT_MENU_TYPE' => 'top',
-                                            'USE_EXT' => 'N',
-                                        )
-                                    ); ?>
-                                    <li>
-                                        <a href="tel:<?=$phone?>">
-                                            <?php $APPLICATION->IncludeFile(SITE_TEMPLATE_PATH.'/include/phone.php')?>
-                                        </a>
-                                    </li>
-                                </ul>
+                        <div class="header__container-inner">
+                            <div class="header__burger">
+                                <span class="toggle-menu mobile-menu">
+                                    <svg width="28px" height="28px" aria-hidden="true">
+                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#burger"></use>
+                                    </svg>
+                                </span>
                             </div>
-                        </div>
-                        <div class="header__account">
-                            <a class="header__favorite header__account-item" href="/favorites/">
-                                <span class="header__favorite-icon">
-                                    <svg width="28px" height="28px" aria-hidden="true">
-                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#fav"></use>
-                                    </svg>
-                                </span>
-                                <span class="header__favorite-ammount header__ammount js-favorites-counter">
-                                    <?=count($wishlist)?>
-                                </span>
-                            </a>
+                            <div class="header__logo">
+                                <a href="/" class="logo" title="germen"></a>
+                            </div>
                             <?php /*
-                            <a class="header__cart header__account-item" href="">
-                                <span class="header__cart-icon">
-                                    <svg width="28px" height="28px" aria-hidden="true">
-                                        <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#shopping-cart"></use>
-                                    </svg>
-                                </span>
-                                <span class="header__cart-ammount header__ammount">2</span>
+                            <a href="tel:<?=$phone?>" class="header__phone">
+                                <svg width="24px" height="24px" aria-hidden="true">
+                                    <use xlink:href="<?=SITE_TEMPLATE_PATH?>/icons/icons.svg?v=<?=VERSION_SPRITE__ICONS?>#phone"></use>
+                                </svg>
                             </a>
                             */ ?>
+                            <div class="header__content">
+                                <div class="header__nav" id="header-nav">
+                                    <ul class="nav">
+                                        <?php $APPLICATION->IncludeComponent(
+                                            'bitrix:menu',
+                                            'simple',
+                                            array(
+                                                'ALLOW_MULTI_SELECT' => 'N',
+                                                'CHILD_MENU_TYPE' => '',
+                                                'DELAY' => 'N',
+                                                'MAX_LEVEL' => 1,
+                                                'MENU_CACHE_GET_VARS' => array(),
+                                                'MENU_CACHE_TIME' => 3600,
+                                                'MENU_CACHE_TYPE' => 'A',
+                                                'MENU_CACHE_USE_GROUPS' => 'Y',
+                                                'ROOT_MENU_TYPE' => 'top',
+                                                'USE_EXT' => 'N',
+                                            )
+                                        ); ?>
+                                        <li>
+                                            <a href="tel:<?=$phone?>">
+                                                <?php $APPLICATION->IncludeFile(SITE_TEMPLATE_PATH.'/include/phone.php')?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="header__account">
+                                <a class="header__favorite header__account-item" href="/favorites/">
+                                    <span class="header__favorite-icon">
+                                        <svg width="28px" height="28px" aria-hidden="true">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#fav"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="header__favorite-ammount header__ammount js-favorites-counter">
+                                        <?=count($wishlist)?>
+                                    </span>
+                                </a>
+                                <a class="header__cart header__account-item" href="/cart/">
+                                    <span class="header__cart-icon">
+                                        <svg width="28px" height="28px" aria-hidden="true">
+                                            <use xlink:href="<?=SITE_TEMPLATE_PATH?>/img/sprites/sprite.svg#shopping-cart"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="header__cart-ammount header__ammount js-cart-counter">
+                                        <?=$cartItemsCount?>
+                                    </span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <?php
                 $class = 'content';
-                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage) {
+                if(!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCartPage) {
                     $class .= ' content--main';
                 }
                 if($isCarePage) {
@@ -258,7 +271,7 @@ if (!empty($_COOKIE['wishlist'])) {
                 }
                 ?>
                 <div class="<?=$class?>">
-                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage): ?>
+                    <?php if (!$isArticlePage && !$isSubscribePage && !$isFavoritePage && !$isCarePage && !$isCartPage): ?>
                         <div class="promo-main">
                             <?php
                             $arrFilterBanner = array();

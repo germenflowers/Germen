@@ -9879,7 +9879,14 @@ $('.js-add-to-cart').click(function(e){
   });
 });
 
+window.isDesktop = function () {
+  return window.matchMedia('(min-width: 1031px)').matches;
+};
+
 window.addEventListener('scroll', function () {
+  if (!window.isDesktop()) {
+    return;
+  }
   var windowScroll = window.pageYOffset;
   var header = document.querySelector('.header__container');
   if (windowScroll >= 60) {
