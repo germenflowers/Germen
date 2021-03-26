@@ -9404,7 +9404,6 @@ input, textarea, button {
     display: flex;
     justify-content: space-between;
     padding: 24px 0px;
-    border-bottom: 1px solid #D6D6D6;
 }
 
 @media (min-width: 700px) {
@@ -9417,6 +9416,7 @@ input, textarea, button {
     .header {
         position: sticky;
         position: -webkit-sticky;
+        z-index: 1000;
     }
 
     .header__container {
