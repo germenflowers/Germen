@@ -190,6 +190,7 @@ $cartItemsCount = Content::getCartItemsCount();
             <?php if (!$isOrderPage): ?>
                 <div class="header">
                     <div class="header__container">
+                        <div class="header__container-inner">
                         <div class="header__burger">
                             <span class="toggle-menu mobile-menu">
                                 <svg width="28px" height="28px" aria-hidden="true">
@@ -255,6 +256,7 @@ $cartItemsCount = Content::getCartItemsCount();
                                     <?=$cartItemsCount?>
                                 </span>
                             </a>
+                        </div>
                         </div>
                     </div>
                 </div>

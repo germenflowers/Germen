@@ -9427,6 +9427,8 @@ input, textarea, button {
         background-color: transparent;
     }
 
+
+
     .header__container--fixed {
         padding: 20px 15px 20px;
         background-color: #ffffff;
@@ -9443,7 +9445,7 @@ input, textarea, button {
 }
 
 @media (min-width: 1250px) {
-    .header__container {
+    .header__container-inner {
         width: 1230px;
         left: 50%;
         margin-left: -615px;
