@@ -9404,7 +9404,6 @@ input, textarea, button {
     justify-content: space-between;
     padding: 24px 16px;
     border-bottom: 1px solid #D6D6D6;
-    will-change: padding;
 }
 
 @media (min-width: 700px) {
