@@ -373,6 +373,14 @@ $(document).ready(function()
       }
     }
 
+    if (props['ORDER_PROP_19'].length === 0) {
+      $('input[name=ORDER_PROP_19]').addClass('error');
+
+      if (firstErrorInput.length === 0) {
+        firstErrorInput = $('input[name=ORDER_PROP_19]');
+      }
+    }
+
     if (props['ORDER_PROP_8'].length === 0) {
       $('input[name=ORDER_PROP_8]').addClass('error');
 
@@ -416,6 +424,13 @@ $(document).ready(function()
             data[$(this).attr('name')] = data['ORDER_PROP_4'][i];
           });
         }
+      }
+
+      if (
+        typeof data['ORDER_PROP_19'] === 'undefined' ||
+        data['ORDER_PROP_19'] === ''
+      ) {
+        data['ORDER_PROP_19'] = 'user@germen.me';
       }
 
       $.ajax({
