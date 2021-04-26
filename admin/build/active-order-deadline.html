@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Germen | Вход</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="fonts/SFProDisplay-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/SFProDisplay-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/SFProDisplay-Medium.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/SFProDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+  <main>
+    <div class="container">
+      <div class="header__logo"><svg width="102" height="24" aria-hidden="true">
+          <use xlink:href="img/sprite.svg#logo"></use>
+        </svg></div>
+      <div class="header">
+        <div class="header__tabs js-tabs" id="header-tabs">
+          <ul class="header__tabs-header js-tabs__header">
+            <li class="header__tabs-item"><a class="header__tabs-link active js-tabs__title" href="">Заказы</a></li>
+            <li class="header__tabs-item"><a class="header__tabs-link js-tabs__title" href="">История</a></li>
+            <li class="header__tabs-item"><a class="header__tabs-link js-tabs__title" href="">Календарь</a></li>
+          </ul>
+        </div>
+        <div class="header__account"><span>K</span>
+          <div class="header__dropdown">
+            <div class="header__dropdown-name">Константин Константинопольский</div>
+            <div class="header__dropdown-email">konsntantin.k@germen.me</div><a class="header__dropdown-password" href="#">Изменить пароль</a><a class="header__dropdown-logout" href="#">Выход</a>
+          </div>
+        </div>
+      </div>
+      <div class="aside">
+        <div class="aside__dropdown"><select name="orders" id="orders-select">
+            <option selected="selected">Новые заказы <span>14</span></option>
+            <option>Собранные <span>1</span></option>
+            <option>Отмененные <span>9</span></option>
+          </select></div>
+        <div class="aside__orders-list">
+          <div class="aside__order">
+            <div class="order order--is-opened snap-content">
+              <div class="order__title">№934013</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать как можно скорее</div>
+              <div class="order__state">
+                <div class="order__in-process">
+                  <div class="circle-timer" data-time-limit="180"></div>
+                </div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+          <div class="aside__order">
+            <div class="order snap-content">
+              <div class="order__title">№934014</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать к 13:04</div>
+              <div class="order__state">
+                <div class="order__in-process">
+                  <div class="circle-timer" data-time-limit="3000"></div>
+                </div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+          <div class="aside__order">
+            <div class="order snap-content">
+              <div class="order__title">№934015</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать к 12:08</div>
+              <div class="order__state">
+                <div class="order__done"><svg width="17" height="15" aria-hidden="true">
+                    <use xlink:href="img/sprite.svg#tick"></use>
+                  </svg></div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+          <div class="aside__order">
+            <div class="order snap-content">
+              <div class="order__title">№934016</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать к 12:13</div>
+              <div class="order__state">
+                <div class="order__in-process">
+                  <div class="circle-timer" data-time-limit="5000"></div>
+                </div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+          <div class="aside__order">
+            <div class="order snap-content">
+              <div class="order__title">№934017</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать к 12:21</div>
+              <div class="order__state">
+                <div class="order__done"><svg width="17" height="15" aria-hidden="true">
+                    <use xlink:href="img/sprite.svg#tick"></use>
+                  </svg></div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+          <div class="aside__order">
+            <div class="order snap-content">
+              <div class="order__title">№934018</div>
+              <div class="order__note"><svg width="15" height="22" aria-hidden="true">
+                  <use xlink:href="img/sprite.svg#clock"></use>
+                </svg>Собрать к 12:23</div>
+              <div class="order__state">
+                <div class="order__in-process">
+                  <div class="circle-timer" data-time-limit="8000"></div>
+                </div>
+              </div>
+            </div>
+            <div class="order__cancel snap-drawers">
+              <div class="snap-drawer snap-drawer-right" data-toggle="modal" data-target="#deleteModal">Отменить</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="steps__item is-active steps__item--small-text">Принять заказ с истекающим временем</div>
+        <div class="steps__arrow"></div>
+        <div class="steps__item">Заказ готов</div>
+        <div class="steps__arrow"></div>
+        <div class="steps__item">Передать курьеру</div>
+      </div>
+      <div class="order-cover">
+        <div class="order-summary">
+          <div class="order-summary__top">
+            <div class="order-summary__schedule order-summary__block">
+              <div class="order-summary__label">Срок приготовления</div>
+              <div class="order-summary__data">12:54 <span class="gray">/ 07:32</span></div>
+            </div>
+            <div class="order-summary__order-number order-summary__block">
+              <div class="order-summary__label">Номер заказа</div>
+              <div class="order-summary__data">#23497</div>
+            </div>
+            <div class="order-summary__total-price order-summary__block">
+              <div class="order-summary__label">Итого за день</div>
+              <div class="order-summary__data">2 800 <span>₽</span></div>
+            </div>
+            <div class="order-summary__state order-summary__block">
+              <div class="order-summary__label order-summary__label--green">Новый</div>
+            </div>
+          </div>
+          <div class="order-summary__bottom">
+            <div class="order-summary__comment">Погрейте, пожалуйста, круассан и поставьте напитки в капхолдер 🙏</div>
+            <div class="order-summary__total-price">700 <span>₽</span></div>
+          </div>
+        </div>
+        <div class="order-list">
+          <div class="order-item">
+            <div class="order-item__img"><img src="" alt=""></div>
+            <div class="order-item__info">
+              <div class="order-item__info-top">
+                <div class="order-item__name">Chàmomile</div>
+                <div class="order-item__ammount">1</div>
+                <div class="order-item__price">300 ₽</div>
+              </div>
+              <div class="order-item__extra">Helper, Доставка</div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Состав</div>
+                <div class="order-item__block-text">25 пионов сорта ян флеминг</div>
+              </div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Комментарий</div>
+                <div class="order-item__block-text">Сборка разноуровневая, упаковка светлая</div>
+              </div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Текст открытки</div>
+                <div class="order-item__block-text">Цветы для моего руководителя, наставника, учителя, примера и доброго человека. С днём рождения Ирина Александровна!!! от Рубена.</div>
+              </div>
+            </div>
+          </div>
+          <div class="order-item">
+            <div class="order-item__img"><img src="" alt=""></div>
+            <div class="order-item__info">
+              <div class="order-item__info-top">
+                <div class="order-item__name">Lola</div>
+                <div class="order-item__ammount">1</div>
+                <div class="order-item__price">400 ₽</div>
+              </div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Состав</div>
+                <div class="order-item__block-text">25 пионов сорта ян флеминг</div>
+              </div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Комментарий</div>
+                <div class="order-item__block-text">Сборка разноуровневая, упаковка светлая</div>
+              </div>
+              <div class="order-item__block">
+                <div class="order-item__block-title">Текст открытки</div>
+                <div class="order-item__block-text">Цветы для моего руководителя, наставника, учителя, примера и доброго человека. С днём рождения Ирина Александровна!!! от Рубена.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="js/script.min.js"></script>
+</body>
+
+</html>
