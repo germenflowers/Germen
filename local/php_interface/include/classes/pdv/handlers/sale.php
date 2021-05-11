@@ -1,14 +1,30 @@
-<?
+<?php
+
 namespace PDV\Handlers;
 
-use \Bitrix\Main\Loader,
-    \Bitrix\Main\Event,
-    \Bitrix\Sale\Internals\OrderPropsValueTable;
+use \Bitrix\Main\Event;
+use \Bitrix\Main\SystemException;
+use \Bitrix\Main\ArgumentException;
+use \Bitrix\Main\ObjectPropertyException;
+use \Bitrix\Sale\Internals\OrderPropsValueTable;
+use \PDV\Smsaero;
 
-class Sale {
-    const link_rate = '';
+/**
+ * Class Sale
+ * @package PDV\Handlers
+ */
+class Sale
+{
+    public const link_rate = '';
 
-    public function changeStatus( Event $event ) {
+    /**
+     * @param Event $event
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public function changeStatus(Event $event): void
+    {
         $order = $event->getParameter("ENTITY");
         $value = $event->getParameter("VALUE");
 
@@ -18,13 +34,14 @@ class Sale {
         $rsPropsValue = OrderPropsValueTable::getList(
             array(
                 'filter' => array('ORDER_ID' => $orderId, 'CODE' => 'PHONE'),
-                'select' => array('CODE', 'VALUE')
+                'select' => array('CODE', 'VALUE'),
             )
         );
-        if ( $arPropsValue = $rsPropsValue->fetch() )
-            $phone = trim(str_replace(array('+','-','(',')',' '), '', $arPropsValue['VALUE']));
+        if ($arPropsValue = $rsPropsValue->fetch()) {
+            $phone = trim(str_replace(array('+', '-', '(', ')', ' '), '', $arPropsValue['VALUE']));
+        }
 
-        if ( !empty($phone) ) {
+        if (!empty($phone)) {
             $textSms = '';
 
             $rsElem = \CIBlockElement::GetList(
@@ -34,7 +51,7 @@ class Sale {
                 array('nPageSize' => 1),
                 array('PREVIEW_TEXT')
             );
-            if ( $arElem = $rsElem->GetNext() ) {
+            if ($arElem = $rsElem->GetNext()) {
                 $textSms = str_replace(
                     array('#ORDER_ID#', '#LINK#', '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
                     array($orderId, self::link_rate, '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
@@ -42,18 +59,25 @@ class Sale {
                 );
             }
 
-            if ( !empty($textSms) ) {
-                if ( $handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'a+') ) {
+            if (!empty($textSms)) {
+                if ($handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'ab+')) {
                     fwrite($handle, $phone." ".$textSms."\n");
                     fclose($handle);
                 }
 
-                \PDV\Smsaero::sendSMS( $phone, $textSms );
+                Smsaero::sendSMS($phone, $textSms);
             }
         }
     }
 
-    public function orderCancel( Event $event ) {
+    /**
+     * @param Event $event
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public function orderCancel(Event $event): void
+    {
         $order = $event->getParameter("ENTITY");
         $cancel = $order->getField("CANCELED");
 
@@ -63,13 +87,16 @@ class Sale {
         $rsPropsValue = OrderPropsValueTable::getList(
             array(
                 'filter' => array('ORDER_ID' => $orderId, 'CODE' => 'PHONE'),
-                'select' => array('CODE', 'VALUE')
+                'select' => array('CODE', 'VALUE'),
             )
         );
-        if ( $arPropsValue = $rsPropsValue->fetch() )
-            $phone = trim(str_replace(array('+','-','(',')',' '), '', $arPropsValue['VALUE']));
+        if ($arPropsValue = $rsPropsValue->fetch()) {
+            $phone = trim(str_replace(array('+', '-', '(', ')', ' '), '', $arPropsValue['VALUE']));
+        }
 
-        if ( !empty($phone) && $cancel == 'Y' ) {
+        if (!empty($phone) && $cancel === 'Y') {
+            $textSms = '';
+
             $rsElem = \CIBlockElement::GetList(
                 array('sort' => 'asc', 'id' => 'desc'),
                 array('IBLOCK_ID' => IBLOCK_ID__SMS, '=CODE' => 'CANCELED'),
@@ -77,7 +104,7 @@ class Sale {
                 array('nPageSize' => 1),
                 array('PREVIEW_TEXT')
             );
-            if ( $arElem = $rsElem->GetNext() ) {
+            if ($arElem = $rsElem->GetNext()) {
                 $textSms = str_replace(
                     array('#ORDER_ID#', '#LINK#', '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
                     array($orderId, self::link_rate, '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
@@ -85,16 +112,23 @@ class Sale {
                 );
             }
 
-            if ( $handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'a+') ) {
+            if ($handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'ab+')) {
                 fwrite($handle, $phone." ".$textSms."\n");
                 fclose($handle);
             }
 
-            \PDV\Smsaero::sendSMS( $phone, $textSms );
+            Smsaero::sendSMS($phone, $textSms);
         }
     }
 
-    public function orderPaid( Event $event ) {
+    /**
+     * @param Event $event
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public function orderPaid(Event $event): void
+    {
         $order = $event->getParameter("ENTITY");
         $paid = $order->getField("PAYED");
 
@@ -104,13 +138,16 @@ class Sale {
         $rsPropsValue = OrderPropsValueTable::getList(
             array(
                 'filter' => array('ORDER_ID' => $orderId, 'CODE' => 'PHONE'),
-                'select' => array('CODE', 'VALUE')
+                'select' => array('CODE', 'VALUE'),
             )
         );
-        if ( $arPropsValue = $rsPropsValue->fetch() )
-            $phone = trim(str_replace(array('+','-','(',')',' '), '', $arPropsValue['VALUE']));
+        if ($arPropsValue = $rsPropsValue->fetch()) {
+            $phone = trim(str_replace(array('+', '-', '(', ')', ' '), '', $arPropsValue['VALUE']));
+        }
 
-        if ( !empty($phone) && $paid == 'Y' ) {
+        if (!empty($phone) && $paid === 'Y') {
+            $textSms = '';
+
             $rsElem = \CIBlockElement::GetList(
                 array('sort' => 'asc', 'id' => 'desc'),
                 array('IBLOCK_ID' => IBLOCK_ID__SMS, '=CODE' => 'PAYED'),
@@ -118,7 +155,7 @@ class Sale {
                 array('nPageSize' => 1),
                 array('PREVIEW_TEXT')
             );
-            if ( $arElem = $rsElem->GetNext() ) {
+            if ($arElem = $rsElem->GetNext()) {
                 $textSms = str_replace(
                     array('#ORDER_ID#', '#LINK#', '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
                     array($orderId, self::link_rate, '#PROMO_CODE#', '#COUNT_SALE#', '#PROMO_DATE#'),
@@ -126,12 +163,12 @@ class Sale {
                 );
             }
 
-            if ( $handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'a+') ) {
+            if ($handle = fopen($_SERVER["DOCUMENT_ROOT"].'/upload/logChangeOrder.txt', 'ab+')) {
                 fwrite($handle, $phone." ".$textSms."\n");
                 fclose($handle);
             }
 
-            \PDV\Smsaero::sendSMS( $phone, $textSms );
+            Smsaero::sendSMS($phone, $textSms);
         }
     }
 }

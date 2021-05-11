@@ -1,66 +1,64 @@
 <?php
 
-$eventManager = \Bitrix\Main\EventManager::getInstance();
+use \Bitrix\Main\EventManager;
+use \Germen\Handlers\Main;
+use \Germen\Handlers\Sale;
+use \PDV\Handlers\IBlock;
+use \PDV\Handlers\Sale as PdvSale;
+
+$eventManager = EventManager::getInstance();
 
 $eventManager->addEventHandler(
-    'sale',
-    'OnSaleStatusOrderChange',
-    array(
-        '\\PDV\\Handlers\\Sale',
-        'changeStatus',
-    )
+    'main',
+    'OnAfterUserAdd',
+    array(Main::class, 'OnAfterUserAdd')
 );
 
 $eventManager->addEventHandler(
-    'sale',
-    'OnSaleOrderCanceled',
-    array(
-        '\\PDV\\Handlers\\Sale',
-        'orderCancel',
-    )
-);
-
-$eventManager->addEventHandler(
-    'sale',
-    'OnSaleOrderPaid',
-    array(
-        '\\PDV\\Handlers\\Sale',
-        'orderPaid',
-    )
-);
-
-$eventManager->addEventHandler(
-    'iblock',
-    'OnBeforeIBlockElementAdd',
-    array(
-        '\\PDV\\Handlers\\IBlock',
-        'checkUpSaleImage',
-    )
-);
-
-$eventManager->addEventHandler(
-    'iblock',
-    'OnBeforeIBlockElementUpdate',
-    array(
-        '\\PDV\\Handlers\\IBlock',
-        'checkUpSaleImage',
-    )
+    'main',
+    'OnAfterUserUpdate',
+    array(Main::class, 'OnAfterUserUpdate')
 );
 
 $eventManager->addEventHandler(
     'sale',
     'OnBeforeOrderAdd',
-    array(
-        '\\Germen\\Handlers\\Sale',
-        'OnBeforeOrderAdd',
-    )
+    array(Sale::class, 'OnBeforeOrderAdd')
 );
 
 $eventManager->addEventHandler(
     'sale',
     'OnOrderSave',
-    array(
-        '\\Germen\\Handlers\\Sale',
-        'OnOrderSave',
-    )
+    array(Sale::class, 'OnOrderSave')
 );
+
+$eventManager->addEventHandler(
+    'sale',
+    'OnSaleStatusOrderChange',
+    array(PdvSale::class, 'changeStatus')
+);
+
+$eventManager->addEventHandler(
+    'sale',
+    'OnSaleOrderCanceled',
+    array(PdvSale::class, 'orderCancel')
+);
+
+$eventManager->addEventHandler(
+    'sale',
+    'OnSaleOrderPaid',
+    array(PdvSale::class, 'orderPaid')
+);
+
+$eventManager->addEventHandler(
+    'iblock',
+    'OnBeforeIBlockElementAdd',
+    array(IBlock::class, 'checkUpSaleImage')
+);
+
+$eventManager->addEventHandler(
+    'iblock',
+    'OnBeforeIBlockElementUpdate',
+    array(IBlock::class, 'checkUpSaleImage')
+);
+
