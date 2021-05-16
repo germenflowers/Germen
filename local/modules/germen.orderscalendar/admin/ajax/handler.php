@@ -37,7 +37,7 @@ if (isset($_GET['timeZone'])) {
     $timeZone = new DateTimeZone($_GET['timeZone']);
 }
 
-$order = new Order();
+$order = new Order($_GET['admin-section'] === 'Y');
 $items = $order->getOrdersFilterDeliveryDate($rangeStart->getTimestamp(), $rangeEnd->getTimestamp());
 $events = $order->formatOrdersToEvents($items);
 

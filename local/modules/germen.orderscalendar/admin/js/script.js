@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
   let calendarEl = document.getElementById('germen-orders-calendar');
   let loadingEl = document.getElementById('germen-orders-calendar-loading');
   let errorEl = document.getElementById('germen-orders-calendar-warning');
+  let isAdminSection = calendarEl.dataset.adminsection === 'Y';
+  let url = '/local/modules/germen.orderscalendar/admin/ajax/handler.php';
+
+  if (isAdminSection) {
+    url += '?admin-section=Y';
+  }
 
   let calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'ru',
@@ -14,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     navLinks: true,
     events: {
-      url: '/local/modules/germen.orderscalendar/admin/ajax/handler.php',
+      url: url,
       failure: function () {
         errorEl.style.display = 'block'
       }

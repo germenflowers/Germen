@@ -19,16 +19,21 @@ use \Bitrix\Main\ObjectPropertyException;
  */
 class Order
 {
+    private $isAdminSection;
+
     /**
      * Order constructor.
-     * @throws SystemException
+     * @param bool $isAdminSection
      * @throws LoaderException
+     * @throws SystemException
      */
-    public function __construct()
+    public function __construct(bool $isAdminSection = false)
     {
         if (!Loader::includeModule('sale')) {
             throw new SystemException('Не подключен модуль sale');
         }
+
+        $this->isAdminSection = $isAdminSection;
     }
 
     /**
@@ -68,7 +73,7 @@ class Order
     /**
      * Метод получает заказы у которых DELIVERY_DATE, DELIVERY_DATE_* попадает в диапазон от $timeStart до $timeEnd
      * а также заказы у которых вообще не указано DELIVERY_DATE
-     * (такие заказы можно будет ометить в календаре другим цветом, чтобы не пропустить эту ошибку)
+     * (такие заказы можно будет отметить в календаре другим цветом, чтобы не пропустить эту ошибку)
      *
      * Поле DELIVERY_DATE используется для указания времени доставки для обычных заказов
      * Поля DELIVERY_DATE_* используются для указания времени доставки для заказов на подписку цветов,
@@ -76,7 +81,7 @@ class Order
      *
      * Поле DELIVERY_DATE_TO используется для того, чтобы в календаре можно было отобразить диапазон времени доставки заказа
      *
-     * В методе придусмотрены поля DELIVERY_DATE_TO_*.
+     * В методе предусмотрены поля DELIVERY_DATE_TO_*.
      * Их можно будет использовать по аналогии с DELIVERY_DATE_TO для заказов на подписку цветов
      *
      * @param int $timeStart
@@ -100,7 +105,7 @@ class Order
         $timeEnd = $rangeEnd->getTimestamp();
 
         /**
-         * Настраиваем ключи, для правильного соотвествия свойст DELIVERY_DATE и DELIVERY_DATE_TO
+         * Настраиваем ключи, для правильного соответствия свойств DELIVERY_DATE и DELIVERY_DATE_TO
          */
         $settings = array(
             'DELIVERY_DATE' => array(
@@ -299,7 +304,12 @@ class Order
      */
     public function createOrderUrl(int $orderId): string
     {
-        return '/bitrix/admin/sale_order_view.php?ID='.$orderId;
+        $url = '/bitrix/admin/sale_order_view.php?ID='.$orderId;
+        if ($this->isAdminSection) {
+            $url = '/admin/'.$orderId.'/';
+        }
+
+        return $url;
     }
 
     /**
@@ -344,7 +354,7 @@ class Order
                 );
             } else {
                 /**
-                 * ИЗбавимся от случаев дублирования времени доставки для одного заказа
+                 * Избавимся от случаев дублирования времени доставки для одного заказа
                  */
                 $timesDelivery = array();
 
