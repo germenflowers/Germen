@@ -5,7 +5,7 @@
  */
 
 use \Bitrix\Main\Page\Asset;
-use \Germen\Admin\Content;
+use \Germen\Admin\User;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -18,9 +18,9 @@ $isPasswordPage = $currentPage === '/admin/change-password/' || $currentPage ===
 $isRegistrationPage = $currentPage === '/admin/registration/' || $currentPage === '/admin/registration/confirm/' || $currentPage === '/admin/registration/end/';
 $isProfilePage = $currentPage === '/admin/profile/';
 
-$content = new Content();
+$user = new User();
 
-$userData = $content->getUserData();
+$userData = $user->getUserData();
 ?>
 <!doctype html>
 <html lang="ru">

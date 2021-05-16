@@ -2,11 +2,25 @@
 
 /**
  * @global CMain $APPLICATION
+ * @global CMain $USER
  */
+
+use \Germen\Admin\Rights;
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php';
 
 $APPLICATION->SetTitle('История');
+
+if ($USER->IsAuthorized() === false) {
+    LocalRedirect('/admin/login/');
+    exit;
+}
+
+$rights = new Rights();
+if (!$rights->checkHistoryRights('view')) {
+    LocalRedirect('/');
+    exit;
+}
 ?>
 <div class="history">
     <div class="history__top">
