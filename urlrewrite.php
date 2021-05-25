@@ -8,4 +8,11 @@ $arUrlRewrite = array(
         'PATH' => '/suppliers/index.php',
         'SORT' => 100,
     ),
+    array(
+        'CONDITION' => '#^/admin/history/#',
+        'RULE' => '',
+        'ID' => 'germen:admin.order.history',
+        'PATH' => '/admin/history/index.php',
+        'SORT' => 100,
+    ),
 );

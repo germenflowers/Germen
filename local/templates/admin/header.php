@@ -46,6 +46,7 @@ $userData = $user->getUserData();
 
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/script.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.validate.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/dev.js');
         ?>
 

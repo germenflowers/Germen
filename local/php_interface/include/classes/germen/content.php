@@ -13,6 +13,8 @@ use Bitrix\Sale\Basket;
  */
 class Content
 {
+    private static $_aStorage = array();
+
     /**
      * Content constructor.
      */
@@ -452,5 +454,29 @@ class Content
         }
 
         return (bool)$CSaleOrderPropsValue->Add($fields);
+    }
+
+    /**
+     * Метод записывает данные в хранилище
+     * @param string $sStorageKey - ключ к значению
+     * @param $mData - значение
+     */
+    public static function setStorage(string $sStorageKey, $mData): void
+    {
+        self::$_aStorage[$sStorageKey] = $mData;
+    }
+
+    /**
+     * Метод получает данные из хранилища
+     * @param string $sStorageKey - ключ к значению
+     * @return bool|mixed
+     */
+    public static function getStorage(string $sStorageKey)
+    {
+        if (!(isset(self::$_aStorage[$sStorageKey]) && self::$_aStorage[$sStorageKey])) {
+            return false;
+        }
+
+        return self::$_aStorage[$sStorageKey];
     }
 }
