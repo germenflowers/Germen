@@ -114,7 +114,9 @@ function initHistoryFilter(array $filter): bool
 }
 
 if ($get['action'] === 'pagenavigation') {
-    initHistoryFilter($get['filter']);
+    if (!empty($get['filter'])) {
+        initHistoryFilter($get['filter']);
+    }
 
     $data = getItems();
 
@@ -124,7 +126,9 @@ if ($get['action'] === 'pagenavigation') {
 }
 
 if ($get['action'] === 'filter') {
-    initHistoryFilter($get['filter']);
+    if (!empty($get['filter'])) {
+        initHistoryFilter($get['filter']);
+    }
 
     $data = getItems();
 
