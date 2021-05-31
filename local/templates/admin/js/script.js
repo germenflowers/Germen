@@ -577,55 +577,55 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 
 ;(function(window, document) {
     'use strict';
-    
+
     /*
      * 1. Check if the browser supports `position: sticky` natively or is too old to run the polyfill.
      *    If either of these is the case set `seppuku` flag. It will be checked later to disable key features
      *    of the polyfill, but the API will remain functional to avoid breaking things.
      */
-    
+
     var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-    
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-    
+
     var seppuku = false;
-    
+
     var isWindowDefined = typeof window !== 'undefined';
-    
+
     // The polyfill can’t function properly without `window` or `window.getComputedStyle`.
     if (!isWindowDefined || !window.getComputedStyle) seppuku = true;
     // Dont’t get in a way if the browser supports `position: sticky` natively.
     else {
             (function () {
                 var testNode = document.createElement('div');
-    
+
                 if (['', '-webkit-', '-moz-', '-ms-'].some(function (prefix) {
                     try {
                         testNode.style.position = prefix + 'sticky';
                     } catch (e) {}
-    
+
                     return testNode.style.position != '';
                 })) seppuku = true;
             })();
         }
-    
+
     /*
      * 2. “Global” vars used across the polyfill
      */
     var isInitialized = false;
-    
+
     // Check if Shadow Root constructor exists to make further checks simpler
     var shadowRootExists = typeof ShadowRoot !== 'undefined';
-    
+
     // Last saved scroll position
     var scroll = {
         top: null,
         left: null
     };
-    
+
     // Array of created Sticky instances
     var stickies = [];
-    
+
     /*
      * 3. Utility functions
      */
@@ -636,52 +636,52 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             }
         }
     }
-    
+
     function parseNumeric(val) {
         return parseFloat(val) || 0;
     }
-    
+
     function getDocOffsetTop(node) {
         var docOffsetTop = 0;
-    
+
         while (node) {
             docOffsetTop += node.offsetTop;
             node = node.offsetParent;
         }
-    
+
         return docOffsetTop;
     }
-    
+
     /*
      * 4. Sticky class
      */
-    
+
     var Sticky = function () {
         function Sticky(node) {
             _classCallCheck(this, Sticky);
-    
+
             if (!(node instanceof HTMLElement)) throw new Error('First argument must be HTMLElement');
             if (stickies.some(function (sticky) {
                 return sticky._node === node;
             })) throw new Error('Stickyfill is already applied to this node');
-    
+
             this._node = node;
             this._stickyMode = null;
             this._active = false;
-    
+
             stickies.push(this);
-    
+
             this.refresh();
         }
-    
+
         _createClass(Sticky, [{
             key: 'refresh',
             value: function refresh() {
                 if (seppuku || this._removed) return;
                 if (this._active) this._deactivate();
-    
+
                 var node = this._node;
-    
+
                 /*
                  * 1. Save node computed props
                  */
@@ -696,14 +696,14 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                     marginRight: nodeComputedStyle.marginRight,
                     cssFloat: nodeComputedStyle.cssFloat
                 };
-    
+
                 /*
                  * 2. Check if the node can be activated
                  */
                 if (isNaN(parseFloat(nodeComputedProps.top)) || nodeComputedProps.display == 'table-cell' || nodeComputedProps.display == 'none') return;
-    
+
                 this._active = true;
-    
+
                 /*
                  * 3. Check if the current node position is `sticky`. If it is, it means that the browser supports sticky positioning,
                  *    but the polyfill was force-enabled. We set the node’s position to `static` before continuing, so that the node
@@ -711,7 +711,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                  */
                 var originalPosition = node.style.position;
                 if (nodeComputedStyle.position == 'sticky' || nodeComputedStyle.position == '-webkit-sticky') node.style.position = 'static';
-    
+
                 /*
                  * 4. Get necessary node parameters
                  */
@@ -720,7 +720,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                 var nodeWinOffset = node.getBoundingClientRect();
                 var parentWinOffset = parentNode.getBoundingClientRect();
                 var parentComputedStyle = getComputedStyle(parentNode);
-    
+
                 this._parent = {
                     node: parentNode,
                     styles: {
@@ -748,34 +748,34 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                     marginLeft: node.style.marginLeft,
                     marginRight: node.style.marginRight
                 };
-    
+
                 var nodeTopValue = parseNumeric(nodeComputedProps.top);
                 this._limits = {
                     start: nodeWinOffset.top + window.pageYOffset - nodeTopValue,
                     end: parentWinOffset.top + window.pageYOffset + parentNode.offsetHeight - parseNumeric(parentComputedStyle.borderBottomWidth) - node.offsetHeight - nodeTopValue - parseNumeric(nodeComputedProps.marginBottom)
                 };
-    
+
                 /*
                  * 5. Ensure that the node will be positioned relatively to the parent node
                  */
                 var parentPosition = parentComputedStyle.position;
-    
+
                 if (parentPosition != 'absolute' && parentPosition != 'relative') {
                     parentNode.style.position = 'relative';
                 }
-    
+
                 /*
                  * 6. Recalc node position.
                  *    It’s important to do this before clone injection to avoid scrolling bug in Chrome.
                  */
                 this._recalcPosition();
-    
+
                 /*
                  * 7. Create a clone
                  */
                 var clone = this._clone = {};
                 clone.node = document.createElement('div');
-    
+
                 // Apply styles to the clone
                 extend(clone.node.style, {
                     width: nodeWinOffset.right - nodeWinOffset.left + 'px',
@@ -791,7 +791,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                     fontSize: '1em',
                     position: 'static'
                 });
-    
+
                 referenceNode.insertBefore(clone.node, node);
                 clone.docOffsetTop = getDocOffsetTop(clone.node);
             }
@@ -799,11 +799,11 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             key: '_recalcPosition',
             value: function _recalcPosition() {
                 if (!this._active || this._removed) return;
-    
+
                 var stickyMode = scroll.top <= this._limits.start ? 'start' : scroll.top >= this._limits.end ? 'end' : 'middle';
-    
+
                 if (this._stickyMode == stickyMode) return;
-    
+
                 switch (stickyMode) {
                     case 'start':
                         extend(this._node.style, {
@@ -818,7 +818,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                             marginTop: 0
                         });
                         break;
-    
+
                     case 'middle':
                         extend(this._node.style, {
                             position: 'fixed',
@@ -832,7 +832,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                             marginTop: 0
                         });
                         break;
-    
+
                     case 'end':
                         extend(this._node.style, {
                             position: 'absolute',
@@ -846,29 +846,29 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                         });
                         break;
                 }
-    
+
                 this._stickyMode = stickyMode;
             }
         }, {
             key: '_fastCheck',
             value: function _fastCheck() {
                 if (!this._active || this._removed) return;
-    
+
                 if (Math.abs(getDocOffsetTop(this._clone.node) - this._clone.docOffsetTop) > 1 || Math.abs(this._parent.node.offsetHeight - this._parent.offsetHeight) > 1) this.refresh();
             }
         }, {
             key: '_deactivate',
             value: function _deactivate() {
                 var _this = this;
-    
+
                 if (!this._active || this._removed) return;
-    
+
                 this._clone.node.parentNode.removeChild(this._clone.node);
                 delete this._clone;
-    
+
                 extend(this._node.style, this._styles);
                 delete this._styles;
-    
+
                 // Check whether element’s parent node is used by other stickies.
                 // If not, restore parent node’s styles.
                 if (!stickies.some(function (sticky) {
@@ -877,10 +877,10 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                     extend(this._parent.node.style, this._parent.styles);
                 }
                 delete this._parent;
-    
+
                 this._stickyMode = null;
                 this._active = false;
-    
+
                 delete this._offsetToWindow;
                 delete this._offsetToParent;
                 delete this._limits;
@@ -889,36 +889,36 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             key: 'remove',
             value: function remove() {
                 var _this2 = this;
-    
+
                 this._deactivate();
-    
+
                 stickies.some(function (sticky, index) {
                     if (sticky._node === _this2._node) {
                         stickies.splice(index, 1);
                         return true;
                     }
                 });
-    
+
                 this._removed = true;
             }
         }]);
-    
+
         return Sticky;
     }();
-    
+
     /*
      * 5. Stickyfill API
      */
-    
-    
+
+
     var Stickyfill = {
         stickies: stickies,
         Sticky: Sticky,
-    
+
         forceSticky: function forceSticky() {
             seppuku = false;
             init();
-    
+
             this.refreshAll();
         },
         addOne: function addOne(node) {
@@ -928,13 +928,13 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                 // Take first node from the list then
                 if (node.length && node[0]) node = node[0];else return;
             }
-    
+
             // Check if Stickyfill is already applied to the node
             // and return existing sticky
             for (var i = 0; i < stickies.length; i++) {
                 if (stickies[i]._node === node) return stickies[i];
             }
-    
+
             // Create and return new sticky
             return new Sticky(node);
         },
@@ -943,20 +943,20 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             if (nodeList instanceof HTMLElement) nodeList = [nodeList];
             // Check if the argument is an iterable of some sort
             if (!nodeList.length) return;
-    
+
             // Add every element as a sticky and return an array of created Sticky instances
             var addedStickies = [];
-    
+
             var _loop = function _loop(i) {
                 var node = nodeList[i];
-    
+
                 // If it’s not an HTMLElement – create an empty element to preserve 1-to-1
                 // correlation with input list
                 if (!(node instanceof HTMLElement)) {
                     addedStickies.push(void 0);
                     return 'continue';
                 }
-    
+
                 // If Stickyfill is already applied to the node
                 // add existing sticky
                 if (stickies.some(function (sticky) {
@@ -965,17 +965,17 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                         return true;
                     }
                 })) return 'continue';
-    
+
                 // Create and add new sticky
                 addedStickies.push(new Sticky(node));
             };
-    
+
             for (var i = 0; i < nodeList.length; i++) {
                 var _ret2 = _loop(i);
-    
+
                 if (_ret2 === 'continue') continue;
             }
-    
+
             return addedStickies;
         },
         refreshAll: function refreshAll() {
@@ -990,7 +990,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                 // Take first node from the list then
                 if (node.length && node[0]) node = node[0];else return;
             }
-    
+
             // Remove the stickies bound to the nodes in the list
             stickies.some(function (sticky) {
                 if (sticky._node === node) {
@@ -1004,12 +1004,12 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             if (nodeList instanceof HTMLElement) nodeList = [nodeList];
             // Check if the argument is an iterable of some sort
             if (!nodeList.length) return;
-    
+
             // Remove the stickies bound to the nodes in the list
-    
+
             var _loop2 = function _loop2(i) {
                 var node = nodeList[i];
-    
+
                 stickies.some(function (sticky) {
                     if (sticky._node === node) {
                         sticky.remove();
@@ -1017,7 +1017,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                     }
                 });
             };
-    
+
             for (var i = 0; i < nodeList.length; i++) {
                 _loop2(i);
             }
@@ -1028,7 +1028,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             }
         }
     };
-    
+
     /*
      * 6. Setup events (unless the polyfill was disabled)
      */
@@ -1036,37 +1036,37 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
         if (isInitialized) {
             return;
         }
-    
+
         isInitialized = true;
-    
+
         // Watch for scroll position changes and trigger recalc/refresh if needed
         function checkScroll() {
             if (window.pageXOffset != scroll.left) {
                 scroll.top = window.pageYOffset;
                 scroll.left = window.pageXOffset;
-    
+
                 Stickyfill.refreshAll();
             } else if (window.pageYOffset != scroll.top) {
                 scroll.top = window.pageYOffset;
                 scroll.left = window.pageXOffset;
-    
+
                 // recalc position for all stickies
                 stickies.forEach(function (sticky) {
                     return sticky._recalcPosition();
                 });
             }
         }
-    
+
         checkScroll();
         window.addEventListener('scroll', checkScroll);
-    
+
         // Watch for window resizes and device orientation changes and trigger refresh
         window.addEventListener('resize', Stickyfill.refreshAll);
         window.addEventListener('orientationchange', Stickyfill.refreshAll);
-    
+
         //Fast dirty check for layout changes every 500ms
         var fastCheckTimer = void 0;
-    
+
         function startFastCheckTimer() {
             fastCheckTimer = setInterval(function () {
                 stickies.forEach(function (sticky) {
@@ -1074,14 +1074,14 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
                 });
             }, 500);
         }
-    
+
         function stopFastCheckTimer() {
             clearInterval(fastCheckTimer);
         }
-    
+
         var docHiddenKey = void 0;
         var visibilityChangeEventName = void 0;
-    
+
         if ('hidden' in document) {
             docHiddenKey = 'hidden';
             visibilityChangeEventName = 'visibilitychange';
@@ -1089,10 +1089,10 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             docHiddenKey = 'webkitHidden';
             visibilityChangeEventName = 'webkitvisibilitychange';
         }
-    
+
         if (visibilityChangeEventName) {
             if (!document[docHiddenKey]) startFastCheckTimer();
-    
+
             document.addEventListener(visibilityChangeEventName, function () {
                 if (document[docHiddenKey]) {
                     stopFastCheckTimer();
@@ -1102,9 +1102,9 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
             });
         } else startFastCheckTimer();
     }
-    
+
     if (!seppuku) init();
-    
+
     /*
      * 7. Expose Stickyfill
      */
@@ -1113,7 +1113,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
     } else if (isWindowDefined) {
         window.Stickyfill = Stickyfill;
     }
-    
+
 })(window, document);
 /*! jQuery UI - v1.12.1 - 2016-09-14
 * http://jqueryui.com
@@ -19907,18 +19907,18 @@ document
   // });
 'use strict';
 
-// (function () {
-//   var header = document.querySelector('.header__tabs');
-//   if (!header) {
-//     return;
-//   }
+(function () {
+  var header = document.querySelector('.courier-tabs');
+  if (!header) {
+    return;
+  }
 
-//   var tabs = new Tabs({
-//     elem: "tabs",
-//     open: 0
-//   });
+  var tabs = new Tabs({
+    elem: "courierTabs",
+    open: 0
+  });
 
-// })();
+})();
 
 const CLASSES = {
   CONTAINER: 'circle-timer',
@@ -20024,4 +20024,28 @@ class CircleTimer {
 
 document
     .querySelectorAll(`.circle-timer`)
-    .forEach(element => new CircleTimer(element));
+		.forEach(element => new CircleTimer(element));
+
+$(document).ready(function(){
+  $('#courierCheck').click(function(){
+      if($(this).prop("checked") == true){
+        $('.courier-order-info__btn .courier__btn').removeClass( "disabled" )
+      }
+      else if($(this).prop("checked") == false){
+        $('.courier-order-info__btn .courier__btn').addClass( "disabled" )
+      }
+  });
+});
+
+$(document).ready(function(){
+  $('.courier-contacts__btn .courier__btn').click(function(){
+    $('.courier-tabs__link--second').addClass( "js-tabs__title-active" );
+    $('.courier-tabs__link--first').removeClass( "js-tabs__title-active" );
+    $(".courier-tabs__content--first").css("opacity", "0");
+    $(".courier-tabs__content--first").css("display", "none");
+    $(".courier-tabs__content--second").css("opacity", "1");
+    $(".courier-tabs__content--second").css("display", "block");
+  });
+});
+
+
