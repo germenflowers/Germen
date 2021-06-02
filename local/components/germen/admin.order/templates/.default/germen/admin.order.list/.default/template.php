@@ -240,7 +240,7 @@ foreach ($arResult['orders'] as $type => $orders) {
                                 <div class="order-item__extra"><?=$propertiesString?></div>
                                 <div class="order-item__block">
                                     <div class="order-item__block-title">Состав</div>
-                                    <div class="order-item__block-text"><?=$basketItem['composition']?></div>
+                                    <div class="order-item__block-text"><?=$basketItem['composition']['TEXT']?></div>
                                 </div>
                                 <div class="order-item__block">
                                     <div class="order-item__block-title">Комментарий</div>
