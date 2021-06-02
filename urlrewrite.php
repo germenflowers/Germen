@@ -9,6 +9,13 @@ $arUrlRewrite = array(
         'SORT' => 100,
     ),
     array(
+        'CONDITION' => '#^/admin/orders/#',
+        'RULE' => '',
+        'ID' => 'germen:admin.order',
+        'PATH' => '/admin/orders/index.php',
+        'SORT' => 100,
+    ),
+    array(
         'CONDITION' => '#^/admin/history/#',
         'RULE' => '',
         'ID' => 'germen:admin.order.history',

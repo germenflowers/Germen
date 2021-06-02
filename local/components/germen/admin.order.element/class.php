@@ -12,9 +12,9 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 }
 
 /**
- * Class GermenAdminOrderHistoryElement
+ * Class GermenAdminOrderElement
  */
-class GermenAdminOrderHistoryElement extends CBitrixComponent
+class GermenAdminOrderElement extends CBitrixComponent
 {
     /**
      * @param $arParams
@@ -136,7 +136,7 @@ class GermenAdminOrderHistoryElement extends CBitrixComponent
     {
         return Tools::returnResultCache(
             $this->arParams['CACHE_TIME'],
-            'GermenAdminOrderHistoryElementGetOrder',
+            'GermenAdminOrderElementGetOrder',
             array($this, 'getOrder'),
             $id
         );

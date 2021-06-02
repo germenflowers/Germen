@@ -59,11 +59,11 @@ $(document).ready(function () {
   });
   //==============================================================================
 
-  $(document).on('click', '.js-history-filter-button', function (e) {
-    e.preventDefault();
-
-    $('.js-history-filters').toggleClass('is-shown');
-  });
+  // $(document).on('click', '.js-history-filter-button', function (e) {
+  //   e.preventDefault();
+  //
+  //   $('.js-history-filters').toggleClass('is-shown');
+  // });
 
   let historyFilterDateEl = document.querySelector('.js-history-filter-date'),
     historyFilterPriceMinEl = document.querySelector('.js-history-filter-price-min'),
@@ -87,6 +87,30 @@ $(document).ready(function () {
     filter.status = $(this).val();
 
     historyFilter(filter);
+  });
+
+  $(document).on('selectmenuchange', '.js-orders-type-select', function (e) {
+    showLoader();
+
+    let list = $('.aside__orders-list[data-type=' + $(this).val() + ']'),
+      orderId = list.find('.js-aside-order:first').data('id');
+
+    $('.aside__orders-list').removeClass('aside__orders-list_active');
+    list.addClass('aside__orders-list_active');
+
+    $('.js-order').removeClass('order-cover_active');
+    $('.js-order[data-id=' + orderId + ']').addClass('order-cover_active');
+
+    hideLoader();
+  });
+
+  $(document).on('click', '.js-aside-order', function (e) {
+    showLoader();
+
+    $('.js-order').removeClass('order-cover_active');
+    $('.js-order[data-id=' + $(this).data('id') + ']').addClass('order-cover_active');
+
+    hideLoader();
   });
 });
 

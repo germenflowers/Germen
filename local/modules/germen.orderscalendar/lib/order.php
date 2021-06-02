@@ -306,7 +306,7 @@ class Order
     {
         $url = '/bitrix/admin/sale_order_view.php?ID='.$orderId;
         if ($this->isAdminSection) {
-            $url = '/admin/'.$orderId.'/';
+            $url = '/admin/history/'.$orderId.'/';
         }
 
         return $url;

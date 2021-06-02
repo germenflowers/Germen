@@ -5,6 +5,7 @@ use \Bitrix\Main\LoaderException;
 use \Bitrix\Main\ArgumentException;
 use \Bitrix\Main\ObjectPropertyException;
 use \Bitrix\Main\UI\PageNavigation;
+use \Bitrix\Main\Type\Date;
 use \Bitrix\Main\Type\DateTime;
 use \Bitrix\Sale\Order;
 use \Bitrix\Sale\Basket;
@@ -15,11 +16,12 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 }
 
 /**
- * Class GermenAdminOrderHistoryList
+ * Class GermenAdminOrderList
  */
-class GermenAdminOrderHistoryList extends CBitrixComponent
+class GermenAdminOrderList extends CBitrixComponent
 {
     private $nav;
+    private $mainOrdersFilter = array();
 
     /**
      * @param array $arParams
@@ -103,15 +105,17 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
     {
         $this->checkModules();
         $this->initPageNavigation();
+        $this->initMainOrdersFilter();
 
         $this->arResult['filter'] = $this->initFilter();
 
         if ($this->arParams['CACHE_TYPE'] === 'Y' || $this->arParams['CACHE_TYPE'] === 'A') {
-            $this->arResult['orders'] = $this->getOrdersDataCached($this->getOrders());
+            $orders = $this->getOrdersDataCached($this->getOrders());
         } else {
-            $this->arResult['orders'] = $this->getOrdersData($this->getOrders());
+            $orders = $this->getOrdersData($this->getOrders());
         }
 
+        $this->arResult['orders'] = $this->groupOrders($orders);
         $this->arResult['pageNavigation'] = $this->getPageNavigation();
 
         $this->includeComponentTemplate();
@@ -193,7 +197,7 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
      */
     private function getCustomCacheId(): string
     {
-        $cacheId = 'GermenAdminOrderHistoryListGetData|';
+        $cacheId = 'GermenAdminOrderListGetData|';
         $cacheId .= $this->nav->getId().'|';
         $cacheId .= $this->nav->getCurrentPage().'|';
         $cacheId .= implode('|', $this->arParams).'|';
@@ -213,31 +217,15 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
 
         $filter = array();
 
-        if (!empty($this->arResult['filter']['date'])) {
-            $timestampStart = strtotime($this->arResult['filter']['date'].' 00:00');
-            $timestampEnd = strtotime($this->arResult['filter']['date'].' 23:59');
-
-            $filter['>=DATE_INSERT'] = DateTime::createFromTimestamp($timestampStart);
-            $filter['<=DATE_INSERT'] = DateTime::createFromTimestamp($timestampEnd);
-        }
-
-        if (!empty($this->arResult['filter']['status'])) {
-            $filter['STATUS_ID'] = $this->arResult['filter']['status'];
-        }
-
-        if (!empty($this->arResult['filter']['priceMin'])) {
-            $filter['>=PRICE'] = $this->arResult['filter']['priceMin'];
-        }
-
-        if (!empty($this->arResult['filter']['priceMax'])) {
-            $filter['<=PRICE'] = $this->arResult['filter']['priceMax'];
+        if (!empty($this->arResult['filter'])) {
+            $filter = array_merge($filter, $this->arResult['filter']);
         }
 
         $result = Order::getList(
             array(
                 'order' => array('ID' => 'DESC'),
                 'filter' => $filter,
-                'select' => array('ID', 'DATE_INSERT', 'PRICE', 'USER_DESCRIPTION'),
+                'select' => array('ID', 'DATE_INSERT', 'PRICE', 'USER_DESCRIPTION', 'STATUS_ID'),
                 'count_total' => true,
                 'offset' => $this->nav->getOffset(),
                 'limit' => $this->nav->getLimit(),
@@ -249,10 +237,13 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
         while ($row = $result->fetch()) {
             $orders[(int)$row['ID']] = array(
                 'id' => (int)$row['ID'],
-                'comment' => $row['USER_DESCRIPTION'],
                 'price' => (int)$row['PRICE'],
+                'comment' => $row['USER_DESCRIPTION'],
+                'note' => '',
                 'dateCreate' => $row['DATE_INSERT'],
-                'dateBuild' => '',
+                'dateDelivery' => '',
+                'dateBuildEstimated' => '',
+                'status' => $row['STATUS_ID'],
             );
         }
 
@@ -271,10 +262,10 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
             return $ordersProperties;
         }
 
-        $filter = array('ORDER_ID' => $ordersId, 'CODE' => array('BUILD_DATE'));
+        $filter = array('ORDER_ID' => $ordersId, 'CODE' => array('DELIVERY_DATE', 'TEXT_SCRAP'));
         $select = array();
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
-        if ($row = $result->Fetch()) {
+        while ($row = $result->Fetch()) {
             $ordersProperties[(int)$row['ORDER_ID']][$row['CODE']] = array(
                 'id' => (int)$row['ID'],
                 'code' => $row['CODE'],
@@ -295,9 +286,16 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
         $orderProperties = $this->getOrdersProperties(array_keys($orders));
 
         foreach ($orders as $id => $fields) {
-            if (!empty($orderProperties[$id]['BUILD_DATE']['value'])) {
-                $timestamp = strtotime($orderProperties[$id]['BUILD_DATE']['value']);
-                $orders[$id]['dateBuild'] = DateTime::createFromTimestamp($timestamp);
+            if (!empty($orderProperties[$id]['DELIVERY_DATE']['value'])) {
+                $timestamp = strtotime($orderProperties[$id]['DELIVERY_DATE']['value']);
+                $diff = 1.5 * 60 * 60; // Время сборки на полтора часа раньше времени доставки
+
+                $orders[$id]['dateDelivery'] = DateTime::createFromTimestamp($timestamp);
+                $orders[$id]['dateBuildEstimated'] = DateTime::createFromTimestamp($timestamp - $diff);
+            }
+
+            if (!empty($orderProperties[$id]['TEXT_SCRAP']['value'])) {
+                $orders[$id]['note'] = $orderProperties[$id]['TEXT_SCRAP']['value'];
             }
         }
 
@@ -327,9 +325,12 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
             $ordersBasket[(int)$row['ORDER_ID']][(int)$row['ID']] = array(
                 'id' => (int)$row['ID'],
                 'productId' => (int)$row['PRODUCT_ID'],
+                'imageId' => 0,
                 'name' => $row['NAME'],
                 'price' => (int)$row['PRICE'],
                 'quantity' => (int)$row['QUANTITY'],
+                'composition' => '',
+                'comment' => '',
                 'properties' => array(),
             );
         }
@@ -346,6 +347,7 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
     {
         $ordersBasket = $this->getOrdersBasket(array_keys($orders));
         $ordersBasket = $this->setPropertiesToBaskets($ordersBasket);
+        $ordersBasket = $this->setProductsToBaskets($ordersBasket);
 
         foreach ($orders as $id => $fields) {
             $orders[$id]['basket'] = $ordersBasket[$id];
@@ -409,6 +411,79 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
     }
 
     /**
+     * @param array $productsId
+     * @return array
+     */
+    private function getProducts(array $productsId): array
+    {
+        $items = array();
+
+        $filter = array('ID' => $productsId);
+        $select = array('IBLOCK_ID', 'ID', 'PREVIEW_PICTURE', 'DETAIL_PICTURE', 'PROPERTY_COMPOSITION');
+        $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $imageId = 0;
+            if (!empty((int)$row['DETAIL_PICTURE'])) {
+                $imageId = (int)$row['DETAIL_PICTURE'];
+            }
+            if (!empty((int)$row['PREVIEW_PICTURE'])) {
+                $imageId = (int)$row['PREVIEW_PICTURE'];
+            }
+
+            $items[(int)$row['ID']] = array(
+                'id' => (int)$row['ID'],
+                'imageId' => $imageId,
+                'composition' => $row['PROPERTY_COMPOSITION_VALUE'],
+                'comment' => '',
+            );
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param array $ordersBasket
+     * @return array
+     */
+    private function setProductsToBaskets(array $ordersBasket): array
+    {
+        $productsId = array();
+        foreach ($ordersBasket as $orderBasket) {
+            foreach ($orderBasket as $basketItem) {
+                if (in_array((int)$basketItem['productId'], $productsId, true)) {
+                    continue;
+                }
+
+                $productsId[] = (int)$basketItem['productId'];
+            }
+        }
+
+        $product = $this->getProducts($productsId);
+
+        foreach ($ordersBasket as $orderId => $orderBasket) {
+            foreach ($orderBasket as $basketItemId => $basketItem) {
+                $ordersBasket[$orderId][$basketItemId]['imageId'] = $product[$basketItem['productId']]['imageId'];
+                $ordersBasket[$orderId][$basketItemId]['composition'] = $product[$basketItem['productId']]['composition'];
+                $ordersBasket[$orderId][$basketItemId]['comment'] = $product[$basketItem['productId']]['comment'];
+            }
+        }
+
+        return $ordersBasket;
+    }
+
+    /**
+     *
+     */
+    private function initMainOrdersFilter(): void
+    {
+        $this->mainOrdersFilter = array(
+            'STATUS_ID' => array('N', 'NP', 'NN', 'SP', 'Q'),
+            // N, NP, NN - новые заказы, SP - собранные заказы, Q - отмененные заказы
+            '>=DATE_INSERT' => Date::createFromTimestamp(strtotime('today')),
+        );
+    }
+
+    /**
      * @return array
      */
     private function initFilter(): array
@@ -419,18 +494,47 @@ class GermenAdminOrderHistoryList extends CBitrixComponent
 
         global ${$this->arParams['FILTER_NAME']};
 
+        if (!empty($this->mainOrdersFilter['STATUS_ID'])) {
+            ${$this->arParams['FILTER_NAME']}['STATUS_ID'] = $this->mainOrdersFilter['STATUS_ID'];
+        }
+
+        if (!empty($this->mainOrdersFilter['>=DATE_INSERT'])) {
+            ${$this->arParams['FILTER_NAME']}['>=DATE_INSERT'] = $this->mainOrdersFilter['>=DATE_INSERT'];
+        }
+
         if (empty(${$this->arParams['FILTER_NAME']})) {
             return array();
         }
 
-        if (isset(${$this->arParams['FILTER_NAME']}['priceMin'])) {
-            ${$this->arParams['FILTER_NAME']}['priceMin'] = (int)${$this->arParams['FILTER_NAME']}['priceMin'];
-        }
-
-        if (isset(${$this->arParams['FILTER_NAME']}['priceMax'])) {
-            ${$this->arParams['FILTER_NAME']}['priceMax'] = (int)${$this->arParams['FILTER_NAME']}['priceMax'];
-        }
-
         return ${$this->arParams['FILTER_NAME']};
+    }
+
+    /**
+     * @param array $orders
+     * @return array
+     */
+    private function groupOrders(array $orders): array
+    {
+        $result = array(
+            'new' => array(),
+            'collected' => array(),
+            'canceled' => array(),
+        );
+
+        foreach ($orders as $orderId => $order) {
+            if (in_array((string)$order['status'], array('N', 'NP', 'NN'), true)) {
+                $result['new'][$orderId] = $order;
+            }
+
+            if ((string)$order['status'] === 'SP') {
+                $result['collected'][$orderId] = $order;
+            }
+
+            if ((string)$order['status'] === 'Q') {
+                $result['canceled'][$orderId] = $order;
+            }
+        }
+
+        return $result;
     }
 }

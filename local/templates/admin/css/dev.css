@@ -26,3 +26,19 @@
 .login__form-errors {
     color: red;
 }
+
+.aside__orders-list {
+    display: none;
+}
+
+.aside__orders-list_active {
+    display: block;
+}
+
+.order-cover {
+    display: none;
+}
+
+.order-cover_active {
+    display: block;
+}

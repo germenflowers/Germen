@@ -5,10 +5,10 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 }
 
 $arComponentDescription = array(
-    'NAME' => 'История заказов',
+    'NAME' => 'Заказы (Список)',
     'DESCRIPTION' => '',
     'COMPLEX' => 'Y',
-    'SORT' => 200,
+    'SORT' => 110,
     'PATH' => array(
         'ID' => 'germen-admin',
         'NAME' => 'Административный раздел',

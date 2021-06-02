@@ -22,34 +22,12 @@ $arComponentParameters = array(
         ),
     ),
     'PARAMETERS' => array(
-        'FILTER_NAME' => array(
+        'ID' => array(
             'PARENT' => 'SETTINGS',
-            'NAME' => 'Название фильтра',
+            'NAME' => 'Ид заказа',
             'TYPE' => 'STRING',
-            'DEFAULT' => 'filter',
-        ),
-        'PAGER_ID' => array(
-            'PARENT' => 'SETTINGS',
-            'NAME' => 'Ид постраничной навигации',
-            'TYPE' => 'STRING',
-        ),
-        'PAGE_ELEMENT_COUNT' => array(
-            'PARENT' => 'SETTINGS',
-            'NAME' => 'Количество элементов на странице',
-            'TYPE' => 'STRING',
-            'DEFAULT' => 10,
-        ),
-        'SEF_MODE' => array(
-            'list' => array(
-                'NAME' => 'Список',
-                'DEFAULT' => '',
-                'VARIABLES' => array(),
-            ),
-            'element' => array(
-                'NAME' => 'Элемент',
-                'DEFAULT' => '#ID#/',
-                'VARIABLES' => array(),
-            ),
+            'MULTIPLE' => 'N',
+            'DEFAULT' => '',
         ),
         'CACHE_TIME' => array('DEFAULT' => 3600),
         'CACHE_FILTER' => array(
@@ -68,12 +46,3 @@ $arComponentParameters = array(
 );
 
 CIBlockParameters::Add404Settings($arComponentParameters, $arCurrentValues);
-
-CIBlockParameters::AddPagerSettings(
-    $arComponentParameters,
-    '',
-    true,
-    true,
-    true,
-    $arCurrentValues['PAGER_BASE_LINK_ENABLE'] === 'Y'
-);
