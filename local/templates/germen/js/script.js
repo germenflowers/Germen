@@ -1,8 +1,3 @@
-/**
- * @fileOverview
- * @author Zoltan Toth
- * @version 1.1.0
- */
 
 /**
  * @description
@@ -157,11 +152,6 @@ var Accordion = function (options) {
     destroy: destroy
   };
 };
-/**
- * @fileOverview
- * @author Zoltan Toth
- * @version 1.0.0
- */
 
 /**
  * @description
@@ -289,6 +279,7 @@ var Tabs = function (options) {
     destroy: destroy
   };
 };
+
 /**
  * Swiper 4.5.0
  * Most modern mobile touch slider and framework with hardware accelerated transitions
@@ -300,7 +291,6 @@ var Tabs = function (options) {
  *
  * Released on: February 22, 2019
  */
-
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
@@ -9605,6 +9595,7 @@ window.productAddSlider = () => {
     slidesPerView: "auto",
   });
 };
+
 'use strict';
 
 (function () {
@@ -9645,19 +9636,18 @@ window.productAddSlider = () => {
 
   mySwiper1.on('slideChange', function () {
     setTimeout(() => {
-      var resr = document.querySelector(".swiper-slide.swiper-slide-resr");
+      var rest = document.querySelector(".swiper-slide.swiper-slide-rest");
       var office = document.querySelector(".swiper-slide.swiper-slide-office");
       var home = document.querySelector(".swiper-slide.swiper-slide-home");
       var titleRest = document.querySelector(".hero__title .change-title .rest");
       var titleOffice = document.querySelector(".hero__title .change-title .office");
       var titleHome = document.querySelector(".hero__title .change-title .home");
 
-      if (resr.classList.contains('swiper-slide-active')) {
+      if (rest.classList.contains('swiper-slide-active')) {
         titleRest.classList.remove('hidden');
         titleOffice.classList.add('hidden');
         titleHome.classList.add('hidden');
       }
-
       if (office.classList.contains('swiper-slide-active')) {
         titleRest.classList.add('hidden');
         titleOffice.classList.remove('hidden');
@@ -9700,7 +9690,7 @@ window.productAddSlider = () => {
 
   });
   mySwiper.on('slideChange', function () {
-    console.log('slide changed');
+
   });
 
 
@@ -9731,6 +9721,7 @@ window.productAddSlider = () => {
 (function () {
 
 })();
+
 'use strict';
 
 (function () {
@@ -9794,6 +9785,7 @@ window.productAddSlider = () => {
     }
   });
 })();
+
 'use strict';
 
 (function () {
@@ -9848,9 +9840,7 @@ $('.promo-item__add-to-fav-btn').click(function(e){
 
   });
   var fav = $('.header__favorite').offset();
-  console.log(fav.top)
   $('.animtocart').animate({ top: fav.top + 'px', left: fav.left + 'px', width: 0, height: 0 }, 800, function(){
-    console.log($('.animtocart').offset())
     $(this).remove();
   });
 });
@@ -9864,7 +9854,6 @@ $('.js-add-to-cart').click(function(e){
     return;
   }
   var butWrap = $(this).parents('.content');
-  console.log(butWrap)
   butWrap.append('<div class="animtobasket"></div>');
   $('.animtobasket').css({
     'position' : 'absolute',
@@ -9886,14 +9875,15 @@ $('.js-add-to-cart').click(function(e){
   });
 });
 
-
-
 window.addEventListener('scroll', function () {
-  var windowScroll = window.pageYOffset;
-  var header = document.querySelector('.header__container');
-  if (windowScroll >= 60) {
-    header.classList.add("header__container--fixed");
-  } else {
-    header.classList.remove("header__container--fixed");
+  let windowScroll = window.pageYOffset,
+    header = document.querySelector('.header__container');
+
+  if (typeof header !== 'undefined' && header !== null && header !== '') {
+    if (windowScroll >= 60) {
+      header.classList.add("header__container--fixed");
+    } else {
+      header.classList.remove("header__container--fixed");
+    }
   }
 });

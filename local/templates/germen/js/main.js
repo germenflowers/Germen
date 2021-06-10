@@ -5,8 +5,6 @@ if (isTouch()) {
 }
 
 $(document).ready(function () {
-  $('.selectpicker').selectpicker();
-
   $('.btn__loading').click(function () {
     $(this).toggleClass('btn__loading--active');
   });
