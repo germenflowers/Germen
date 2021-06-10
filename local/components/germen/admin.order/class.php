@@ -19,46 +19,6 @@ class GermenAdminOrder extends CBitrixComponent
      */
     public function onPrepareComponentParams($arParams): array
     {
-        if (empty($arParams['FILTER_NAME'])) {
-            $arParams['FILTER_NAME'] = 'filter';
-        }
-
-        if (empty($arParams['PAGER_ID'])) {
-            $arParams['PAGER_ID'] = 'admin-order';
-        }
-
-        if (empty($arParams['PAGE_ELEMENT_COUNT'])) {
-            $arParams['PAGE_ELEMENT_COUNT'] = 10;
-        }
-
-        if (empty($arParams['DISPLAY_BOTTOM_PAGER'])) {
-            $arParams['DISPLAY_BOTTOM_PAGER'] = 'N';
-        }
-
-        if (empty($arParams['DISPLAY_TOP_PAGER'])) {
-            $arParams['DISPLAY_TOP_PAGER'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_BASE_LINK_ENABLE'])) {
-            $arParams['PAGER_BASE_LINK_ENABLE'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_DESC_NUMBERING'])) {
-            $arParams['PAGER_DESC_NUMBERING'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_DESC_NUMBERING_CACHE_TIME'])) {
-            $arParams['PAGER_DESC_NUMBERING_CACHE_TIME'] = 36000;
-        }
-
-        if (empty($arParams['PAGER_SHOW_ALL'])) {
-            $arParams['PAGER_SHOW_ALL'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_SHOW_ALWAYS'])) {
-            $arParams['PAGER_SHOW_ALWAYS'] = 'N';
-        }
-
         if (empty($arParams['SEF_FOLDER'])) {
             $arParams['SEF_FOLDER'] = '/admin/order/';
         }

@@ -98,6 +98,9 @@ $(document).ready(function () {
     $('.aside__orders-list').removeClass('aside__orders-list_active');
     list.addClass('aside__orders-list_active');
 
+    $('.js-order-steps').removeClass('steps_active');
+    $('.js-order-steps[data-id=' + orderId + ']').addClass('steps_active');
+
     $('.js-order').removeClass('order-cover_active');
     $('.js-order[data-id=' + orderId + ']').addClass('order-cover_active');
 
@@ -107,10 +110,115 @@ $(document).ready(function () {
   $(document).on('click', '.js-aside-order', function (e) {
     showLoader();
 
+    $('.js-order-steps').removeClass('steps_active');
+    $('.js-order-steps[data-id=' + $(this).data('id') + ']').addClass('steps_active');
+
     $('.js-order').removeClass('order-cover_active');
     $('.js-order[data-id=' + $(this).data('id') + ']').addClass('order-cover_active');
 
     hideLoader();
+  });
+
+  $(document).on('click', '.js-order-take', function (e) {
+    let self = $(this),
+      container = self.parents('.js-order-steps');
+
+    if (self.hasClass('is-active')) {
+      $.ajax({
+        type: 'POST',
+        url: '/admin/ajax/orders.php',
+        data: {
+          action: 'take',
+          id: self.data('id'),
+        },
+        beforeSend: function () {
+          showLoader();
+        },
+        success: function (data) {
+          if (data.status === 'success') {
+            self.removeClass('is-active');
+            container.find('.js-order-ready').addClass('is-active');
+
+            let buildDateElement = $('.js-order-build-date[data-id=' + self.data('id') + ']'),
+              buildTimerElement = $('.js-order-build-timer[data-id=' + self.data('id') + ']'),
+              date = new Date(),
+              buildDate = new Date(date.getTime() + buildDateElement.data('time') * 1000);
+
+            buildDateElement.html(buildDate.getHours()+':'+buildDate.getMinutes());
+            startTimer(buildTimerElement.data('time'), buildTimerElement);
+          }
+
+          hideLoader();
+        },
+        error: function (error) {
+          hideLoader();
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.js-order-ready', function (e) {
+    let self = $(this),
+      container = self.parents('.js-order-steps');
+
+    if (self.hasClass('is-active')) {
+      $.ajax({
+        type: 'POST',
+        url: '/admin/ajax/orders.php',
+        data: {
+          action: 'ready',
+          id: self.data('id'),
+        },
+        beforeSend: function () {
+          showLoader();
+        },
+        success: function (data) {
+          if (data.status === 'success') {
+            self.removeClass('is-active');
+            container.find('.js-order-courier').addClass('is-active');
+          }
+
+          hideLoader();
+        },
+        error: function (error) {
+          hideLoader();
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.js-order-courier', function (e) {
+    let self = $(this);
+
+    if (self.hasClass('is-active')) {
+      $.ajax({
+        type: 'POST',
+        url: '/admin/ajax/orders.php',
+        data: {
+          action: 'courier',
+          id: self.data('id'),
+        },
+        beforeSend: function () {
+          showLoader();
+        },
+        success: function (data) {
+          if (data.status === 'success') {
+            self.removeClass('is-active');
+          }
+
+          hideLoader();
+        },
+        error: function (error) {
+          hideLoader();
+        }
+      });
+    }
+  });
+
+  $('.js-order-build-timer').each(function () {
+    if ($(this).data('init') === 'Y') {
+      startTimer($(this).data('timestamp'), $(this));
+    }
   });
 });
 
@@ -295,4 +403,27 @@ function getHistoryFilter() {
   }
 
   return filter;
+}
+
+function startTimer(goal, timer) {
+  if(goal <= 0) {
+    return;
+  }
+
+  let i = a => (a - a % 1 + "").padStart(2, "0"),
+    m = 60,
+    h = m * m;
+
+  goal += new Date / 1000;
+
+  setInterval(() => {
+    let t = goal - new Date / 1000;
+
+    if(t <= 0) {
+      timer.html('00:00');
+      return;
+    }
+
+    timer.html([t / h, t % h / m].map(i).join(":"));
+  }, 999);
 }

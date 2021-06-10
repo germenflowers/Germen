@@ -42,3 +42,11 @@
 .order-cover_active {
     display: block;
 }
+
+.steps {
+    display: none;
+}
+
+.steps_active {
+    display: flex;
+}

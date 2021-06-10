@@ -18,13 +18,6 @@ $this->setFrameMode(true);
 //$APPLICATION->RestartBuffer();
 //echo '<pre>'.print_r($arResult, true).'</pre>';
 //die();
-
-$sum = 0;
-foreach ($arResult['orders'] as $type => $orders) {
-    foreach ($orders as $order) {
-        $sum += $order['price'];
-    }
-}
 ?>
 <?php if (
     empty($arResult['orders']['new']) &&
@@ -116,7 +109,7 @@ foreach ($arResult['orders'] as $type => $orders) {
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php if ($type !== 'canceled'): ?>
+                        <?php if ($type === 'new'): ?>
                             <div class="order__cancel snap-drawers">
                                 <div
                                         class="snap-drawer snap-drawer-right"
@@ -136,28 +129,6 @@ foreach ($arResult['orders'] as $type => $orders) {
         <?php endforeach; ?>
     </div>
 
-    <div class="steps">
-        <div class="steps__item is-active">Принять заказ</div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item">Заказ готов</div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item">Передать курьеру</div>
-
-        <div class="steps__item">Принять заказ</div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item">Заказ готов</div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item is-active">Передать курьеру</div>
-
-        <div class="steps__item is-active steps__item--small-text">
-            Принять заказ с&nbsp;истекающим временем
-        </div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item">Заказ готов</div>
-        <div class="steps__arrow"></div>
-        <div class="steps__item">Передать курьеру</div>
-    </div>
-
     <?php
     $first = true;
     ?>
@@ -172,14 +143,78 @@ foreach ($arResult['orders'] as $type => $orders) {
         }
         ?>
         <?php foreach ($orders as $order): ?>
+            <?php
+            $orderBuildPrice = 0;
+            $orderBuildTime = 0;
+            foreach ($order['basket'] as $basketItem) {
+                $orderBuildPrice += $basketItem['buildPrice'] * $basketItem['quantity'];
+                $orderBuildTime += $basketItem['buildTime'];
+            }
+
+            if (empty($orderBuildTime)) {
+                $orderBuildTime = 10 * 60;
+            }
+
+            $timeLimit = $order['dateBuildEstimated']->getTimestamp() - time();
+            if ($timeLimit < 0) {
+                $timeLimit = 0;
+            }
+
+            $expiringTime = $timeLimit < 30 * 60;
+
+            $isStartBuild = !empty($order['dateBuildStart']);
+
+            $orderBuildTimestamp = time() + $orderBuildTime;
+            if ($isStartBuild) {
+                $orderBuildTimestamp = $order['dateBuildStart']->getTimestamp() + $orderBuildTime;
+            }
+
+            $orderBuildTimerTimestamp = $orderBuildTimestamp - time();
+            if ($orderBuildTimerTimestamp < 0) {
+                $orderBuildTimerTimestamp = 0;
+            }
+            ?>
+            <div class="steps <?=$first ? 'steps_active' : ''?> js-order-steps" data-id="<?=$order['id']?>">
+                <div
+                        class="steps__item js-order-take <?=$isStartBuild ? '' : 'is-active'?> <?=$expiringTime ? 'steps__item--small-text' : ''?>"
+                        data-id="<?=$order['id']?>"
+                >
+                    <?php if ($expiringTime): ?>
+                        Принять заказ с&nbsp;истекающим временем
+                    <?php else: ?>
+                        Принять заказ
+                    <?php endif; ?>
+                </div>
+                <div class="steps__arrow"></div>
+                <div class="steps__item js-order-ready <?=$isStartBuild ? 'is-active' : ''?>">Заказ готов</div>
+                <div class="steps__arrow"></div>
+                <div class="steps__item js-order-courier">Передать курьеру</div>
+            </div>
             <div class="order-cover <?=$first ? 'order-cover_active' : ''?> js-order" data-id="<?=$order['id']?>">
                 <div class="order-summary">
                     <div class="order-summary__top">
                         <div class="order-summary__schedule order-summary__block">
                             <div class="order-summary__label">Срок приготовления</div>
                             <div class="order-summary__data">
-                                12:54
-                                <span class="gray">/ 07:32</span>
+                                <span
+                                        class="js-order-build-date"
+                                        data-id="<?=$order['id']?>"
+                                        data-time="<?=$orderBuildTime?>"
+                                >
+                                    <?=date('H:i', $orderBuildTimestamp)?>
+                                </span>
+                                <span class="gray">
+                                    /
+                                    <span
+                                            class="js-order-build-timer"
+                                            data-id="<?=$order['id']?>"
+                                            data-time="<?=$orderBuildTime?>"
+                                            data-timestamp="<?=$orderBuildTimerTimestamp?>"
+                                            data-init="<?=$isStartBuild ? 'Y' : 'N'?>"
+                                    >
+                                        00:00
+                                    </span>
+                                </span>
                             </div>
                         </div>
                         <div class="order-summary__order-number order-summary__block">
@@ -189,7 +224,7 @@ foreach ($arResult['orders'] as $type => $orders) {
                         <div class="order-summary__total-price order-summary__block">
                             <div class="order-summary__label">Итого за день</div>
                             <div class="order-summary__data">
-                                <?=number_format($sum, 0, '', ' ')?>
+                                <?=number_format($arResult['buildSum'], 0, '', ' ')?>
                                 <span>₽</span>
                             </div>
                         </div>
@@ -204,7 +239,7 @@ foreach ($arResult['orders'] as $type => $orders) {
                             <?=$order['comment']?>
                         </div>
                         <div class="order-summary__total-price">
-                            <?=number_format($order['price'], 0, '', ' ')?>
+                            <?=number_format($orderBuildPrice, 0, '', ' ')?>
                             <span>₽</span>
                         </div>
                     </div>
@@ -221,7 +256,12 @@ foreach ($arResult['orders'] as $type => $orders) {
                             );
                         }
 
-                        $price = number_format($basketItem['price'], 0, '', ' ');
+                        $price = number_format(
+                            $basketItem['buildPrice'] * $basketItem['quantity'],
+                            0,
+                            '',
+                            ' '
+                        );
 
                         $propertiesString = Content::getHistoryListBasketItemPropertiesString(
                             $basketItem['properties']
@@ -238,18 +278,24 @@ foreach ($arResult['orders'] as $type => $orders) {
                                     <div class="order-item__price"><?=$price?> ₽</div>
                                 </div>
                                 <div class="order-item__extra"><?=$propertiesString?></div>
-                                <div class="order-item__block">
-                                    <div class="order-item__block-title">Состав</div>
-                                    <div class="order-item__block-text"><?=$basketItem['composition']['TEXT']?></div>
-                                </div>
+                                <?php if (!empty($basketItem['composition'])): ?>
+                                    <div class="order-item__block">
+                                        <div class="order-item__block-title">Состав</div>
+                                        <div class="order-item__block-text"><?=$basketItem['composition']?></div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php /*
                                 <div class="order-item__block">
                                     <div class="order-item__block-title">Комментарий</div>
-                                    <div class="order-item__block-text"><?=$basketItem['comment']?></div>
+                                    <div class="order-item__block-text"></div>
                                 </div>
-                                <div class="order-item__block">
-                                    <div class="order-item__block-title">Текст открытки</div>
-                                    <div class="order-item__block-text"><?=$order['note']?></div>
-                                </div>
+                                */ ?>
+                                <?php if (!empty($order['note'])): ?>
+                                    <div class="order-item__block">
+                                        <div class="order-item__block-title">Текст открытки</div>
+                                        <div class="order-item__block-text"><?=$order['note']?></div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

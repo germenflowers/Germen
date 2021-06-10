@@ -2,14 +2,17 @@
 
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\LoaderException;
+use \Bitrix\Main\SystemException;
 use \Bitrix\Main\ArgumentException;
 use \Bitrix\Main\ObjectPropertyException;
-use \Bitrix\Main\UI\PageNavigation;
 use \Bitrix\Main\Type\Date;
 use \Bitrix\Main\Type\DateTime;
 use \Bitrix\Sale\Order;
 use \Bitrix\Sale\Basket;
+use \Bitrix\Sale\Internals\OrderChangeTable;
 use \Germen\Tools;
+use \Germen\Admin\Rights;
+use \Germen\Admin\Content;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -20,8 +23,10 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
  */
 class GermenAdminOrderList extends CBitrixComponent
 {
-    private $nav;
     private $mainOrdersFilter = array();
+    private $todayDeliveredOrdersId = array();
+    private $todayBuildOrdersId = array();
+    private $todayCanceledOrdersId = array();
 
     /**
      * @param array $arParams
@@ -29,46 +34,6 @@ class GermenAdminOrderList extends CBitrixComponent
      */
     public function onPrepareComponentParams($arParams): array
     {
-        if (empty($arParams['FILTER_NAME'])) {
-            $arParams['FILTER_NAME'] = 'filter';
-        }
-
-        if (empty($arParams['PAGER_ID'])) {
-            $arParams['PAGER_ID'] = 'admin-order-history';
-        }
-
-        if (empty($arParams['PAGE_ELEMENT_COUNT'])) {
-            $arParams['PAGE_ELEMENT_COUNT'] = 10;
-        }
-
-        if (empty($arParams['DISPLAY_BOTTOM_PAGER'])) {
-            $arParams['DISPLAY_BOTTOM_PAGER'] = 'N';
-        }
-
-        if (empty($arParams['DISPLAY_TOP_PAGER'])) {
-            $arParams['DISPLAY_TOP_PAGER'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_BASE_LINK_ENABLE'])) {
-            $arParams['PAGER_BASE_LINK_ENABLE'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_DESC_NUMBERING'])) {
-            $arParams['PAGER_DESC_NUMBERING'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_DESC_NUMBERING_CACHE_TIME'])) {
-            $arParams['PAGER_DESC_NUMBERING_CACHE_TIME'] = 36000;
-        }
-
-        if (empty($arParams['PAGER_SHOW_ALL'])) {
-            $arParams['PAGER_SHOW_ALL'] = 'N';
-        }
-
-        if (empty($arParams['PAGER_SHOW_ALWAYS'])) {
-            $arParams['PAGER_SHOW_ALWAYS'] = 'N';
-        }
-
         if (empty($arParams['SET_STATUS_404'])) {
             $arParams['SET_STATUS_404'] = 'Y';
         }
@@ -100,25 +65,75 @@ class GermenAdminOrderList extends CBitrixComponent
      * @throws ArgumentException
      * @throws LoaderException
      * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public function executeComponent(): void
     {
         $this->checkModules();
-        $this->initPageNavigation();
-        $this->initMainOrdersFilter();
 
-        $this->arResult['filter'] = $this->initFilter();
-
-        if ($this->arParams['CACHE_TYPE'] === 'Y' || $this->arParams['CACHE_TYPE'] === 'A') {
-            $orders = $this->getOrdersDataCached($this->getOrders());
+        if ($this->request->isAjaxRequest()) {
+            $this->processAjax();
         } else {
-            $orders = $this->getOrdersData($this->getOrders());
+            $this->todayDeliveredOrdersId = $this->getTodayDeliveredOrdersId();
+            $this->todayBuildOrdersId = $this->getTodayBuildOrdersId();
+            $this->todayCanceledOrdersId = $this->getTodayCanceledOrdersId();
+
+            $orders = array();
+            if ($this->initMainOrdersFilter()) {
+                if ($this->arParams['CACHE_TYPE'] === 'Y' || $this->arParams['CACHE_TYPE'] === 'A') {
+                    $orders = $this->getOrdersDataCached($this->getOrders($this->mainOrdersFilter));
+                } else {
+                    $orders = $this->getOrdersData($this->getOrders($this->mainOrdersFilter));
+                }
+            }
+
+            $this->arResult['orders'] = $this->groupOrders($orders);
+            $this->arResult['buildSum'] = $this->getTodayBuildSum();
+
+            $this->includeComponentTemplate();
+        }
+    }
+
+    /**
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    private function processAjax(): void
+    {
+        header('Content-type: text/json');
+
+        $get = $this->request->getQueryList();
+        $post = $this->request->getPostList();
+
+        if (empty($post['action'])) {
+            die(json_encode(array('status' => 'error', 'message' => 'server error')));
         }
 
-        $this->arResult['orders'] = $this->groupOrders($orders);
-        $this->arResult['pageNavigation'] = $this->getPageNavigation();
+        $response = array('status' => 'error');
 
-        $this->includeComponentTemplate();
+        if ($post['action'] === 'take') {
+            if (!(new Rights())->checkOrdersRights('edit')) {
+                die(json_encode(array('status' => 'error', 'message' => 'Forbidden')));
+            }
+
+            if (empty((int)$post['id'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty id')));
+            }
+
+            $property = $this->getOrderPropertyByCode('BUILD_START_DATE');
+            if (empty($property)) {
+                die(json_encode(array('status' => 'error', 'message' => 'Property no exist')));
+            }
+
+            $value = new DateTime();
+
+            if (Content::addOrderProperty($post['id'], $property['id'], $property['code'], $property['name'], $value)) {
+                $response = array('status' => 'success', 'dateTime' => $value->format('d.m.Y H:i'));
+            }
+        }
+
+        die(json_encode($response));
     }
 
     /**
@@ -138,34 +153,190 @@ class GermenAdminOrderList extends CBitrixComponent
     }
 
     /**
-     *
+     * Заказы которые нужно доставить сегодня, максимум через 3 часа от текущего времени
+     * @return array
      */
-    private function initPageNavigation(): void
+    private function getTodayDeliveredOrdersId(): array
     {
-        $this->nav = new PageNavigation($this->arParams['PAGER_ID']);
-        $this->nav->allowAllRecords($this->arParams['PAGER_SHOW_ALL'] === 'Y');
-        $this->nav->setPageSize($this->arParams['PAGE_ELEMENT_COUNT']);
-        $this->nav->initFromUri();
+        $ordersId = array();
+
+        $maxTime = time() + 3 * 60 * 60;
+        $maxDate = date('d.m.Y H:i', $maxTime);
+        if (date('d') !== date('d', $maxTime)) {
+            $maxDate = date('d.m.Y').' 23:59';
+        }
+
+        $filter = array(
+            'CODE' => 'DELIVERY_DATE',
+            '>=VALUE' => date('d.m.Y').' 00:00',
+            '<=VALUE' => $maxDate,
+        );
+        $select = array();
+        $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $ordersId[] = (int)$row['ORDER_ID'];
+        }
+
+        return $ordersId;
     }
 
     /**
-     * @return string
+     * @return array
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
-    private function getPageNavigation(): string
+    private function getTodayBuildOrdersId(): array
     {
-        global $APPLICATION;
+        $ordersId = array();
 
-        ob_start();
-        $APPLICATION->IncludeComponent(
-            'bitrix:main.pagenavigation',
-            $this->arParams['PAGER_TEMPLATE'],
+        $result = OrderChangeTable::getList(
             array(
-                'NAV_OBJECT' => $this->nav,
-                'SEF_MODE' => 'N',
-            ),
-            false
+                'order' => array(),
+                'filter' => array(
+                    'TYPE' => 'ORDER_STATUS_CHANGED',
+                    '>=DATE_CREATE' => Date::createFromTimestamp(strtotime('today')),
+                    '<=DATE_CREATE' => DateTime::createFromTimestamp(strtotime(date('d.m.Y').' 23:59:59')),
+                ),
+                'select' => array('ORDER_ID', 'DATA'),
+            )
         );
-        return (string)ob_get_clean();
+        while ($row = $result->fetch()) {
+            $data = unserialize($row['DATA']);
+
+            if ($data['STATUS_ID'] === 'SP') {
+                $ordersId[] = (int)$row['ORDER_ID'];
+            }
+        }
+
+        return $ordersId;
+    }
+
+    /**
+     * @return array
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    private function getTodayCanceledOrdersId(): array
+    {
+        $ordersId = array();
+
+        $result = OrderChangeTable::getList(
+            array(
+                'order' => array(),
+                'filter' => array(
+                    'TYPE' => 'ORDER_STATUS_CHANGED',
+                    '>=DATE_CREATE' => Date::createFromTimestamp(strtotime('today')),
+                    '<=DATE_CREATE' => DateTime::createFromTimestamp(strtotime(date('d.m.Y').' 23:59:59')),
+                ),
+                'select' => array('ORDER_ID', 'DATA'),
+            )
+        );
+        while ($row = $result->fetch()) {
+            $data = unserialize($row['DATA']);
+
+            if ($data['STATUS_ID'] === 'Q') {
+                $ordersId[] = (int)$row['ORDER_ID'];
+            }
+        }
+
+        return $ordersId;
+    }
+
+    /**
+     * @return bool
+     */
+    private function initMainOrdersFilter(): bool
+    {
+        if (empty($this->todayDeliveredOrdersId) && empty($this->todayBuildOrdersId) && empty($this->todayCanceledOrdersId)) {
+            return false;
+        }
+
+        $buildAndCanceledOrdersId = array_merge($this->todayBuildOrdersId, $this->todayCanceledOrdersId);
+
+        if (empty($this->todayDeliveredOrdersId)) {
+            $this->mainOrdersFilter = array('ID' => $buildAndCanceledOrdersId);
+        } elseif (empty($buildAndCanceledOrdersId)) {
+            $this->mainOrdersFilter = array(
+                'ID' => $this->todayDeliveredOrdersId,
+                'STATUS_ID' => array('N', 'NP', 'NN'),
+            );
+        } else {
+            $this->mainOrdersFilter = array(
+                array(
+                    'LOGIC' => 'OR',
+                    array('ID' => $this->todayDeliveredOrdersId, 'STATUS_ID' => array('N', 'NP', 'NN')),
+                    array('ID' => $buildAndCanceledOrdersId),
+                ),
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $filter
+     * @return array
+     * @throws ArgumentException
+     */
+    private function getOrders(array $filter = array()): array
+    {
+        $orders = array();
+
+        $result = Order::getList(
+            array(
+                'order' => array('ID' => 'DESC'),
+                'filter' => $filter,
+                'select' => array('ID', 'DATE_INSERT', 'PRICE', 'USER_DESCRIPTION', 'STATUS_ID'),
+            )
+        );
+
+        while ($row = $result->fetch()) {
+            $orders[(int)$row['ID']] = array(
+                'id' => (int)$row['ID'],
+                'price' => (int)$row['PRICE'],
+                'comment' => $row['USER_DESCRIPTION'],
+                'note' => '',
+                'dateCreate' => $row['DATE_INSERT'],
+                'dateDelivery' => '',
+                'dateBuildStart' => '',
+                'dateBuildEstimated' => '',
+                'dateBuild' => '',
+                'status' => $row['STATUS_ID'],
+            );
+        }
+
+        return $orders;
+    }
+
+    /**
+     * @param array $orders
+     * @return array
+     */
+    private function groupOrders(array $orders): array
+    {
+        $result = array(
+            'new' => array(),
+            'collected' => array(),
+            'canceled' => array(),
+        );
+
+        foreach ($orders as $orderId => $order) {
+            if (in_array((string)$order['status'], array('N', 'NP', 'NN'), true)) {
+                $result['new'][$orderId] = $order;
+            }
+
+            if ((string)$order['status'] === 'SP') {
+                $result['collected'][$orderId] = $order;
+            }
+
+            if ((string)$order['status'] === 'Q') {
+                $result['canceled'][$orderId] = $order;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -207,50 +378,6 @@ class GermenAdminOrderList extends CBitrixComponent
     }
 
     /**
-     * @return array
-     * @throws ArgumentException
-     * @throws ObjectPropertyException
-     */
-    private function getOrders(): array
-    {
-        $orders = array();
-
-        $filter = array();
-
-        if (!empty($this->arResult['filter'])) {
-            $filter = array_merge($filter, $this->arResult['filter']);
-        }
-
-        $result = Order::getList(
-            array(
-                'order' => array('ID' => 'DESC'),
-                'filter' => $filter,
-                'select' => array('ID', 'DATE_INSERT', 'PRICE', 'USER_DESCRIPTION', 'STATUS_ID'),
-                'count_total' => true,
-                'offset' => $this->nav->getOffset(),
-                'limit' => $this->nav->getLimit(),
-            )
-        );
-
-        $this->nav->setRecordCount($result->getCount());
-
-        while ($row = $result->fetch()) {
-            $orders[(int)$row['ID']] = array(
-                'id' => (int)$row['ID'],
-                'price' => (int)$row['PRICE'],
-                'comment' => $row['USER_DESCRIPTION'],
-                'note' => '',
-                'dateCreate' => $row['DATE_INSERT'],
-                'dateDelivery' => '',
-                'dateBuildEstimated' => '',
-                'status' => $row['STATUS_ID'],
-            );
-        }
-
-        return $orders;
-    }
-
-    /**
      * @param array $ordersId
      * @return array
      */
@@ -262,7 +389,10 @@ class GermenAdminOrderList extends CBitrixComponent
             return $ordersProperties;
         }
 
-        $filter = array('ORDER_ID' => $ordersId, 'CODE' => array('DELIVERY_DATE', 'TEXT_SCRAP'));
+        $filter = array(
+            'ORDER_ID' => $ordersId,
+            'CODE' => array('DELIVERY_DATE', 'TEXT_SCRAP', 'BUILD_DATE', 'BUILD_START_DATE'),
+        );
         $select = array();
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {
@@ -297,6 +427,16 @@ class GermenAdminOrderList extends CBitrixComponent
             if (!empty($orderProperties[$id]['TEXT_SCRAP']['value'])) {
                 $orders[$id]['note'] = $orderProperties[$id]['TEXT_SCRAP']['value'];
             }
+
+            if (!empty($orderProperties[$id]['BUILD_DATE']['value'])) {
+                $timestamp = strtotime($orderProperties[$id]['BUILD_DATE']['value']);
+                $orders[$id]['dateBuild'] = DateTime::createFromTimestamp($timestamp);
+            }
+
+            if (!empty($orderProperties[$id]['BUILD_START_DATE']['value'])) {
+                $timestamp = strtotime($orderProperties[$id]['BUILD_START_DATE']['value']);
+                $orders[$id]['dateBuildStart'] = DateTime::createFromTimestamp($timestamp);
+            }
         }
 
         return $orders;
@@ -328,9 +468,10 @@ class GermenAdminOrderList extends CBitrixComponent
                 'imageId' => 0,
                 'name' => $row['NAME'],
                 'price' => (int)$row['PRICE'],
+                'buildPrice' => 0,
+                'buildTime' => 0,
                 'quantity' => (int)$row['QUANTITY'],
                 'composition' => '',
-                'comment' => '',
                 'properties' => array(),
             );
         }
@@ -419,7 +560,15 @@ class GermenAdminOrderList extends CBitrixComponent
         $items = array();
 
         $filter = array('ID' => $productsId);
-        $select = array('IBLOCK_ID', 'ID', 'PREVIEW_PICTURE', 'DETAIL_PICTURE', 'PROPERTY_COMPOSITION');
+        $select = array(
+            'IBLOCK_ID',
+            'ID',
+            'PREVIEW_PICTURE',
+            'DETAIL_PICTURE',
+            'PROPERTY_COMPOSITION',
+            'PROPERTY_BUILD_PRICE',
+            'PROPERTY_BUILD_TIME',
+        );
         $result = \CIBlockElement::GetList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {
             $imageId = 0;
@@ -433,8 +582,9 @@ class GermenAdminOrderList extends CBitrixComponent
             $items[(int)$row['ID']] = array(
                 'id' => (int)$row['ID'],
                 'imageId' => $imageId,
-                'composition' => $row['PROPERTY_COMPOSITION_VALUE'],
-                'comment' => '',
+                'composition' => $row['PROPERTY_COMPOSITION_VALUE']['TEXT'],
+                'buildPrice' => (int)$row['PROPERTY_BUILD_PRICE_VALUE'],
+                'buildTime' => (int)$row['PROPERTY_BUILD_TIME_VALUE'] * 60,
             );
         }
 
@@ -464,7 +614,8 @@ class GermenAdminOrderList extends CBitrixComponent
             foreach ($orderBasket as $basketItemId => $basketItem) {
                 $ordersBasket[$orderId][$basketItemId]['imageId'] = $product[$basketItem['productId']]['imageId'];
                 $ordersBasket[$orderId][$basketItemId]['composition'] = $product[$basketItem['productId']]['composition'];
-                $ordersBasket[$orderId][$basketItemId]['comment'] = $product[$basketItem['productId']]['comment'];
+                $ordersBasket[$orderId][$basketItemId]['buildPrice'] = $product[$basketItem['productId']]['buildPrice'];
+                $ordersBasket[$orderId][$basketItemId]['buildTime'] = $product[$basketItem['productId']]['buildTime'];
             }
         }
 
@@ -472,69 +623,46 @@ class GermenAdminOrderList extends CBitrixComponent
     }
 
     /**
-     *
+     * @return int
      */
-    private function initMainOrdersFilter(): void
+    private function getTodayBuildSum(): int
     {
-        $this->mainOrdersFilter = array(
-            'STATUS_ID' => array('N', 'NP', 'NN', 'SP', 'Q'),
-            // N, NP, NN - новые заказы, SP - собранные заказы, Q - отмененные заказы
-            '>=DATE_INSERT' => Date::createFromTimestamp(strtotime('today')),
-        );
+        $sum = 0;
+
+        foreach ($this->arResult['orders'] as $type => $typeOrders) {
+            if ($type === 'canceled') {
+                continue;
+            }
+
+            foreach ($typeOrders as $order) {
+                foreach ($order['basket'] as $basketItem) {
+                    $sum += $basketItem['buildPrice'] * $basketItem['quantity'];
+                }
+            }
+        }
+
+        return $sum;
     }
 
     /**
+     * @param string $code
      * @return array
      */
-    private function initFilter(): array
+    private function getOrderPropertyByCode(string $code): array
     {
-        if (empty($this->arParams['FILTER_NAME'])) {
-            return array();
+        $property = array();
+
+        $filter = array('CODE' => $code);
+        $select = array('ID', 'NAME', 'CODE');
+        $result = \CSaleOrderProps::GetList(array(), $filter, false, false, $select);
+        while ($row = $result->Fetch()) {
+            $property = array(
+                'id' => (int)$row['ID'],
+                'code' => $row['CODE'],
+                'name' => $row['NAME'],
+            );
         }
 
-        global ${$this->arParams['FILTER_NAME']};
-
-        if (!empty($this->mainOrdersFilter['STATUS_ID'])) {
-            ${$this->arParams['FILTER_NAME']}['STATUS_ID'] = $this->mainOrdersFilter['STATUS_ID'];
-        }
-
-        if (!empty($this->mainOrdersFilter['>=DATE_INSERT'])) {
-            ${$this->arParams['FILTER_NAME']}['>=DATE_INSERT'] = $this->mainOrdersFilter['>=DATE_INSERT'];
-        }
-
-        if (empty(${$this->arParams['FILTER_NAME']})) {
-            return array();
-        }
-
-        return ${$this->arParams['FILTER_NAME']};
-    }
-
-    /**
-     * @param array $orders
-     * @return array
-     */
-    private function groupOrders(array $orders): array
-    {
-        $result = array(
-            'new' => array(),
-            'collected' => array(),
-            'canceled' => array(),
-        );
-
-        foreach ($orders as $orderId => $order) {
-            if (in_array((string)$order['status'], array('N', 'NP', 'NN'), true)) {
-                $result['new'][$orderId] = $order;
-            }
-
-            if ((string)$order['status'] === 'SP') {
-                $result['collected'][$orderId] = $order;
-            }
-
-            if ((string)$order['status'] === 'Q') {
-                $result['canceled'][$orderId] = $order;
-            }
-        }
-
-        return $result;
+        return $property;
     }
 }
