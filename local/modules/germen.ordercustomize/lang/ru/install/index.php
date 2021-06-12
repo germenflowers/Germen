@@ -1,0 +1,6 @@
+<?php
+
+$MESS['ORDER_CUSTOMIZE_MODULE_NAME'] = 'Изменение заказов в административной части';
+$MESS['ORDER_CUSTOMIZE_MODULE_DESCRIPTION'] = '';
+$MESS['ORDER_CUSTOMIZE_PARTNER'] = '';
+$MESS['ORDER_CUSTOMIZE_PARTNER_URI'] = '';

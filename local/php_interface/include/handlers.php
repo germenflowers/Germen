@@ -1,48 +1,66 @@
-<?
+<?php
+
 $eventManager = \Bitrix\Main\EventManager::getInstance();
 
-$eventManager->addEventHandler (
+$eventManager->addEventHandler(
     'sale',
     'OnSaleStatusOrderChange',
-    array (
+    array(
         '\\PDV\\Handlers\\Sale',
-        'changeStatus'
+        'changeStatus',
     )
 );
 
-$eventManager->addEventHandler (
+$eventManager->addEventHandler(
     'sale',
     'OnSaleOrderCanceled',
-    array (
+    array(
         '\\PDV\\Handlers\\Sale',
-        'orderCancel'
+        'orderCancel',
     )
 );
 
-$eventManager->addEventHandler (
+$eventManager->addEventHandler(
     'sale',
     'OnSaleOrderPaid',
-    array (
+    array(
         '\\PDV\\Handlers\\Sale',
-        'orderPaid'
+        'orderPaid',
     )
 );
 
-$eventManager->addEventHandler (
+$eventManager->addEventHandler(
     'iblock',
     'OnBeforeIBlockElementAdd',
-    array (
+    array(
         '\\PDV\\Handlers\\IBlock',
-        'checkUpSaleImage'
+        'checkUpSaleImage',
     )
 );
 
-$eventManager->addEventHandler (
+$eventManager->addEventHandler(
     'iblock',
     'OnBeforeIBlockElementUpdate',
-    array (
+    array(
         '\\PDV\\Handlers\\IBlock',
-        'checkUpSaleImage'
+        'checkUpSaleImage',
     )
 );
 
+$eventManager->addEventHandler(
+    'sale',
+    'OnBeforeOrderAdd',
+    array(
+        '\\Germen\\Handlers\\Sale',
+        'OnBeforeOrderAdd',
+    )
+);
+
+$eventManager->addEventHandler(
+    'sale',
+    'OnOrderSave',
+    array(
+        '\\Germen\\Handlers\\Sale',
+        'OnOrderSave',
+    )
+);

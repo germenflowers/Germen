@@ -417,4 +417,40 @@ class Content
 
         return $products;
     }
+
+    /**
+     * @param int $orderId
+     * @param int $propertyId
+     * @param string $propertyCode
+     * @param string $propertyName
+     * @param string $value
+     * @return bool
+     */
+    public static function addOrderProperty(
+        int $orderId,
+        int $propertyId,
+        string $propertyCode,
+        string $propertyName,
+        string $value
+    ): bool {
+        $CSaleOrderPropsValue = new \CSaleOrderPropsValue();
+
+        $fields = array(
+            'NAME' => $propertyName,
+            'CODE' => $propertyCode,
+            'ORDER_PROPS_ID' => $propertyId,
+            'ORDER_ID' => $orderId,
+            'VALUE' => $value,
+        );
+
+        $result = $CSaleOrderPropsValue->GetList(
+            array(),
+            array('ORDER_ID' => $orderId, 'ORDER_PROPS_ID' => $propertyId)
+        );
+        if ($row = $result->Fetch()) {
+            return (bool)$CSaleOrderPropsValue->Update($row['ID'], $fields);
+        }
+
+        return (bool)$CSaleOrderPropsValue->Add($fields);
+    }
 }
