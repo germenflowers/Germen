@@ -44,7 +44,8 @@ $userData = $user->getUserData();
             '<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">'
         );
 
-        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/script.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery-3.6.0.min.js');
+        Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery-ui.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jquery.validate.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/jsrender.min.js');
         Asset::getInstance()->addJs(SITE_TEMPLATE_PATH.'/js/dev.js');

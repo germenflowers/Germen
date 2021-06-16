@@ -448,7 +448,7 @@ class Order
         $items = array();
 
         /**
-         * Настраиваем ключи, для правильного соотвествия свойст DELIVERY_DATE и DELIVERY_DATE_TO
+         * Настраиваем ключи, для правильного соответствия свойств DELIVERY_DATE и DELIVERY_DATE_TO
          */
         $settings = array(
             'DELIVERY_DATE_TO' => array(

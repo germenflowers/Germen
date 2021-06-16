@@ -27,6 +27,9 @@ class GermenAdminOrderList extends CBitrixComponent
     private $todayDeliveredOrdersId = array();
     private $todayBuildOrdersId = array();
     private $todayCanceledOrdersId = array();
+    private $newOrdersStatus = array('N', 'NP', 'NN');
+    private $completedOrdersStatus = 'SP';
+    private $canceledOrdersStatus = 'Q';
 
     /**
      * @param array $arParams
@@ -87,8 +90,13 @@ class GermenAdminOrderList extends CBitrixComponent
                 }
             }
 
-            $this->arResult['orders'] = $this->groupOrders($orders);
-            $this->arResult['buildSum'] = $this->getTodayBuildSum();
+            $this->arResult['buildSum'] = $this->getTodayBuildSum($orders);
+
+            $this->arResult['orders'] = $this->groupOrders(
+                $this->setAdditionalOrdersData($orders, $this->arResult['buildSum'])
+            );
+
+            $this->setOrdersDateShowAdmin($orders);
 
             $this->includeComponentTemplate();
         }
@@ -129,8 +137,112 @@ class GermenAdminOrderList extends CBitrixComponent
             $value = new DateTime();
 
             if (Content::addOrderProperty($post['id'], $property['id'], $property['code'], $property['name'], $value)) {
-                $response = array('status' => 'success', 'dateTime' => $value->format('d.m.Y H:i'));
+                $response = array('status' => 'success');
             }
+        }
+
+        if ($post['action'] === 'ready') {
+            if (!(new Rights())->checkOrdersRights('edit')) {
+                die(json_encode(array('status' => 'error', 'message' => 'Forbidden')));
+            }
+
+            if (empty((int)$post['id'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty id')));
+            }
+
+            $property = $this->getOrderPropertyByCode('BUILD_DATE');
+            if (empty($property)) {
+                die(json_encode(array('status' => 'error', 'message' => 'Property no exist')));
+            }
+
+            $value = new DateTime();
+
+            if (Content::addOrderProperty($post['id'], $property['id'], $property['code'], $property['name'], $value)) {
+                $response = array('status' => 'success');
+            }
+        }
+
+        if ($post['action'] === 'courier') {
+            if (!(new Rights())->checkOrdersRights('edit')) {
+                die(json_encode(array('status' => 'error', 'message' => 'Forbidden')));
+            }
+
+            if (empty((int)$post['id'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty id')));
+            }
+
+            $order = Order::load((int)$post['id']);
+
+            if (is_null($order)) {
+                die(json_encode(array('status' => 'error', 'message' => 'Order is null')));
+            }
+
+            $order->setField('STATUS_ID', $this->completedOrdersStatus);
+
+            $result = $order->save();
+            if ($result->isSuccess()) {
+                $response = array('status' => 'success');
+            }
+        }
+
+        if ($post['action'] === 'delete') {
+            if (!(new Rights())->checkOrdersRights('edit')) {
+                die(json_encode(array('status' => 'error', 'message' => 'Forbidden')));
+            }
+
+            if (empty((int)$post['id'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty id')));
+            }
+
+            if (empty($post['comment'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty comment')));
+            }
+
+            $order = Order::load((int)$post['id']);
+
+            if (is_null($order)) {
+                die(json_encode(array('status' => 'error', 'message' => 'Order is null')));
+            }
+
+            $order->setField('CANCELED', 'Y');
+            $order->setField('REASON_CANCELED', $post['comment']);
+            $order->setField('STATUS_ID', $this->canceledOrdersStatus);
+
+            $result = $order->save();
+            if ($result->isSuccess()) {
+                $response = array('status' => 'success');
+            }
+        }
+
+        if ($post['action'] === 'getNewOrders') {
+            if (empty((int)$post['timestamp'])) {
+                die(json_encode(array('status' => 'error', 'message' => 'Empty timestamp')));
+            }
+
+            $orders = array();
+            $buildSum = 0;
+
+            $this->todayDeliveredOrdersId = $this->getTodayDeliveredOrdersId(true);
+
+            if ($this->initMainOrdersFilter()) {
+                $orders = $this->getOrdersData($this->getOrders($this->mainOrdersFilter));
+            }
+
+            if (!empty($orders)) {
+                $this->todayDeliveredOrdersId = $this->getTodayDeliveredOrdersId();
+                $this->todayBuildOrdersId = $this->getTodayBuildOrdersId();
+
+                if ($this->initMainOrdersFilter()) {
+                    $allOrders = $this->getOrdersData($this->getOrders($this->mainOrdersFilter));
+                    $buildSum = $this->getTodayBuildSum($allOrders);
+                }
+
+                $orders = $this->setAdditionalOrdersData($orders, $buildSum);
+
+                $this->setOrdersDateShowAdmin($orders, (int)$post['timestamp']);
+            }
+
+            $response = array('status' => 'success', 'orders' => array_values($orders), 'buildSum' => $buildSum);
         }
 
         die(json_encode($response));
@@ -154,9 +266,10 @@ class GermenAdminOrderList extends CBitrixComponent
 
     /**
      * Заказы которые нужно доставить сегодня, максимум через 3 часа от текущего времени
+     * @param bool $isNoShowAdmin - выбрать ид заказов, которые еще не показывались в админке
      * @return array
      */
-    private function getTodayDeliveredOrdersId(): array
+    private function getTodayDeliveredOrdersId(bool $isNoShowAdmin = false): array
     {
         $ordersId = array();
 
@@ -175,6 +288,17 @@ class GermenAdminOrderList extends CBitrixComponent
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {
             $ordersId[] = (int)$row['ORDER_ID'];
+        }
+
+        if ($isNoShowAdmin) {
+            $filter = array('CODE' => 'DATE_SHOW_ADMIN', '!VALUE' => false);
+            $select = array();
+            $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
+            while ($row = $result->Fetch()) {
+                if (in_array((int)$row['ORDER_ID'], $ordersId, true)) {
+                    unset($ordersId[array_search((int)$row['ORDER_ID'], $ordersId, true)]);
+                }
+            }
         }
 
         return $ordersId;
@@ -204,7 +328,7 @@ class GermenAdminOrderList extends CBitrixComponent
         while ($row = $result->fetch()) {
             $data = unserialize($row['DATA']);
 
-            if ($data['STATUS_ID'] === 'SP') {
+            if ($data['STATUS_ID'] === $this->completedOrdersStatus) {
                 $ordersId[] = (int)$row['ORDER_ID'];
             }
         }
@@ -236,7 +360,7 @@ class GermenAdminOrderList extends CBitrixComponent
         while ($row = $result->fetch()) {
             $data = unserialize($row['DATA']);
 
-            if ($data['STATUS_ID'] === 'Q') {
+            if ($data['STATUS_ID'] === $this->canceledOrdersStatus) {
                 $ordersId[] = (int)$row['ORDER_ID'];
             }
         }
@@ -260,13 +384,13 @@ class GermenAdminOrderList extends CBitrixComponent
         } elseif (empty($buildAndCanceledOrdersId)) {
             $this->mainOrdersFilter = array(
                 'ID' => $this->todayDeliveredOrdersId,
-                'STATUS_ID' => array('N', 'NP', 'NN'),
+                'STATUS_ID' => $this->newOrdersStatus,
             );
         } else {
             $this->mainOrdersFilter = array(
                 array(
                     'LOGIC' => 'OR',
-                    array('ID' => $this->todayDeliveredOrdersId, 'STATUS_ID' => array('N', 'NP', 'NN')),
+                    array('ID' => $this->todayDeliveredOrdersId, 'STATUS_ID' => $this->newOrdersStatus),
                     array('ID' => $buildAndCanceledOrdersId),
                 ),
             );
@@ -303,6 +427,7 @@ class GermenAdminOrderList extends CBitrixComponent
                 'dateBuildStart' => '',
                 'dateBuildEstimated' => '',
                 'dateBuild' => '',
+                'dateShowAdmin' => '',
                 'status' => $row['STATUS_ID'],
             );
         }
@@ -323,15 +448,15 @@ class GermenAdminOrderList extends CBitrixComponent
         );
 
         foreach ($orders as $orderId => $order) {
-            if (in_array((string)$order['status'], array('N', 'NP', 'NN'), true)) {
+            if (in_array((string)$order['status'], $this->newOrdersStatus, true)) {
                 $result['new'][$orderId] = $order;
             }
 
-            if ((string)$order['status'] === 'SP') {
+            if ((string)$order['status'] === $this->completedOrdersStatus) {
                 $result['collected'][$orderId] = $order;
             }
 
-            if ((string)$order['status'] === 'Q') {
+            if ((string)$order['status'] === $this->canceledOrdersStatus) {
                 $result['canceled'][$orderId] = $order;
             }
         }
@@ -369,8 +494,6 @@ class GermenAdminOrderList extends CBitrixComponent
     private function getCustomCacheId(): string
     {
         $cacheId = 'GermenAdminOrderListGetData|';
-        $cacheId .= $this->nav->getId().'|';
-        $cacheId .= $this->nav->getCurrentPage().'|';
         $cacheId .= implode('|', $this->arParams).'|';
         $cacheId .= implode('|', $this->arResult['filter']).'|';
 
@@ -391,7 +514,7 @@ class GermenAdminOrderList extends CBitrixComponent
 
         $filter = array(
             'ORDER_ID' => $ordersId,
-            'CODE' => array('DELIVERY_DATE', 'TEXT_SCRAP', 'BUILD_DATE', 'BUILD_START_DATE'),
+            'CODE' => array('DELIVERY_DATE', 'TEXT_SCRAP', 'BUILD_DATE', 'BUILD_START_DATE', 'DATE_SHOW_ADMIN'),
         );
         $select = array();
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
@@ -436,6 +559,11 @@ class GermenAdminOrderList extends CBitrixComponent
             if (!empty($orderProperties[$id]['BUILD_START_DATE']['value'])) {
                 $timestamp = strtotime($orderProperties[$id]['BUILD_START_DATE']['value']);
                 $orders[$id]['dateBuildStart'] = DateTime::createFromTimestamp($timestamp);
+            }
+
+            if (!empty($orderProperties[$id]['DATE_SHOW_ADMIN']['value'])) {
+                $timestamp = strtotime($orderProperties[$id]['DATE_SHOW_ADMIN']['value']);
+                $orders[$id]['dateShowAdmin'] = DateTime::createFromTimestamp($timestamp);
             }
         }
 
@@ -608,14 +736,18 @@ class GermenAdminOrderList extends CBitrixComponent
             }
         }
 
-        $product = $this->getProducts($productsId);
+        $products = $this->getProducts($productsId);
 
         foreach ($ordersBasket as $orderId => $orderBasket) {
             foreach ($orderBasket as $basketItemId => $basketItem) {
-                $ordersBasket[$orderId][$basketItemId]['imageId'] = $product[$basketItem['productId']]['imageId'];
-                $ordersBasket[$orderId][$basketItemId]['composition'] = $product[$basketItem['productId']]['composition'];
-                $ordersBasket[$orderId][$basketItemId]['buildPrice'] = $product[$basketItem['productId']]['buildPrice'];
-                $ordersBasket[$orderId][$basketItemId]['buildTime'] = $product[$basketItem['productId']]['buildTime'];
+                $product = $products[$basketItem['productId']];
+
+                $basketItem['imageId'] = empty($product['imageId']) ? 0 : $product['imageId'];
+                $basketItem['composition'] = empty($product['composition']) ? '' : $product['composition'];
+                $basketItem['buildPrice'] = empty($product['buildPrice']) ? 0 : $product['buildPrice'];
+                $basketItem['buildTime'] = empty($product['buildTime']) ? 0 : $product['buildTime'];
+
+                $ordersBasket[$orderId][$basketItemId] = $basketItem;
             }
         }
 
@@ -623,18 +755,18 @@ class GermenAdminOrderList extends CBitrixComponent
     }
 
     /**
+     * @param array $orders
      * @return int
      */
-    private function getTodayBuildSum(): int
+    private function getTodayBuildSum(array $orders): int
     {
         $sum = 0;
 
-        foreach ($this->arResult['orders'] as $type => $typeOrders) {
-            if ($type === 'canceled') {
-                continue;
-            }
-
-            foreach ($typeOrders as $order) {
+        foreach ($orders as $order) {
+            if (
+                (string)$order['status'] === $this->completedOrdersStatus ||
+                in_array((string)$order['status'], $this->newOrdersStatus, true)
+            ) {
                 foreach ($order['basket'] as $basketItem) {
                     $sum += $basketItem['buildPrice'] * $basketItem['quantity'];
                 }
@@ -664,5 +796,137 @@ class GermenAdminOrderList extends CBitrixComponent
         }
 
         return $property;
+    }
+
+    /**
+     * @param array $orders
+     * @param int $timestamp
+     * @return bool
+     */
+    private function setOrdersDateShowAdmin(array $orders, int $timestamp = 0): bool
+    {
+        $property = $this->getOrderPropertyByCode('DATE_SHOW_ADMIN');
+
+        if (empty($property)) {
+            return false;
+        }
+
+        if (empty($timestamp)) {
+            $value = new DateTime();
+        } else {
+            $value = DateTime::createFromTimestamp($timestamp);
+        }
+
+        foreach ($orders as $order) {
+            if (!empty($order['dateShowAdmin'])) {
+                continue;
+            }
+
+            Content::addOrderProperty($order['id'], $property['id'], $property['code'], $property['name'], $value);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $orders
+     * @param int $buildSum
+     * @return array
+     */
+    private function setAdditionalOrdersData(array $orders, int $buildSum): array
+    {
+        foreach ($orders as $id => $order) {
+            $timeLimit = $order['dateBuildEstimated']->getTimestamp() - time();
+            if ($timeLimit < 0) {
+                $timeLimit = 0;
+            }
+
+            $note = 'Собрать к '.$order['dateBuildEstimated']->format('H:i');
+
+            if ($timeLimit < 30 * 60) {
+                $note = 'Собрать как можно скорее';
+            }
+
+            if ($order['dateBuildEstimated']->format('d.m.Y') !== date('d.m.Y')) {
+                $note = 'Собрать к '.$order['dateBuildEstimated']->format('d.m.y H:i');
+            }
+
+            $order['timeLimit'] = $timeLimit;
+            $order['asideNote'] = $note;
+
+            if (in_array((string)$order['status'], $this->newOrdersStatus, true)) {
+                $orderBuildPrice = 0;
+                $orderBuildTime = 0;
+
+                foreach ($order['basket'] as $basketId => $basketItem) {
+                    $orderBuildPrice += $basketItem['buildPrice'] * $basketItem['quantity'];
+                    $orderBuildTime += $basketItem['buildTime'];
+
+                    $image = array('src' => '');
+                    if (!empty($basketItem['imageId'])) {
+                        $image = \CFile::ResizeImageGet(
+                            $basketItem['imageId'],
+                            array('width' => 90, 'height' => 100),
+                            BX_RESIZE_IMAGE_PROPORTIONAL
+                        );
+                    } elseif ($basketItem['properties']['TYPE']['value'] === 'Монобукеты') {
+                        $image = array('src' => SITE_TEMPLATE_PATH.'/img/mono.jpg');
+                    } elseif ($basketItem['properties']['TYPE']['value'] === 'Составные букеты') {
+                        $image = array('src' => SITE_TEMPLATE_PATH.'/img/compose.jpg');
+                    }
+
+                    $basketItem['imageSrc'] = $image['src'];
+                    $basketItem['priceFormat'] = number_format(
+                        $basketItem['buildPrice'] * $basketItem['quantity'],
+                        0,
+                        '',
+                        ' '
+                    );
+                    $basketItem['propertiesString'] = Content::getHistoryListBasketItemPropertiesString(
+                        $basketItem['properties']
+                    );
+                    $basketItem['orderNote'] = $order['note'];
+
+                    $order['basket'][$basketId] = $basketItem;
+                }
+
+                $order['basket'] = array_values($order['basket']);
+
+                if (empty($orderBuildTime)) {
+                    $orderBuildTime = 10 * 60;
+                }
+
+                $isExpiringTime = $timeLimit < 30 * 60;
+
+                $isStartBuild = !empty($order['dateBuildStart']);
+                $isBuild = !empty($order['dateBuild']);
+
+                $orderBuildTimestamp = time() + $orderBuildTime;
+                if ($isStartBuild) {
+                    $orderBuildTimestamp = $order['dateBuildStart']->getTimestamp() + $orderBuildTime;
+                }
+
+                $orderBuildTimerTimestamp = $orderBuildTimestamp - time();
+                if ($orderBuildTimerTimestamp < 0) {
+                    $orderBuildTimerTimestamp = 0;
+                }
+
+                $order['orderBuildPrice'] = $orderBuildPrice;
+                $order['orderBuildPriceFormat'] = number_format($orderBuildPrice, 0, '', ' ');
+                $order['orderBuildTime'] = $orderBuildTime;
+                $order['orderBuildDate'] = date('H:i', $orderBuildTimestamp);
+                $order['orderBuildTimestamp'] = $orderBuildTimestamp;
+                $order['orderBuildTimerTimestamp'] = $orderBuildTimerTimestamp;
+                $order['isExpiringTime'] = $isExpiringTime;
+                $order['isStartBuild'] = $isStartBuild;
+                $order['isBuild'] = $isBuild;
+                $order['ordersBuildSum'] = $buildSum;
+                $order['ordersBuildSumFormat'] = number_format($buildSum, 0, '', ' ');
+            }
+
+            $orders[$id] = $order;
+        }
+
+        return $orders;
     }
 }
