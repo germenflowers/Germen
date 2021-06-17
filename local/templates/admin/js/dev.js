@@ -35,28 +35,28 @@ $(document).ready(function () {
       catch (e) {
       }
     }
-  }
 
-  authorizationForm.validate({
-    rules: {
-      USER_PASSWORD: {
-        minlength: 6
+    authorizationForm.validate({
+      rules: {
+        USER_PASSWORD: {
+          minlength: 6
+        },
       },
-    },
-    messages: {
-      USER_LOGIN: {
-        required: 'Обязательное поле',
-        email: 'Пожалуйста, введите корректный адрес электронной почты.'
+      messages: {
+        USER_LOGIN: {
+          required: 'Обязательное поле',
+          email: 'Пожалуйста, введите корректный адрес электронной почты.'
+        },
+        USER_PASSWORD: {
+          required: 'Обязательное поле',
+          minlength: $.validator.format('Пожалуйста, введите не меньше {0} символов.')
+        },
       },
-      USER_PASSWORD: {
-        required: 'Обязательное поле',
-        minlength: $.validator.format('Пожалуйста, введите не меньше {0} символов.')
+      submitHandler: function (form) {
+        form.submit();
       },
-    },
-    submitHandler: function (form) {
-      form.submit();
-    },
-  });
+    });
+  }
   //==============================================================================
 
   // $(document).on('click', '.js-history-filter-button', function (e) {
@@ -229,39 +229,43 @@ $(document).ready(function () {
     $("#deleteModal").modal();
   });
 
-  $('form[name=deleteOrder]').validate({
-    rules: {},
-    messages: {
-      comment: {
-        required: 'Обязательное поле',
+  let deleteOrderForm = $('form[name=deleteOrder]');
+
+  if (deleteOrderForm.length > 0) {
+    deleteOrderForm.validate({
+      rules: {},
+      messages: {
+        comment: {
+          required: 'Обязательное поле',
+        },
       },
-    },
-    submitHandler: function (form) {
-      $.ajax({
-        type: 'POST',
-        url: '/admin/ajax/orders.php',
-        data: $(form).serialize(),
-        beforeSend: function () {
-          showLoader();
-        },
-        success: function (data) {
-          if (data.status === 'success') {
-            reduceAsideOrdersCount('new');
-            increaseAsideOrdersCount('canceled');
-            moveAsideElement($(form).find('input[name=id]').val(), 'canceled');
-            renderCanceledOrder($(form).find('input[name=id]').val());
+      submitHandler: function (form) {
+        $.ajax({
+          type: 'POST',
+          url: '/admin/ajax/orders.php',
+          data: $(form).serialize(),
+          beforeSend: function () {
+            showLoader();
+          },
+          success: function (data) {
+            if (data.status === 'success') {
+              reduceAsideOrdersCount('new');
+              increaseAsideOrdersCount('canceled');
+              moveAsideElement($(form).find('input[name=id]').val(), 'canceled');
+              renderCanceledOrder($(form).find('input[name=id]').val());
+            }
+
+            $("#deleteModal").modal('hide');
+
+            hideLoader();
+          },
+          error: function (error) {
+            hideLoader();
           }
-
-          $("#deleteModal").modal('hide');
-
-          hideLoader();
-        },
-        error: function (error) {
-          hideLoader();
-        }
-      });
-    },
-  });
+        });
+      },
+    });
+  }
 
   $('.js-order-build-timer').each(function () {
     if ($(this).data('init') === 'Y') {
@@ -269,13 +273,15 @@ $(document).ready(function () {
     }
   });
 
-  let now = new Date(),
-    delay = 2 * 60 * 1000,
-    checkNewOrdersTimerId = setTimeout(function tick() {
-      getNewOrders(now);
-      now = new Date();
-      checkNewOrdersTimerId = setTimeout(tick, delay);
-    }, delay);
+  if ($('.js-orders-container').length > 0) {
+    let now = new Date(),
+      delay = 2 * 60 * 1000,
+      checkNewOrdersTimerId = setTimeout(function tick() {
+        getNewOrders(now);
+        now = new Date();
+        checkNewOrdersTimerId = setTimeout(tick, delay);
+      }, delay);
+  }
 });
 
 function showLoader() {
@@ -639,5 +645,7 @@ function showModalNewOrders(orders) {
   setTimeout(() => modalEl.modal('hide'), delay);
 
   let audio = new Audio('/local/templates/admin/audio/notification.mp3');
-  audio.play().then(r => {}, e => {});
+  audio.play().then(r => {
+  }, e => {
+  });
 }
