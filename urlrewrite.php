@@ -2,6 +2,13 @@
 
 $arUrlRewrite = array(
     array(
+        'CONDITION' => '#^/couriers/(.*)#',
+        'RULE' => 'token=$1',
+        'ID' => '',
+        'PATH' => '/couriers/index.php',
+        'SORT' => 100,
+    ),
+    array(
         'CONDITION' => '#^/suppliers/(.*)#',
         'RULE' => 'token=$1',
         'ID' => '',
