@@ -1,6 +1,6 @@
 <?php
 
-namespace Germen\Suppliers;
+namespace Germen\Couriers;
 
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\ArgumentNullException;
@@ -9,7 +9,7 @@ use ShortCode\Random;
 
 /**
  * Class Tools
- * @package Germen\Suppliers
+ * @package Germen\Couriers
  */
 class Tools
 {
@@ -48,6 +48,6 @@ class Tools
     {
         $siteUrl = self::getSiteUrl();
 
-        return 'https://'.$siteUrl.'/suppliers/'.$token;
+        return 'https://'.$siteUrl.'/couriers/'.$token;
     }
 }

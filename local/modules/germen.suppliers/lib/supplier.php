@@ -58,10 +58,9 @@ class Supplier
      * @throws ArgumentException
      * @throws SystemException
      * @throws ArgumentNullException
-     * @throws LoaderException
      * @throws NotImplementedException
      */
-    public function create($orderId): array
+    public function create(int $orderId): array
     {
         $order = new Order;
         $product = new Product;
@@ -156,7 +155,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    private function add($fields): array
+    private function add(array $fields): array
     {
         $return = array('error' => false, 'message' => '');
 
@@ -174,7 +173,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    private function update($id, $fields): array
+    private function update(int $id, array $fields): array
     {
         $return = array('error' => false, 'message' => '');
 
@@ -194,7 +193,7 @@ class Supplier
      * @throws ObjectPropertyException
      * @throws SystemException
      */
-    public function getForNotification($deliveryTime, $orderId = 0): array
+    public function getForNotification(int $deliveryTime, int $orderId = 0): array
     {
         $items = array();
 
@@ -231,11 +230,10 @@ class Supplier
      * @param string $bitrixStatus
      * @return array
      * @throws ArgumentException
-     * @throws LoaderException
      * @throws ObjectPropertyException
      * @throws SystemException
      */
-    private function setStatus($id, $status, $bitrixStatus = ''): array
+    private function setStatus(int $id, string $status, string $bitrixStatus = ''): array
     {
         $return = array('error' => false, 'message' => '');
 
@@ -263,7 +261,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusSend($id): array
+    public function setStatusSend(int $id): array
     {
         return $this->setStatus($id, 'send', 'SS');
     }
@@ -273,7 +271,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusAccepted($id): array
+    public function setStatusAccepted(int $id): array
     {
         return $this->setStatus($id, 'accepted', 'SA');
     }
@@ -283,7 +281,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusInWork($id): array
+    public function setStatusInWork(int $id): array
     {
         return $this->setStatus($id, 'in-work', 'SW');
     }
@@ -293,7 +291,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusNotAvailable($id): array
+    public function setStatusNotAvailable(int $id): array
     {
         return $this->setStatus($id, 'not-available', 'SN');
     }
@@ -303,7 +301,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusAssembled($id): array
+    public function setStatusAssembled(int $id): array
     {
         return $this->setStatus($id, 'assembled', 'SP');
     }
@@ -313,7 +311,7 @@ class Supplier
      * @return array
      * @throws Exception
      */
-    public function setStatusCourier($id): array
+    public function setStatusCourier(int $id): array
     {
         return $this->setStatus($id, 'courier', 'SC');
     }
@@ -323,7 +321,7 @@ class Supplier
      * @return array
      * @throws LoaderException
      */
-    public function getPhones($suppliersId): array
+    public function getPhones(array $suppliersId): array
     {
         $phones = array();
 
@@ -347,11 +345,10 @@ class Supplier
      * @param string $token
      * @return array
      * @throws ArgumentException
-     * @throws LoaderException
      * @throws ObjectPropertyException
      * @throws SystemException
      */
-    public function getByToken($token): array
+    public function getByToken(string $token): array
     {
         $data = array();
 
@@ -414,7 +411,7 @@ class Supplier
      * @param string $status
      * @return array
      */
-    public function getStatusList($status = ''): array
+    public function getStatusList(string $status = ''): array
     {
         $items = array(
             'create' => array(

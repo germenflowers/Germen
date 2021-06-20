@@ -61,4 +61,3 @@ $eventManager->addEventHandler(
     'OnBeforeIBlockElementUpdate',
     array(IBlock::class, 'checkUpSaleImage')
 );
-

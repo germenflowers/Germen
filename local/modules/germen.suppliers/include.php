@@ -9,5 +9,3 @@ Loader::registerAutoLoadClasses(
         'agents' => 'classes/general/agents.php',
     )
 );
-
-require_once 'vendor/autoload.php';

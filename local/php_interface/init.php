@@ -11,3 +11,5 @@ foreach ($includeFilesList as $fileToInclude) {
         include_once($fileToInclude);
     }
 }
+
+require_once dirname(__DIR__, 2).'/vendor/autoload.php';

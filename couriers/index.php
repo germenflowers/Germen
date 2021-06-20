@@ -6,31 +6,31 @@
 
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\Page\Asset;
-use \Germen\Suppliers\Supplier;
+use \Germen\Couriers\Courier;
 
-//if (empty($_REQUEST['token'])) {
-//    header('HTTP/1.0 403 Forbidden');
-//    exit;
-//}
+if (empty($_REQUEST['token'])) {
+    header('HTTP/1.0 403 Forbidden');
+    exit;
+}
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php';
 
-//if (!Loader::includeModule('germen.suppliers')) {
-//    header('HTTP/1.0 403 Forbidden');
-//    exit;
-//}
+if (!Loader::includeModule('germen.couriers')) {
+    header('HTTP/1.0 403 Forbidden');
+    exit;
+}
 
-//$supplier = new Supplier;
-//$data = $supplier->getByToken($_REQUEST['token']);
-//$statuses = $supplier->getStatusList($data['status']);
-//
-//if (empty($data)) {
-//    header('HTTP/1.0 403 Forbidden');
-//    exit;
-//}
+$data = (new Courier())->getByToken($_REQUEST['token']);
 
-$modulePath = '/local/modules/germen.suppliers';
+if (empty($data)) {
+    header('HTTP/1.0 403 Forbidden');
+    exit;
+}
+
+$modulePath = '/local/modules/germen.couriers';
 $templatePath = '/local/templates/admin';
+
+$deliveryTimestamp = strtotime($data['order']['deliveryDate']);
 ?>
 <!doctype html>
 <html lang="ru">
@@ -48,19 +48,16 @@ $templatePath = '/local/templates/admin';
         <link rel="preload" href="<?=$templatePath?>/fonts/SFProDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin>
 
         <?php
-        Asset::getInstance()->addCss($templatePath.'/css/style.min.css');
-        Asset::getInstance()->addCss($templatePath.'/css/dev.css');
+        Asset::getInstance()->addCss($templatePath.'/css/style.css');
+        Asset::getInstance()->addCss($modulePath.'/css/style.css');
         Asset::getInstance()->addString(
             '<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">'
         );
 
         Asset::getInstance()->addJs($templatePath.'/js/jquery-3.6.0.min.js');
         Asset::getInstance()->addJs($templatePath.'/js/jquery-ui.min.js');
-        Asset::getInstance()->addJs($templatePath.'/js/dev.js');
+        Asset::getInstance()->addJs($modulePath.'/js/script.js');
         ?>
-
-<!--        <script type="text/javascript" src="--><?//=$modulePath?><!--/js/jquery-3-4-1.min.js"></script>-->
-<!--        <script type="text/javascript" src="--><?//=$modulePath?><!--/js/script.js"></script>-->
     </head>
     <body class="mobile">
         <main>
@@ -75,36 +72,31 @@ $templatePath = '/local/templates/admin';
                 </div>
                 <div class="courier-top container-mobile">
                     <div class="courier-top__order">
-                        <div class="courier-top__order-number">Заказ № 2269</div>
-                        <div class="courier-top__order-status">Новый</div>
+                        <div class="courier-top__order-number">Заказ № <?=$data['order']['id']?></div>
+                        <div class="courier-top__order-status"><?=$data['order']['status']['name']?></div>
                     </div>
                     <div class="courier-top__delivery">
                         <div class="courier-top__delivery-block">
                             <div class="courier-top__delivery-note">Доставить до</div>
-                            <div class="courier-top__delivery-data">13:00</div>
+                            <div class="courier-top__delivery-data"><?=date('H:i', $deliveryTimestamp)?></div>
                         </div>
                         <div class="courier-top__delivery-block">
                             <div class="courier-top__delivery-note">Дата доставки</div>
-                            <div class="courier-top__delivery-data">03.03.2020</div>
+                            <div class="courier-top__delivery-data"><?=date('d.m.Y', $deliveryTimestamp)?></div>
                         </div>
                     </div>
                     <div class="courier-top__note">
-                        <p>Домофон не работает. Наберите, пожалуйста, 89В и&nbsp;консьерж пустит вас в подъезд. Поднимайтесь
-                            на&nbsp;6&nbsp;этаж, позвоните по телефону и оставьте цветы у&nbsp;двери на площадке. Заранее большое
-                            спасибо!)
-                        </p>
+                        <p><?=$data['order']['comment']?></p>
                     </div>
                 </div>
                 <div class="courier-tabs js-tabs" id="courierTabs">
                     <div class="courier-tabs__header js-tabs__header">
                         <div class="courier-tabs__header-inner">
                             <a class="courier-tabs__link courier-tabs__link--first js-tabs__title" href="">
-                                Адрес
-                                заказа
+                                Адрес заказа
                             </a>
                             <a class="courier-tabs__link courier-tabs__link--second js-tabs__title" href="">
-                                Состав
-                                заказа
+                                Состав заказа
                             </a>
                             <div class="courier-tabs__chosen"></div>
                         </div>
@@ -113,74 +105,91 @@ $templatePath = '/local/templates/admin';
                         <div class="courier-contacts">
                             <div class="courier-contacts__block">
                                 <p class="courier-contacts__block-line container-mobile">
-                                    <span>Россия, г. Москва, Трёхпрудный&nbsp;пер., 4, стр. 1</span>
-                                    <span>Офис/квартира: 401</span>
+                                    <span><?=$data['order']['address']?></span>
+                                    <span>Офис/квартира: <?=$data['order']['flat']?></span>
                                 </p>
                                 <a class="courier-contacts__link courier-contacts__link--map" href=""></a>
                             </div>
                             <div class="courier-contacts__block">
                                 <p class="courier-contacts__block-line container-mobile">
-                                    <span class="courier-contacts__name">Мария</span>
-                                    <span class="courier-contacts__tel">+7 985 684-17-53</span>
+                                    <span class="courier-contacts__name"><?=$data['order']['userName']?></span>
+                                    <span class="courier-contacts__tel"><?=$data['order']['userPhone']?></span>
                                 </p>
-                                <a class="courier-contacts__link courier-contacts__link--tel" href="tel:+79856841753"></a>
+                                <a
+                                        class="courier-contacts__link courier-contacts__link--tel"
+                                        href="tel:+7<?=$data['order']['userPhone']?>"
+                                ></a>
                             </div>
-                            <div class="courier-contacts__gift container-mobile">
-                                <span>Это сюрприз</span>
-                            </div>
-                            <div class="courier-contacts__btn container-mobile">
-                                <button class="courier__btn" type="button">Проверить заказ</button>
-                            </div>
+                            <?php if ($data['order']['isSurprise']): ?>
+                                <div class="courier-contacts__gift container-mobile">
+                                    <span>Это сюрприз</span>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($data['order']['status']['id'] !== 'CA'): ?>
+                                <div class="courier-contacts__btn container-mobile js-check-order">
+                                    <button class="courier__btn" type="button">Проверить заказ</button>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="courier-tabs__content courier-tabs__content--second js-tabs__content">
                         <div class="courier-order-info">
-                            <div class="courier-order-info__block container-mobile">
-                                <div class="courier-order-info__block-image">
-                                    <img src="" alt="">
+                            <?php foreach ($data['order']['basket'] as $item): ?>
+                                <div class="courier-order-info__block container-mobile">
+                                    <div class="courier-order-info__block-image">
+                                        <img src="<?=$item['image']?>" alt="<?=$item['name']?>">
+                                    </div>
+                                    <div class="courier-order-info__block-info">
+                                        <div class="courier-order-info__block-name"><?=$item['name']?></div>
+                                        <div class="courier-order-info__block-note"><?=$item['composition']?></div>
+                                    </div>
                                 </div>
-                                <div class="courier-order-info__block-info">
-                                    <div class="courier-order-info__block-name">Chàmomile</div>
-                                    <div class="courier-order-info__block-note">25 пионов сорта ян флеминг</div>
+                                <div class="courier-order-info__block container-mobile">
+                                    <div class="courier-order-info__block-info">
+                                        <div class="courier-order-info__block-name">Количество</div>
+                                        <div class="courier-order-info__block-note"><?=$item['quantity']?> шт</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="courier-order-info__block container-mobile">
-                                <div class="courier-order-info__block-info">
-                                    <div class="courier-order-info__block-name">Количество</div>
-                                    <div class="courier-order-info__block-note">1 шт</div>
-                                </div>
-                            </div>
+                            <?php endforeach; ?>
                             <div class="courier-order-info__block container-mobile">
                                 <div class="courier-order-info__block-info">
                                     <div class="courier-order-info__block-name">Текст открытки</div>
                                     <div class="courier-order-info__block-note">
-                                        Цветы для моего руководителя,
-                                        наставника, учителя, примера и доброго человека. С днём рождения Ирина
-                                        Александровна!!! от Рубена.
+                                        <?=$data['order']['note']?>
                                     </div>
                                 </div>
                             </div>
-                            <form>
-                                <div class="courier-order-info__block courier-order-info__block--no-border container-mobile">
-                                    <input id="courierCheck" type="checkbox">
-                                    <label class="courier-order-info__block-info" for="courierCheck">
-                                        <div class="courier-order-info__block-name courier-order-info__block-name--check">
-                                            Проверил состав заказа
-                                        </div>
-                                        <div class="courier-order-info__block-note">
-                                            Проверьте заказ, чтобы принять его
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="courier-order-info__btn">
-                                    <button class="courier__btn disabled" type="button">Принять заказ</button>
-                                </div>
-                            </form>
+                            <?php if ($data['order']['status']['id'] !== 'CA'): ?>
+                                <form name="couriersForm" action="<?=$modulePath?>/ajax/handler.php" method="post">
+                                    <input type="hidden" name="action" value="takeOrder">
+                                    <input type="hidden" name="token" value="<?=$_REQUEST['token']?>">
+
+                                    <div class="courier-order-info__block courier-order-info__block--no-border container-mobile">
+                                        <input name="checkOrder" id="courierCheck" type="checkbox">
+                                        <label class="courier-order-info__block-info" for="courierCheck">
+                                            <div class="courier-order-info__block-name courier-order-info__block-name--check">
+                                                Проверил состав заказа
+                                            </div>
+                                            <div class="courier-order-info__block-note">
+                                                Проверьте заказ, чтобы принять его
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="courier-order-info__btn">
+                                        <button class="courier__btn disabled" type="submit">Принять заказ</button>
+                                    </div>
+                                </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
+
+        <div class="loader js-loader">
+            <img src="<?=$modulePath?>/img/loader.gif" alt="">
+        </div>
+        <div class="overlay js-overlay"></div>
 
         <script src="<?=$templatePath?>/js/script.js"></script>
     </body>
