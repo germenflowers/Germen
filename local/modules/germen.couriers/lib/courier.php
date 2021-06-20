@@ -33,9 +33,21 @@ class Courier
      * @throws NotImplementedException
      * @throws Exception
      */
-    public function create(int $orderId): bool
+    public function create(int $orderId, bool $paid = false, string $statusId = '', int $courierId = 0): bool
     {
         $orderFields = (new Order)->getFields($orderId);
+
+        if (!$orderFields['paid'] && $paid) {
+            $orderFields['paid'] = $paid;
+        }
+
+        if ($orderFields['status']['id'] !== 'SC' && $statusId === 'SC') {
+            $orderFields['status']['id'] = $statusId;
+        }
+
+        if (empty($orderFields['courierId']) && !empty($courierId)) {
+            $orderFields['courierId'] = $courierId;
+        }
 
         if (!$orderFields['paid']) {
             throw new SystemException('Заказ не оплачен');

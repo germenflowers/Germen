@@ -78,7 +78,7 @@ class germenCouriersEventHandlers
             $courier = new Courier();
 
             try {
-                $courier->create((int)$order->getId());
+                $courier->create((int)$order->getId(), $order->isPaid(), $statusId, $courierId);
             } catch (Exception $e) {
                 return new EventResult(
                     EventResult::ERROR,
