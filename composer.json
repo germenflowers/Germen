@@ -1,6 +1,7 @@
 {
     "require": {
         "ajaxray/short-code": "^1.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-curl": "*"
     }
 }

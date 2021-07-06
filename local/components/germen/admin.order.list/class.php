@@ -265,7 +265,7 @@ class GermenAdminOrderList extends CBitrixComponent
     }
 
     /**
-     * Заказы которые нужно доставить сегодня, максимум через 3 часа от текущего времени
+     * Заказы которые нужно доставить сегодня
      * @param bool $isNoShowAdmin - выбрать ид заказов, которые еще не показывались в админке
      * @return array
      */
@@ -273,17 +273,12 @@ class GermenAdminOrderList extends CBitrixComponent
     {
         $ordersId = array();
 
-        $maxTime = time() + 3 * 60 * 60;
-        $maxDate = date('d.m.Y H:i', $maxTime);
-        if (date('d') !== date('d', $maxTime)) {
-            $maxDate = date('d.m.Y').' 23:59';
-        }
-
         $filter = array(
             'CODE' => 'DELIVERY_DATE',
             '>=VALUE' => date('d.m.Y').' 00:00',
-            '<=VALUE' => $maxDate,
+            '<=VALUE' => date('d.m.Y').' 23:59',
         );
+
         $select = array();
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {

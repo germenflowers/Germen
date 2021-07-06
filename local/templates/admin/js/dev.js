@@ -145,7 +145,7 @@ $(document).ready(function () {
               buildDate = new Date(date.getTime() + buildDateElement.data('time') * 1000);
 
             buildDateElement.html(buildDate.getHours() + ':' + (buildDate.getMinutes() < 10 ? '0' : '') + buildDate.getMinutes());
-            startTimer(buildTimerElement.data('time'), buildTimerElement);
+            startTimer(buildTimerElement.data('timestamp'), buildTimerElement);
           }
 
           hideLoader();
