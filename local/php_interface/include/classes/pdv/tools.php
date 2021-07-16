@@ -266,7 +266,7 @@ class Tools
                         fclose($handle);
                     }
 
-                    \PDV\Smsaero::sendSMS($phone, $textSms);
+                    (new Smsaero)->sendSMS($phone, $textSms);
                 }
             }
         }

@@ -2,6 +2,7 @@
     "require": {
         "ajaxray/short-code": "^1.1",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "mobiledetect/mobiledetectlib": "^2.8"
     }
 }

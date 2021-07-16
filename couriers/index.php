@@ -31,6 +31,14 @@ $modulePath = '/local/modules/germen.couriers';
 $templatePath = '/local/templates/admin';
 
 $deliveryTimestamp = strtotime($data['order']['deliveryDate']);
+
+$mobileDetect = new Mobile_Detect();
+
+$isApple = $mobileDetect->isiPhone() ||
+    $mobileDetect->isiOS() ||
+    $mobileDetect->isiPad() ||
+    $mobileDetect->isiPadOS() ||
+    $mobileDetect->isSafari();
 ?>
 <!doctype html>
 <html lang="ru">
@@ -108,13 +116,19 @@ $deliveryTimestamp = strtotime($data['order']['deliveryDate']);
                                     <span><?=$data['order']['address']?></span>
                                     <span>Офис/квартира: <?=$data['order']['flat']?></span>
                                 </p>
-                                <a
-                                        class="courier-contacts__link courier-contacts__link--map"
-                                        href="https://maps.google.com/?q=<?=$data['order']['address']?>"
-                                        target="_blank"
-                                >
-                                    <a href="https://maps.apple.com/maps?q=<?=$data['order']['address']?>" target="_blank"></a>
-                                </a>
+                                <?php if ($isApple): ?>
+                                    <a
+                                            class="courier-contacts__link courier-contacts__link--map"
+                                            href="https://maps.apple.com/maps?q=<?=$data['order']['address']?>"
+                                            target="_blank"
+                                    ></a>
+                                <?php else: ?>
+                                    <a
+                                            class="courier-contacts__link courier-contacts__link--map"
+                                            href="https://maps.google.com/?q=<?=$data['order']['address']?>"
+                                            target="_blank"
+                                    ></a>
+                                <?php endif; ?>
                             </div>
                             <div class="courier-contacts__block">
                                 <p class="courier-contacts__block-line container-mobile">
@@ -123,7 +137,7 @@ $deliveryTimestamp = strtotime($data['order']['deliveryDate']);
                                 </p>
                                 <a
                                         class="courier-contacts__link courier-contacts__link--tel"
-                                        href="tel:+7<?=$data['order']['userPhone']?>"
+                                        href="tel:+<?=$data['order']['userPhone']?>"
                                 ></a>
                             </div>
                             <?php if ($data['order']['isSurprise']): ?>

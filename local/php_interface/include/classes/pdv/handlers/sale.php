@@ -65,7 +65,7 @@ class Sale
                     fclose($handle);
                 }
 
-                Smsaero::sendSMS($phone, $textSms);
+                (new Smsaero)->sendSMS($phone, $textSms);
             }
         }
     }
@@ -117,7 +117,7 @@ class Sale
                 fclose($handle);
             }
 
-            Smsaero::sendSMS($phone, $textSms);
+            (new Smsaero)->sendSMS($phone, $textSms);
         }
     }
 
@@ -168,7 +168,7 @@ class Sale
                 fclose($handle);
             }
 
-            Smsaero::sendSMS($phone, $textSms);
+            (new Smsaero)->sendSMS($phone, $textSms);
         }
     }
 }
