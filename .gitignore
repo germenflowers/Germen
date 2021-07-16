@@ -4,6 +4,7 @@ Thumbs.db
 *.log
 *.txt
 *.xml
+!browserconfig.xml
 
 /bitrix/
 /upload/
