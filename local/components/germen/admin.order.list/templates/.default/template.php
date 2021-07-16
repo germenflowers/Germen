@@ -30,7 +30,7 @@ $types = array(
 
 $noOrders = (empty($arResult['orders']['new']) && empty($arResult['orders']['collected']) && empty($arResult['orders']['canceled']));
 ?>
-<div class="js-orders-container">
+<div class="js-orders-container" data-time="<?=time()?>">
     <div class="aside js-aside" style="<?=$noOrders ? 'display: none;' : ''?>">
         <div class="aside__dropdown">
             <select name="orders" id="orders-select" class="js-orders-type-select">

@@ -222,9 +222,10 @@ class GermenAdminOrderList extends CBitrixComponent
             $orders = array();
             $buildSum = 0;
 
-            $this->todayDeliveredOrdersId = $this->getTodayDeliveredOrdersId(true);
+            $this->todayDeliveredOrdersId = $this->getTodayDeliveredOrdersId();
 
             if ($this->initMainOrdersFilter()) {
+                $this->mainOrdersFilter['>=DATE_INSERT'] = DateTime::createFromTimestamp((int)$post['timestamp']);
                 $orders = $this->getOrdersData($this->getOrders($this->mainOrdersFilter));
             }
 
@@ -242,7 +243,7 @@ class GermenAdminOrderList extends CBitrixComponent
                 $this->setOrdersDateShowAdmin($orders, (int)$post['timestamp']);
             }
 
-            $response = array('status' => 'success', 'orders' => array_values($orders), 'buildSum' => $buildSum);
+            $response = array('status' => 'success', 'orders' => array_values($orders), 'buildSum' => $buildSum, 'time' => time());
         }
 
         die(json_encode($response));
@@ -266,10 +267,9 @@ class GermenAdminOrderList extends CBitrixComponent
 
     /**
      * Заказы которые нужно доставить сегодня
-     * @param bool $isNoShowAdmin - выбрать ид заказов, которые еще не показывались в админке
      * @return array
      */
-    private function getTodayDeliveredOrdersId(bool $isNoShowAdmin = false): array
+    private function getTodayDeliveredOrdersId(): array
     {
         $ordersId = array();
 
@@ -283,17 +283,6 @@ class GermenAdminOrderList extends CBitrixComponent
         $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
         while ($row = $result->Fetch()) {
             $ordersId[] = (int)$row['ORDER_ID'];
-        }
-
-        if ($isNoShowAdmin) {
-            $filter = array('CODE' => 'DATE_SHOW_ADMIN', '!VALUE' => false);
-            $select = array();
-            $result = \CSaleOrderPropsValue::GetList(array(), $filter, false, false, $select);
-            while ($row = $result->Fetch()) {
-                if (in_array((int)$row['ORDER_ID'], $ordersId, true)) {
-                    unset($ordersId[array_search((int)$row['ORDER_ID'], $ordersId, true)]);
-                }
-            }
         }
 
         return $ordersId;

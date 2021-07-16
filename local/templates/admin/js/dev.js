@@ -274,11 +274,9 @@ $(document).ready(function () {
   });
 
   if ($('.js-orders-container').length > 0) {
-    let now = new Date(),
-      delay = 2 * 60 * 1000,
+    let delay = 30 * 1000,
       checkNewOrdersTimerId = setTimeout(function tick() {
-        getNewOrders(now);
-        now = new Date();
+        getNewOrders();
         checkNewOrdersTimerId = setTimeout(tick, delay);
       }, delay);
   }
@@ -590,13 +588,15 @@ function renderCanceledOrder(id) {
   container.html($('#orderCanceledTmpl').render({ id: id }));
 }
 
-function getNewOrders(date) {
+function getNewOrders() {
+  let timestamp = $('.js-orders-container').data('time');
+
   $.ajax({
     type: 'POST',
     url: '/admin/ajax/orders.php',
     data: {
       'action': 'getNewOrders',
-      'timestamp': date.getTime() / 1000,
+      'timestamp': timestamp,
     },
     beforeSend: function () {
     },
@@ -604,6 +604,8 @@ function getNewOrders(date) {
       if (data.status === 'success' && !$.isEmptyObject(data.orders)) {
         renderNewOrders(data.orders);
         showModalNewOrders(data.orders);
+
+        $('.js-orders-container').data('time', data.time)
       }
     },
     error: function (error) {
@@ -630,7 +632,7 @@ function renderNewOrders(orders) {
 function showModalNewOrders(orders) {
   let ordersId = [],
     ordersStr = '',
-    delay = 2 * 1000,
+    delay = 5 * 1000,
     modalEl = $("#newOrdersModal");
 
   $.each(orders, function (index, order) {
