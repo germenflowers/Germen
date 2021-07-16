@@ -5,6 +5,7 @@ namespace Germen\Couriers;
 use \Bitrix\Main\SystemException;
 use \Bitrix\Main\ArgumentException;
 use \Bitrix\Main\ArgumentNullException;
+use \Bitrix\Main\ArgumentOutOfRangeException;
 use \Bitrix\Main\NotImplementedException;
 use \Bitrix\Main\ObjectPropertyException;
 use \Germen\Couriers\Iblock\Courier as IblockCourier;
@@ -26,12 +27,16 @@ class Courier
 
     /**
      * @param int $orderId
+     * @param bool $paid
+     * @param string $statusId
+     * @param int $courierId
      * @return bool
-     * @throws SystemException
      * @throws ArgumentException
      * @throws ArgumentNullException
+     * @throws ArgumentOutOfRangeException
      * @throws NotImplementedException
-     * @throws Exception
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public function create(int $orderId, bool $paid = false, string $statusId = '', int $courierId = 0): bool
     {

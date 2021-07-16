@@ -48,6 +48,6 @@ class Tools
     {
         $siteUrl = self::getSiteUrl();
 
-        return 'https://'.$siteUrl.'/couriers/'.$token;
+        return 'https://'.$siteUrl.'/couriers/'.$token.'/';
     }
 }
