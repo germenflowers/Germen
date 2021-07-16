@@ -73,7 +73,7 @@ $deliveryTimestamp = strtotime($data['order']['deliveryDate']);
                 <div class="courier-top container-mobile">
                     <div class="courier-top__order">
                         <div class="courier-top__order-number">Заказ № <?=$data['order']['id']?></div>
-                        <div class="courier-top__order-status"><?=$data['order']['status']['name']?></div>
+                        <div class="courier-top__order-status js-order-status"><?=$data['order']['status']['name']?></div>
                     </div>
                     <div class="courier-top__delivery">
                         <div class="courier-top__delivery-block">
@@ -108,7 +108,13 @@ $deliveryTimestamp = strtotime($data['order']['deliveryDate']);
                                     <span><?=$data['order']['address']?></span>
                                     <span>Офис/квартира: <?=$data['order']['flat']?></span>
                                 </p>
-                                <a class="courier-contacts__link courier-contacts__link--map" href=""></a>
+                                <a
+                                        class="courier-contacts__link courier-contacts__link--map"
+                                        href="https://maps.google.com/?q=<?=$data['order']['address']?>"
+                                        target="_blank"
+                                >
+                                    <a href="https://maps.apple.com/maps?q=<?=$data['order']['address']?>" target="_blank"></a>
+                                </a>
                             </div>
                             <div class="courier-contacts__block">
                                 <p class="courier-contacts__block-line container-mobile">

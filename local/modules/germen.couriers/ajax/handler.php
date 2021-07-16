@@ -49,8 +49,10 @@ if ($post['action'] === 'takeOrder') {
 
     $data = (new Courier())->getByToken($_REQUEST['token']);
 
-    if ((new Order())->setStatus($data['order']['id'], 'CA')) {
-        $result = array('status' => 'success', 'message' => '');
+    $order = new Order();
+    if ($order->setStatus($data['order']['id'], 'CA')) {
+        $statuses = $order->getStatuses();
+        $result = array('status' => 'success', 'message' => '', 'orderStatus' => $statuses['CA']['name']);
     }
 }
 
